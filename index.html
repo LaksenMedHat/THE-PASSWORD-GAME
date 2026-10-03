@@ -473,8 +473,12 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .achbar i { display: block; height: 100%; background: var(--gold); border-radius: 4px; }
 .ach .achnum { display: block; font-size: 11px; color: var(--gold); margin-top: 3px; font-variant-numeric: tabular-nums; }
 .ach.locked.revealed .achbar { background: var(--panel-hi); }
-.acc-scores { margin-top: 22px; }
-.scores-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.acc-body { align-items: stretch; }
+.acc-left { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.acc-achcol { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 460px; }
+.ach-scroll { position: relative; flex: 1 1 auto; }
+.ach-scroll > .achs.one { position: absolute; inset: 0; max-height: none; }
+.scores-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
 .scores-grid h4 { margin: 0 0 6px; font-family: var(--display); font-weight: 400; font-size: 22px; color: var(--ink); }
 .scores-grid .tbl td, .scores-grid .tbl th { padding: 6px; }
 .profile .pf-head { display: flex; justify-content: space-between; align-items: center; gap: 14px; }
@@ -494,6 +498,8 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
   .acc-head { grid-template-columns: minmax(0, 1fr); }
   .acc-body { grid-template-columns: minmax(0, 1fr); }
   .achs.one { max-height: 480px; }
+  .acc-achcol { min-height: 0; }
+  .ach-scroll > .achs.one { position: static; max-height: 480px; }
 }
 @media (max-width: 520px) {
   .hud b { font-size: 28px; }
@@ -558,7 +564,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
       <button class="btn" id="accBtn" type="button">ACCOUNT <small id="accSmall">LVL 0</small><span class="dot" id="dotAcc" hidden>!</span></button>
       <button class="btn dark" id="howBtn" type="button">HOW TO PLAY</button>
     </div>
-    <button class="version" id="verBtn" type="button">V9 · LOUNGE · <u>PATCH NOTES</u></button>
+    <button class="version" id="verBtn" type="button">V9.1 · ENCORE · <u>PATCH NOTES</u></button>
   </section>
 
   <section id="account" class="screen account" hidden>
@@ -580,9 +586,11 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
         <div class="acc-medals" id="accMedals"></div>
       </div>
     </header>
-    <section class="acc-col acc-scores" id="accScores"><h3>HIGHSCORES</h3><div id="accScoresBody" class="scores-grid"></div></section>
     <div class="acc-body">
-      <section class="acc-col" id="accAch"><h3>ACHIEVEMENTS <small id="accAchCount">0/30</small></h3><div class="achs one" id="accAchList"></div></section>
+      <div class="acc-left">
+        <section class="acc-col acc-scores" id="accScores"><h3>HIGHSCORES</h3><div id="accScoresBody" class="scores-grid"></div></section>
+        <section class="acc-col acc-achcol" id="accAch"><h3>ACHIEVEMENTS <small id="accAchCount">0/30</small></h3><div class="ach-scroll"><div class="achs one" id="accAchList"></div></div></section>
+      </div>
       <section class="acc-col" id="accStats"><h3>STATISTICS</h3><div id="accStatsBody"></div></section>
     </div>
     <div class="acc-foot"><button class="btn dark" id="accBack" type="button">BACK TO MENU</button></div>
@@ -1337,13 +1345,26 @@ const music = (() => {
       bass: [[0, 0, 3], [3, 0, 1], [6, 12, 2], [8, 0, 3], [11, 7, 2], [14, 'a', 2]],
       comp: [[0, 3], [6, 2], [10, 4]],
       kick: [0, 7, 8], snare: [4, 12], tKick: [0, 3, 7, 8, 11, 14]
+    },
+    drop: {
+      bpm: 104,
+      chords: [[40, [55, 59, 62, 66]], [40, [55, 59, 62, 66]], [36, [55, 59, 60, 64]], [36, [55, 59, 60, 64]],
+               [45, [60, 64, 67, 71]], [45, [60, 64, 67, 71]], [47, [57, 60, 63, 66]], [47, [57, 60, 63, 66]]],
+      mel: [[[0, 76, 2], [2, 79, 2], [4, 76, 2], [6, 74, 2], [8, 71, 4], [12, 74, 4]], [[0, 76, 6], [6, 79, 2], [8, 78, 8]],
+            [[0, 72, 2], [2, 76, 2], [4, 79, 2], [6, 76, 2], [8, 74, 4], [12, 72, 4]], [[0, 71, 8], [8, 67, 4], [12, 71, 4]],
+            [[0, 72, 2], [2, 76, 2], [4, 81, 4], [8, 79, 4], [12, 76, 4]], [[0, 74, 6], [6, 72, 2], [8, 71, 8]],
+            [[0, 75, 4], [4, 78, 4], [8, 81, 4], [12, 78, 4]], [[0, 83, 8], [8, 81, 4], [12, 78, 4]]],
+      bass: [[0, 0, 2], [2, 0, 1], [4, 12, 2], [6, 0, 1], [8, 0, 2], [10, 7, 2], [12, 12, 2], [14, 'a', 2]],
+      comp: [[0, 2], [3, 2], [6, 2], [10, 3]],
+      kick: [0, 4, 8, 12], snare: [4, 12], tKick: [0, 4, 6, 8, 12, 14]
     }
   };
-  const LAYERS = ['keys', 'bass', 'hats', 'drums', 'lead', 'arp', 'pulse'];
+  const LAYERS = ['keys', 'bass', 'hats', 'drums', 'lead', 'arp', 'pulse', 'siren', 'tick'];
   let a = null, out = null, filt = null, jbus = null, wob = null, vib = null, noise = null;
   const L = {};
   let started = false, timer = 0, nextT = 0, step = 0, bar = 0, track = 'lounge', tempo = 1;
-  let lastLead = 72, jingleUntil = 0, want = null, hidden = false;
+  let lastLead = 72, jingleUntil = 0, want = null, hiddenAt = 0;
+  const away = () => hiddenAt ? performance.now() - hiddenAt : 0;   // ms the tab has been in the background
 
   function setup() {
     a = audio(); if (!a || out) return !!a;
@@ -1351,7 +1372,7 @@ const music = (() => {
     lim.connect(musicBus || a.destination);
     out = a.createGain(); out.gain.value = 0; out.connect(lim);
     filt = a.createBiquadFilter(); filt.type = 'lowpass'; filt.frequency.value = 2600; filt.Q.value = .5; filt.connect(out);
-    jbus = a.createGain(); jbus.gain.value = 1; jbus.connect(out);
+    jbus = a.createGain(); jbus.gain.value = 1.8; jbus.connect(out);
     LAYERS.forEach(k => { const g = a.createGain(); g.gain.value = 0; g.connect(filt); L[k] = { g, tgt: 0, at: 0 }; });
     // slow tape wobble for keys and bass, faster vibrato for the lead
     const lfo = (f, depth) => { const o = a.createOscillator(), g = a.createGain(); o.frequency.value = f; g.gain.value = depth; o.connect(g); o.start(); return g; };
@@ -1424,55 +1445,85 @@ const music = (() => {
     const g = a.createGain(); g.gain.setValueAtTime(.05 * vel, t); g.gain.exponentialRampToValueAtTime(.0001, t + .06); g.connect(dest);
     osc('triangle', 330, t, t + .07, g);
   }
+  // rising alarm synth for the last seconds
+  function siren(t, m, dur, vel, dest) {
+    const lp = a.createBiquadFilter(); lp.type = 'lowpass'; lp.Q.value = 7;
+    lp.frequency.setValueAtTime(700, t); lp.frequency.exponentialRampToValueAtTime(3200, t + dur); lp.connect(dest);
+    const g = a.createGain(); g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.035 * vel, t + dur * .7);
+    g.gain.exponentialRampToValueAtTime(.0001, t + dur); g.connect(lp);
+    [['sawtooth', -12], ['sawtooth', 12]].forEach(([ty, det]) => { const o = osc(ty, hz(m), t, t + dur, g, det); o.frequency.exponentialRampToValueAtTime(hz(m + 12), t + dur); });
+  }
+  // clock tick, locked to the beat
+  function woodTick(t, accent, dest) {
+    const g = a.createGain(); g.gain.setValueAtTime(accent ? .09 : .06, t); g.gain.exponentialRampToValueAtTime(.0001, t + .045); g.connect(dest);
+    osc('triangle', accent ? 1900 : 1450, t, t + .05, g);
+    noiseHit(t, 'bandpass', 4000, 2, accent ? .05 : .03, .02, dest);
+  }
   const hat = (t, vel, open, dest) => noiseHit(t, 'highpass', 7500, .6, .06 * vel, open ? .22 : .035, dest);
 
   /* ----- what should be playing right now ----- */
   function decide() {
-    const w = { track: 'lounge', keys: 0, bass: 0, hats: 0, drums: 0, lead: 0, arp: 0, pulse: 0, tempo: 1, comp: false, hats16: false, cut: 2600 };
+    const w = { track: 'lounge', keys: 0, bass: 0, hats: 0, drums: 0, lead: 0, arp: 0, pulse: 0, siren: 0, tick: 0,
+                tempo: 1, comp: false, hats16: false, pulse16: false, four: false, fill: false, tense: 0, cut: 2600 };
     if (performance.now() < jingleUntil) return Object.assign(w, { duck: true });
     const inGame = !$('game').hidden;
     const pvp = inGame ? !!S.mp : !!(MP.ch || MP.lobbyOpen);
-    if (pvp) w.track = 'pvp';
-    if (inGame && S.phase === 'playing') {
-      const tot = S.active.length, ok = S.active.filter(e => e.ok).length, frac = tot ? ok / tot : 0;
+    if (pvp) w.track = 'pvp'; else if (inGame && S.mode === 'dropout') w.track = 'drop';
+    if (inGame && S.phase === 'over') return Object.assign(w, { silent: true });   // quiet until a button is pressed
+    if (inGame && (S.phase === 'playing' || S.phase === 'between' || S.phase === 'waiting')) {
+      const playing = S.phase === 'playing';
+      const tot = S.active.length, ok = S.active.filter(e => e.ok).length, frac = tot ? ok / tot : 0, done = playing && tot && frac === 1;
       w.keys = .7; w.bass = .9; w.comp = true;
-      w.hats = frac > 0 ? .75 : .35;
-      w.drums = frac >= .5 || (S.mode === 'dropout' && S.round >= 5) || pvp ? .9 : 0;
-      if (tot && frac === 1) { w.lead = .9; w.arp = .55; }
-      const low = Math.min(20, S.roundLen / 3);
-      let tense = S.dispLeft < low ? 1 - Math.max(0, S.dispLeft) / low : 0;
-      if (S.capAt) tense = Math.max(tense, .6);
-      const ko = MP.match && MP.match.ko; if (S.mode === 'ko' && ko && ko.hp && ko.hp.me <= 40) tense = Math.max(tense, .35);
-      if (tense > 0) {
-        w.pulse = .45 + .55 * tense; w.tempo = 1 + .16 * tense; w.keys = .7 - .35 * tense;
-        w.hats16 = tense > .25; w.cut = 2600 + 3400 * tense; w.drums = Math.max(w.drums, .9);
+      if (w.track === 'drop') {                // Drop Out: a new instrument every few rounds
+        const r = S.round;
+        w.hats = .75; w.drums = r >= 3 ? .9 : 0; w.arp = r >= 5 ? .45 : 0; w.pulse = r >= 8 ? .55 : 0;
+        w.lead = r >= 11 ? .65 : 0; w.hats16 = r >= 15; w.siren = r >= 20 ? .3 : 0; w.cut = 2600 + Math.min(2400, r * 120);
+        w.tempo = 1 + Math.min(.3, (r - 1) * .015);
+        if (done) { w.lead = .9; w.arp = Math.max(w.arp, .55); }
+      } else {                                 // more instruments as more rules turn green
+        w.hats = !playing || frac > 0 ? .75 : .35;
+        w.drums = !playing || frac >= .5 || pvp ? .9 : 0;
+        if (done) { w.lead = .9; w.arp = .55; }
       }
-      if (S.mode === 'dropout') w.tempo *= 1 + Math.min(.14, (S.round - 1) * .007);
-    } else if (inGame && S.phase === 'over') {
-      w.keys = .55; w.bass = .45; w.cut = 1500;
-    } else if (inGame) {           // between rounds, waiting for the opponent, countdown
-      w.keys = .7; w.bass = .7; w.hats = .4; w.cut = 2000;
-    } else if (pvp) {              // PvP lobby
-      w.keys = .85; w.bass = .9; w.hats = .55; w.drums = .45;
-    } else {                       // menu, account
-      w.keys = .9; w.bass = .8; w.hats = .3; w.lead = .5; w.cut = 2200;
+      if (playing) {
+        const zone = Math.min(30, S.roundLen * .5);
+        let tense = S.dispLeft < zone ? 1 - Math.max(0, S.dispLeft) / zone : 0;
+        if (S.capAt) tense = Math.max(tense, .65);
+        const ko = MP.match && MP.match.ko; if (S.mode === 'ko' && ko && ko.hp && ko.hp.me <= 40) tense = Math.max(tense, .35);
+        if (tense > 0) {
+          w.tense = tense; w.tempo *= 1 + .35 * tense; w.four = true; w.fill = tense > .8;
+          w.drums = Math.max(w.drums, .95); w.hats = Math.max(w.hats, .8); w.hats16 = w.hats16 || tense > .2;
+          w.pulse = Math.max(w.pulse, .5 + .5 * tense); w.pulse16 = tense > .6;
+          w.siren = Math.max(w.siren, .3 + .7 * tense); w.keys = .7 - .4 * tense; w.cut = 2600 + 5000 * tense;
+          w.tick = S.dispLeft <= Math.min(10, S.roundLen * .5) ? 1 : 0;
+        }
+      }
+      w.tempo = Math.min(w.tempo, 1.55);
+      return w;
     }
+    if (inGame) { w.keys = .7; w.bass = .7; w.hats = .4; w.cut = 2000; return w; }   // countdown
+    if (pvp) { w.keys = .85; w.bass = .9; w.hats = .55; w.drums = .45; }           // PvP lobby
+    else { w.keys = .9; w.bass = .8; w.hats = .3; w.lead = .5; w.cut = 2200; }      // menu, account
     return w;
   }
-  function apply(w) {
-    const now = a.currentTime;
+  function apply(w, at) {
+    const now = a.currentTime, quick = w.duck || w.silent, t0 = quick ? now : Math.max(now, at || now);
     LAYERS.forEach(k => {
-      const v = w.duck ? 0 : w[k];
-      if (Math.abs(v - L[k].tgt) > .001) { L[k].tgt = v; L[k].at = now; L[k].g.gain.setTargetAtTime(v, now, w.duck ? .06 : .6); }
+      const v = quick ? 0 : w[k];
+      if (Math.abs(v - L[k].tgt) > .001) {
+        L[k].tgt = v; L[k].at = t0;
+        L[k].g.gain.cancelScheduledValues(t0);
+        L[k].g.gain.setTargetAtTime(v, t0, quick ? .08 : v > L[k].g.gain.value ? .12 : .35);
+      }
     });
-    filt.frequency.setTargetAtTime(w.cut, now, .5);
+    filt.frequency.setTargetAtTime(w.cut, t0, .4);
   }
   const live = k => L[k].tgt > .01 || a.currentTime - L[k].at < 2;
 
   /* ----- sequencer ----- */
   function playStep(t, sd, w) {
     const tr = TRACKS[track], s = step, ch = tr.chords[bar % 8], nx = tr.chords[(bar + 1) % 8];
-    const swing = s % 4 === 2 ? sd * .3 : 0, ts = t + swing;
+    const swing = track === 'drop' || w.tense > .3 ? 0 : (s % 4 === 2 ? sd * .3 : 0), ts = t + swing;
     if (live('keys')) {
       if (!w.comp) { if (s === 0) keys(t, ch[1], sd * 16 * .98, .8, L.keys.g); }
       else tr.comp.forEach(([at, len]) => { if (at === s) keys(ts, ch[1], sd * len * .9, .75, L.keys.g); });
@@ -1480,10 +1531,12 @@ const music = (() => {
     if (live('bass')) tr.bass.forEach(([at, iv, len]) => {
       if (at === s) bass(ts, iv === 'a' ? nx[0] + (Math.random() < .5 ? -1 : 1) : ch[0] + iv, sd * len * .92, 1, L.bass.g);
     });
-    if (live('pulse') && s % 2 === 0) bass(ts, ch[0] + (s % 8 === 4 ? 12 : 0), sd * .8, .7, L.pulse.g);
+    if (live('pulse') && (w.pulse16 || s % 2 === 0)) bass(ts, ch[0] + (s % 8 === 4 ? 12 : 0), sd * (w.pulse16 ? .6 : .8), .7, L.pulse.g);
     if (live('drums')) {
-      (w.pulse > .6 ? tr.tKick : tr.kick).includes(s) && kick(t, 1, L.drums.g);
-      tr.snare.includes(s) && snare(ts, 1, L.drums.g);
+      const kicks = w.four ? (w.tense > .7 ? [0, 4, 6, 8, 12, 14] : [0, 4, 8, 12]) : tr.kick;
+      if (kicks.includes(s)) kick(t, 1, L.drums.g);
+      if (tr.snare.includes(s)) snare(ts, 1, L.drums.g);
+      else if (w.fill && bar % 2 === 1 && s >= 12) snare(t, .45 + (s - 12) * .15, L.drums.g);
     }
     if (live('hats')) {
       if (w.hats16) hat(ts, s % 2 ? .55 : 1, false, L.hats.g);
@@ -1491,16 +1544,23 @@ const music = (() => {
     }
     if (live('lead')) tr.mel[bar % 8].forEach(([at, m, len]) => { if (at === s) lead(ts, m, sd * len, 1, L.lead.g); });
     if (live('arp') && s % 2 === 0) pluck(ts, ch[1][(s / 2) % 4] + 12, 1, L.arp.g);
+    if (live('siren') && (s === 0 || (w.tense > .6 && s === 8))) siren(t, ch[0] + 24, sd * (w.tense > .6 ? 8 : 16) * .95, 1, L.siren.g);
+    if (live('tick') && s % 2 === 0) woodTick(t, s % 4 === 0, L.tick.g);
   }
   function tick() {
     if (!a) return;
-    const on = !muted && vol.music > 0 && !hidden;
-    out.gain.setTargetAtTime(on ? vol.music * .6 : 0, a.currentTime, .25);
+    const gone = away() > 30000;                 // background tab: quieter, silent after 30 s
+    const on = !muted && vol.music > 0 && !gone;
+    out.gain.setTargetAtTime(on ? vol.music * .6 * (hiddenAt ? .45 : 1) : 0, a.currentTime, hiddenAt ? 1.2 : .25);
     if (!on) { nextT = 0; return; }
-    want = decide(); apply(want);
-    tempo += (want.tempo - tempo) * .08;
+    want = decide();
+    if (want.silent || want.duck) { apply(want); step = 0; bar = 0; nextT = 0; return; }   // the next phrase starts fresh
     if (nextT < a.currentTime) nextT = a.currentTime + .05;
-    while (nextT < a.currentTime + .18) {
+    const sd0 = 60 / (TRACKS[track].bpm * tempo) / 4;
+    apply(want, nextT + ((4 - step % 4) % 4) * sd0);
+    tempo += (want.tempo - tempo) * .1;
+    const ahead = hiddenAt ? 1.6 : .18;           // background tabs only wake up about once a second
+    while (nextT < a.currentTime + ahead) {
       if (step === 0 && want.track !== track) { track = want.track; bar = 0; }
       const sd = 60 / (TRACKS[track].bpm * tempo) / 4;
       playStep(nextT, sd, want);
@@ -1511,12 +1571,12 @@ const music = (() => {
   function start() {
     if (started) return; if (!setup()) return;
     started = true; timer = setInterval(tick, 40);
-    document.addEventListener('visibilitychange', () => { hidden = document.visibilityState === 'hidden'; });
+    document.addEventListener('visibilitychange', () => { hiddenAt = document.visibilityState === 'hidden' ? performance.now() : 0; });
   }
 
   /* ----- jingles (they replace the win/lose sound when music is on) ----- */
   function jingle(kind) {
-    if (!started || muted || vol.music <= 0 || hidden) return false;
+    if (!started || muted || vol.music <= 0 || hiddenAt) return false;
     const t = a.currentTime + .06, d = jbus, len = kind === 'win' ? 3.2 : 2.8;
     jingleUntil = performance.now() + len * 1000;
     apply(Object.assign(decide(), { duck: true }));
@@ -1540,8 +1600,10 @@ const music = (() => {
     }
     return true;
   }
-  return { start, jingle, tracks: TRACKS, state: () => ({ started, track, tempo, want, bar, step }) };
+  const playing = () => started && !muted && vol.music > 0 && !hiddenAt;
+  return { start, jingle, playing, tracks: TRACKS, state: () => ({ started, track, tempo, want, bar, step }) };
 })();
+
 
 ['pointerdown', 'keydown'].forEach(ev => addEventListener(ev, () => { audio(); music.start(); }, { capture: true, passive: true }));
 
@@ -3342,8 +3404,13 @@ function renderOppBar() {
 }
 
 /* ---------- version + patch notes ---------- */
-const VERSION = 'V9';
+const VERSION = 'V9.1';
 const PATCH_NOTES = [
+  ['V9.1', 'Encore', ['Drop Out has its own track. A new instrument joins every few rounds and it keeps speeding up.',
+    'Low on time? The music now gets loud: faster tempo, pounding drums, a rising alarm and a ticking clock in the last 10 seconds.',
+    'After a game the music waits quietly until you press a button, instead of cutting out and back in.',
+    'Instruments now join and leave on the beat.', 'The music turns down in a background tab and stops after 30 seconds away.',
+    'The Standard / Drop Out choice closes again after 4 seconds.', 'Account: Highscores moved above Achievements, so there\'s less empty space.']],
   ['V9', 'Lounge', ['Music! An original lounge soundtrack, played live by the game. Instruments join in as you complete rules, and it gets tense when the clock runs low.',
     'PvP has its own, faster track. Wins, losses and draws get their own jingles.', 'Click SOUND (top right) for separate music and effects volume.',
     'Completing 2 or more rules at once plays a bigger sound. Clicks vary a little in pitch.',
@@ -3399,8 +3466,10 @@ function renderMenuStats() {
   $('discCount').textContent = discovered.size + '/' + RULES.length;
 }
 
-function collapsePlay() { if ($('playSplit')) { $('playSplit').hidden = true; $('play').hidden = false; } }
-$('play').onclick = () => { sfx.click(); $('play').hidden = true; $('playSplit').hidden = false; $('playStd').focus(); };
+let splitTimer = 0;
+function collapsePlay() { clearTimeout(splitTimer); if ($('playSplit')) { $('playSplit').hidden = true; $('play').hidden = false; } }
+function armSplit(ms) { clearTimeout(splitTimer); splitTimer = setTimeout(() => { if ($('playSplit').matches(':hover')) return armSplit(1500); collapsePlay(); }, ms); }
+$('play').onclick = () => { sfx.click(); $('play').hidden = true; $('playSplit').hidden = false; $('playStd').focus(); armSplit(4000); };
 $('playStd').onclick = () => startGame({ mode: 'standard' });
 $('playDrop').onclick = () => startGame({ mode: 'dropout' });
 document.addEventListener('click', e => { if (!$('playSplit').hidden && !e.target.closest('#playWrap')) collapsePlay(); });
@@ -3470,7 +3539,7 @@ function frame() {
     const secs = Math.ceil(S.dispLeft);
     $('timeOut').textContent = fmtTime(S.dispLeft);
     $('timeBox').classList.toggle('hurry', S.dispLeft < Math.min(20, S.roundLen / 3));
-    if (secs <= Math.min(15, S.roundLen / 2) && secs < S.lastTick && secs > 0) { S.lastTick = secs; sfx.tick(); }
+    if (secs <= Math.min(15, S.roundLen / 2) && secs < S.lastTick && secs > 0) { S.lastTick = secs; if (!music.playing()) sfx.tick(); }
     if (S.dispLeft <= 0) timeUp();
   }
   // "Are you still there?": the menu, untouched by modals, for 5 minutes straight
