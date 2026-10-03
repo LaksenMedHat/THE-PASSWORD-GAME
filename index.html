@@ -284,7 +284,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .lvl-txt b { font-family: var(--display); font-weight: 400; font-size: 32px; line-height: 1; }
 .lvl-txt span { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
 .lvl-txt small { font-size: 12px; color: var(--dim); font-variant-numeric: tabular-nums; }
-.acc-medals { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.acc-medals { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
 .btn { position: relative; }
 .dot { position: absolute; top: -10px; right: -10px; width: 28px; height: 28px; display: grid; place-items: center; background: var(--red); color: #fff; border: 3px solid var(--edge); border-radius: 50%;
   font-family: var(--display); font-size: 22px; line-height: 1; text-shadow: none; box-shadow: 0 3px 0 var(--edge); animation: dotpop 1.6s ease-in-out infinite; }
@@ -341,7 +341,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .xpbar.big i { background: linear-gradient(90deg, var(--good), #a8ffcf); border-radius: 6px; }
 .prog-gain { font-family: var(--display); font-size: 34px; color: var(--good); line-height: 1; opacity: 0; transform: scale(.4); transition: opacity .2s, transform .35s cubic-bezier(.3, 1.8, .5, 1); }
 .prog-gain.on { opacity: 1; transform: scale(1); }
-.prog-medals { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; min-height: 150px; }
+.prog-medals { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; min-height: 150px; }
 .prog-medals .medal { opacity: 0; transform: scale(.3) translateY(-16px); }
 .prog-medals .medal.in { opacity: 1; transform: none; transition: transform .35s cubic-bezier(.3, 1.8, .5, 1), opacity .15s; }
 .prog .mbar { background: var(--panel-hi); }
@@ -415,6 +415,63 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .diag { margin-top: 16px; font-size: 12px; color: var(--dim); }
 .diag summary { cursor: pointer; }
 .diag pre { background: var(--edge); border-radius: 8px; padding: 10px; max-height: 180px; overflow: auto; font-size: 11px; white-space: pre-wrap; color: var(--ink); user-select: text; }
+/* ---------- V8 ---------- */
+.btn.orange { background: #ff8a2b; color: var(--edge); text-shadow: none; }
+.playwrap { display: grid; }
+.playsplit { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; animation: splitin .35s cubic-bezier(.2,1.6,.4,1); }
+.playsplit .btn { font-size: 30px; padding-inline: .3em; }
+@keyframes splitin { 0% { transform: scaleX(.6); opacity: 0; } 100% { transform: none; opacity: 1; } }
+.version { margin-top: 6px; background: none; border: 0; color: var(--dim); font-size: 12px; letter-spacing: .12em; }
+.version:hover u { color: var(--gold); }
+.notes { display: grid; gap: 10px; max-height: 60vh; overflow-y: auto; }
+.note-v { background: var(--edge); border-radius: 10px; padding: 12px 14px; }
+.note-v h3 { margin: 0 0 6px; font-size: 26px; }
+.note-v h3 small { font-family: var(--body); font-size: 12px; color: var(--dim); margin-left: 8px; }
+.note-v ul { margin: 0; padding-left: 1.1em; }
+.note-v li { font-size: 13px; line-height: 1.5; }
+.modechip { display: inline-block; font-family: var(--display); font-size: 16px; color: var(--edge); background: var(--gold); border-radius: 6px; padding: 1px 8px 2px; vertical-align: 4px; letter-spacing: .04em; }
+.modechip.m-dropout { background: #ff8a2b; } .modechip.m-score, .modechip.m-race, .modechip.m-ko { background: var(--good); }
+#timeOut.capped { color: var(--bad) !important; }
+.hpwrap { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 2px 0 6px; }
+.hp { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center; background: var(--panel); border: 3px solid var(--edge); border-radius: 10px; padding: 6px 10px; min-width: 0; }
+.hp small { font-size: 11px; letter-spacing: .12em; color: var(--dim); max-width: 9ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hp b { font-family: var(--display); font-weight: 400; font-size: 24px; font-variant-numeric: tabular-nums; }
+.hpbar { height: 12px; background: var(--edge); border-radius: 6px; overflow: hidden; }
+.hpbar i { display: block; height: 100%; background: var(--good); transition: width .6s cubic-bezier(.3,1.4,.5,1); }
+.hp.opp .hpbar i { background: var(--red); }
+.hpwrap.hit { animation: no .3s; }
+#burst .card.ko p, #burst .card.drop p { margin: 8px 0 0; color: var(--ink); }
+.dmg-out { color: var(--good); } .dmg-in { color: var(--bad); }
+.hp-mini { display: flex; gap: 14px; justify-content: center; margin-top: 8px; font-size: 13px; color: var(--dim); font-variant-numeric: tabular-nums; }
+.drop-score small { font-size: 12px; letter-spacing: .14em; color: var(--dim); }
+.modes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+.mode-opt { text-align: left; background: var(--edge); border: 3px solid var(--edge); border-radius: 10px; padding: 10px; color: var(--ink); display: grid; gap: 4px; align-content: start; }
+.mode-opt b { font-family: var(--display); font-weight: 400; font-size: 24px; }
+.mode-opt span { font-size: 12px; color: var(--dim); line-height: 1.4; }
+.mode-opt.on { border-color: var(--gold); }
+.mode-opt.static { grid-column: 1 / -1; }
+.chip i { font-style: normal; color: var(--dim); font-size: 10px; }
+.tbl.lb tr.lbrow { cursor: pointer; }
+.tbl.lb tr.lbrow:hover td, .tbl.lb tr.lbrow:focus td { background: rgba(255,255,255,.06); }
+.achbar { height: 6px; background: var(--edge); border-radius: 4px; overflow: hidden; margin-top: 6px; }
+.achbar i { display: block; height: 100%; background: var(--gold); border-radius: 4px; }
+.ach .achnum { display: block; font-size: 11px; color: var(--gold); margin-top: 3px; font-variant-numeric: tabular-nums; }
+.ach.locked.revealed .achbar { background: var(--panel-hi); }
+.acc-scores { margin-top: 22px; }
+.scores-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.scores-grid h4 { margin: 0 0 6px; font-family: var(--display); font-weight: 400; font-size: 22px; color: var(--ink); }
+.scores-grid .tbl td, .scores-grid .tbl th { padding: 6px; }
+.profile .pf-head { display: flex; justify-content: space-between; align-items: center; gap: 14px; }
+.pf-name { font-family: var(--display); font-size: 52px; line-height: .95; overflow-wrap: anywhere; }
+.pf-medals { grid-template-columns: repeat(5, minmax(0, 1fr)); margin-top: 14px; }
+.medal.sm .disc { width: 50px; height: 50px; }
+.medal.sm b { font-size: 12px; }
+.pf-achs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.ach.mini { grid-template-columns: 34px 1fr; padding: 6px 8px; gap: 8px; }
+.ach.mini .emblem { width: 34px; height: 37px; }
+.ach.mini b { font-size: 12px; }
+.esc-hint { font-size: 12px; color: var(--dim); }
+
 .progress { color: var(--dim); font-size: 14px; margin: -4px 0 14px; }
 
 @media (max-width: 860px) {
@@ -434,10 +491,14 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
   .corner { font-size: 17px; }
   .stat b { font-size: 30px; }
   .achs { grid-template-columns: 1fr; }
-  .acc-medals { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .acc-medals { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .lvl-txt { min-width: 0; }
-  .prog-medals { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .prog-medals { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .lobby-grid { grid-template-columns: minmax(0, 1fr); }
+  .modes, .scores-grid, .hpwrap { grid-template-columns: minmax(0, 1fr); }
+  .pf-medals { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .pf-achs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .playsplit .btn { font-size: 24px; }
   .players, .mp-cols { grid-template-columns: minmax(0, 1fr); }
   .players .vs, .mp-cols .vs { justify-self: center; }
   .room-code b { font-size: 52px; }
@@ -467,14 +528,15 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
     </h1>
     <p class="menu-player" id="menuPlayer"></p>
     <div class="menu-btns">
-      <button class="btn red" id="play" type="button">PLAY</button>
-      <button class="btn mpbtn" id="mpBtn" type="button">1V1 ONLINE</button>
-      <button class="btn gold" id="hsBtn" type="button">HIGHSCORE <small id="bestSmall">–</small></button>
+      <div class="playwrap" id="playWrap"><button class="btn red" id="play" type="button">PLAY</button>
+        <div class="playsplit" id="playSplit" hidden><button class="btn red" id="playStd" type="button">STANDARD</button><button class="btn orange" id="playDrop" type="button">DROP OUT</button></div></div>
+      <button class="btn mpbtn" id="mpBtn" type="button">PVP</button>
+      <button class="btn gold" id="lbBtn" type="button">LEADERBOARDS</button>
       <button class="btn" id="discBtn" type="button">DISCOVERED RULES <small id="discCount">0/67</small><span class="dot" id="dotDisc" hidden>!</span></button>
       <button class="btn" id="accBtn" type="button">ACCOUNT <small id="accSmall">LVL 0</small><span class="dot" id="dotAcc" hidden>!</span></button>
       <button class="btn dark" id="howBtn" type="button">HOW TO PLAY</button>
     </div>
-    <p class="menu-foot">5 rounds · 2 new rules per round · 2:00 on the clock each round</p>
+    <button class="version" id="verBtn" type="button">V8 · GAME MODES · <u>PATCH NOTES</u></button>
   </section>
 
   <section id="account" class="screen account" hidden>
@@ -496,8 +558,9 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
         <div class="acc-medals" id="accMedals"></div>
       </div>
     </header>
+    <section class="acc-col acc-scores" id="accScores"><h3>HIGHSCORES</h3><div id="accScoresBody" class="scores-grid"></div></section>
     <div class="acc-body">
-      <section class="acc-col" id="accAch"><h3>ACHIEVEMENTS <small id="accAchCount">0/24</small></h3><div class="achs one" id="accAchList"></div></section>
+      <section class="acc-col" id="accAch"><h3>ACHIEVEMENTS <small id="accAchCount">0/30</small></h3><div class="achs one" id="accAchList"></div></section>
       <section class="acc-col" id="accStats"><h3>STATISTICS</h3><div id="accStatsBody"></div></section>
     </div>
     <div class="acc-foot"><button class="btn dark" id="accBack" type="button">BACK TO MENU</button></div>
@@ -505,12 +568,13 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 
   <section id="game" class="screen" hidden>
     <button class="corner quit" id="quitBtn" type="button">QUIT</button>
-    <p class="mini-title">The <span>(New and improved)</span> Password Game</p>
+    <p class="mini-title">The <span>(New and improved)</span> Password Game <span class="modechip" id="modeChip">STANDARD</span></p>
     <div class="oppbar" id="oppBar" hidden></div>
+    <div class="hpwrap" id="hpWrap" hidden></div>
     <div class="hud">
       <div class="hud-round"><small>ROUND</small><b id="roundOut">1/5</b></div>
       <div class="hud-time" id="timeBox"><b id="timeOut">2:00</b></div>
-      <div class="hud-score"><small>SCORE</small><b id="scoreOut">0</b></div>
+      <div class="hud-score"><small id="scoreLbl">SCORE</small><b id="scoreOut">0</b></div>
     </div>
     <div class="field">
       <textarea id="pw" rows="1" aria-label="Password" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off" placeholder="Type your password…"></textarea>
@@ -1337,46 +1401,70 @@ function drawFlames(heat, dt) {
   }
 }
 
+/* ---------- game modes ---------- */
+const MODES = {
+  standard: { name: 'Standard', rounds: 5, perRound: 2, time: () => 120 },
+  dropout: { name: 'Drop Out', rounds: Infinity, perRound: 3, fresh: true, time: r => Math.max(10, 60 - 5 * Math.floor((r - 1) / 2)) },
+  score: { name: 'Score', rounds: 5, perRound: 2, pvp: true, time: () => 120, desc: 'Both play every round. When one player submits, the other has 15 seconds left. Most points after 5 rounds wins.' },
+  race: { name: 'Race', rounds: 5, perRound: 2, pvp: true, time: () => 120, desc: 'Race through 5 rounds at your own pace. The first player to finish all 5 wins.' },
+  ko: { name: 'Knockout', rounds: 5, perRound: 2, pvp: true, time: () => 60, desc: '100 HP each, 1 minute per round. The shorter password deals damage. Fail a round and you take a big hit. Most HP after 5 rounds wins, or KO your opponent first.' }
+};
+const PVP_MODES = ['score', 'race', 'ko'];
+
 /* ---------- game state ---------- */
-const S = { phase: 'menu', round: 0, active: [], pool: [], score: 0, shownScore: 0, roundStart: 0, timeLeft: ROUND_TIME, streak: 0, history: [], lastTick: 99, counter: 0, playTime: 0, chars: 0, pending: new Set(), discBefore: [], betweenTimer: 0, lastWin: false };
+const S = { phase: 'menu', mode: 'standard', mp: false, round: 0, active: [], pool: [], score: 0, shownScore: 0, roundStart: 0, roundLen: ROUND_TIME, timeLeft: ROUND_TIME, dispLeft: ROUND_TIME, capAt: 0, streak: 0, history: [], lastTick: 99, counter: 0, playTime: 0, chars: 0, pending: new Set(), discBefore: [], betweenTimer: 0, lastWin: false, lastStreak: 0, menuIdle: 0 };
+const M = () => MODES[S.mode] || MODES.standard;
 let heatShown = 0;
 
 function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(window.PG.rand() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 function fmtTime(t) { t = Math.max(0, Math.ceil(t)); return Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0'); }
 const nf = n => Math.round(n).toLocaleString('en-US');
 
-function show(screen) { $('menu').hidden = screen !== 'menu'; $('game').hidden = screen !== 'game'; $('account').hidden = screen !== 'account'; }
+function show(screen) { $('menu').hidden = screen !== 'menu'; $('game').hidden = screen !== 'game'; $('account').hidden = screen !== 'account'; if (screen !== 'menu') collapsePlay(); }
 
 function startGame(opts) {
   audio(); sfx.click();
   closeModal();
-  const mp = !!(opts && typeof opts.seed === 'number');
+  const mode = opts && MODES[opts.mode] ? opts.mode : 'standard';
+  const mp = !!MODES[mode].pvp && !!opts && typeof opts.seed === 'number';
   window.PG.setSeed(mp ? opts.seed : null);
-  S.mp = mp;
-  Object.assign(S, { phase: 'playing', round: 0, active: [], pool: shuffle(RULES.slice()), score: 0, shownScore: 0, streak: 0, history: [], counter: 0, playTime: 0, chars: 0, pending: new Set(), discBefore: [...discovered] });
+  Object.assign(S, { mode, mp, phase: 'playing', round: 0, active: [], pool: shuffle(RULES.slice()), score: 0, shownScore: 0, streak: 0, history: [], counter: 0, playTime: 0, chars: 0, pending: new Set(), discBefore: [...discovered], capAt: 0, lastStreak: 0, rewards: null, finalSubmitted: false });
   clearTimeout(S.betweenTimer); $('burst').hidden = true;
   flameLevel = 0;
   $('rules').innerHTML = ''; $('pw').value = ''; autosize();
+  // a fresh HUD (the old score used to linger until the first count-up)
+  $('scoreOut').textContent = '0';
+  $('scoreLbl').textContent = mode === 'dropout' ? 'BEST ROUND' : 'SCORE';
+  if (mode === 'dropout') $('scoreOut').textContent = dropBest() ? String(dropBest()) : '–';
+  $('modeChip').textContent = MODES[mode].name.toUpperCase() + (mp ? ' · PVP' : '');
+  $('modeChip').className = 'modechip m-' + mode;
+  $('game').dataset.mode = mode;
   S.paused = false;
   show('game');
   nextRound();
   setTimeout(() => { if (!S.paused) $('pw').focus(); }, 50);
-  renderOppBar();
+  renderOppBar(); renderHp();
   tutEvent('gameStart');
 }
 
 function nextRound() {
   S.round++;
-  for (let i = 0; i < 2; i++) addRule();
-  S.roundStart = performance.now(); S.timeLeft = ROUND_TIME; S.lastTick = 99; S.phase = 'playing';
-  $('roundOut').textContent = S.round + '/' + ROUNDS;
+  const md = M();
+  if (md.fresh) { S.active = []; $('rules').innerHTML = ''; $('pw').value = ''; autosize(); }
+  for (let i = 0; i < md.perRound; i++) addRule();
+  S.roundLen = md.time(S.round);
+  S.roundStart = performance.now(); S.timeLeft = S.dispLeft = S.roundLen; S.capAt = 0; S.lastTick = 99; S.phase = 'playing';
+  $('roundOut').textContent = md.rounds === Infinity ? String(S.round) : S.round + '/' + md.rounds;
+  $('timeOut').classList.remove('capped');
   sfx.add();
   evaluate(true);
   if (S.round > 1) tutEvent('roundStart');
   if (S.mp) { sendProg({ status: 'playing' }); renderOppBar(); }
+  if (md.fresh && S.round > 1) $('pw').focus();
 }
 
 function addRule() {
+  if (!S.pool.length) S.pool = shuffle(RULES.slice());
   const rule = S.pool.pop();
   const inst = rule.make();
   S.counter++;
@@ -1407,11 +1495,9 @@ function evaluate(silent) {
       if (ok) changedOn = true; else changedOff = true;
     }
   }
-  // order: unmet first, newest first in each group
   const ordered = S.active.slice().sort((a, b) => (a.ok - b.ok) || (b.n - a.n));
   const list = $('rules');
   ordered.forEach((e, i) => { if (list.children[i] !== e.el) list.insertBefore(e.el, list.children[i] || null); });
-  // bounce after reordering so the animation isn't reset
   for (const e of S.active) if (e.justOk !== e.ok) { if (e.ok && !silent) { e.el.classList.remove('pop'); void e.el.offsetWidth; e.el.classList.add('pop'); } e.justOk = e.ok; }
   if (!silent) { if (changedOn) sfx.ok(); else if (changedOff) sfx.off(); }
   const len = [...raw].length;
@@ -1428,33 +1514,62 @@ function autosize() { const t = $('pw'); t.style.height = 'auto'; t.style.height
 function lockIn() {
   if (S.phase !== 'playing' || S.paused) return;
   if (!evaluate(true)) { sfx.no(); const g = $('game'); g.classList.remove('shake-x'); void g.offsetWidth; g.classList.add('shake-x'); return; }
+  const md = M();
   const pw = $('pw').value, len = [...pw].length;
-  const t = Math.max(0, S.timeLeft);
+  const t = Math.max(0, S.timeLeft); // scoring always uses the real clock, never the 15-second Score-mode cap
+  S.playTime += S.roundLen - t;
+  if (t < 5 || (S.capAt && S.dispLeft < 5)) award('justintime');
+  if (S.roundLen - t < 3) award('quickster');
+  const b = $('burst');
+  S.phase = 'between';
+  if (S.mode === 'dropout') {
+    S.history.push({ round: S.round, rules: S.active.length, time: t, len, points: 0 });
+    sfx.clear();
+    const nextT = md.time(S.round + 1);
+    b.innerHTML = `<div class="card drop"><h2>ROUND ${S.round} CLEARED</h2><div class="pts">${S.round + 1}</div><div class="why">Next round: 3 new rules · ${nextT} seconds</div></div>`;
+    b.hidden = false;
+    S.betweenTimer = setTimeout(() => { if (S.phase !== 'between') return; b.hidden = true; nextRound(); }, 1000);
+    return;
+  }
   const r = roundScore(S.active.length, t, len);
-  S.score += r.points;
-  S.playTime += ROUND_TIME - t;
-  if (t < 5) award('justintime');
-  if (ROUND_TIME - t < 3) award('quickster');
-  S.history.push({ round: S.round, rules: S.active.length, time: t, len, points: r.points, timeF: r.timeF, eff: r.eff });
+  let pts = r.points;
+  if (S.mode === 'score' && MP.match) pts = Math.round(pts * catchUp());
+  S.score += pts;
+  S.history.push({ round: S.round, rules: S.active.length, time: t, len, points: pts, timeF: r.timeF, eff: r.eff });
   S.streak = t > 60 ? S.streak + 1 : 0;
   flameLevel = Math.min(3, S.streak);
   if (S.streak > 0) spawnFlame(Math.ceil(fx.width * 1.5 * S.streak), true);
-  S.phase = 'between';
-  if (S.mp && S.round < ROUNDS) sendProg({ status: 'cleared', round: S.round, score: S.score });
-  const b = $('burst');
+  const final = S.round >= md.rounds;
+  if (final) S.finalSubmitted = true;
+  if (S.mp) {
+    if (S.mode === 'ko') { koRoundDone('c', len); return; }
+    if (!final) sendProg({ status: 'cleared', round: S.round, score: S.score, len });
+  }
   let delay = 1900;
-  if (S.round >= ROUNDS) { delay = letterWave(pw) + 250; }
+  if (final) delay = letterWave(pw) + 250;
   else {
     sfx.clear();
-    b.innerHTML = `<div class="card"><h2>ROUND ${S.round} CLEARED</h2><div class="pts">+${nf(r.points)}</div><div class="why">${S.active.length} rules · time ×${r.timeF.toFixed(2)} · length ×${r.eff.toFixed(2)}${S.streak > 0 ? ' · fire streak ' + S.streak : ''}</div></div>`;
+    b.innerHTML = `<div class="card"><h2>ROUND ${S.round} CLEARED</h2><div class="pts">+${nf(pts)}</div><div class="why">${S.active.length} rules · time ×${r.timeF.toFixed(2)} · length ×${r.eff.toFixed(2)}${S.streak > 0 ? ' · fire streak ' + S.streak : ''}</div></div>`;
     b.hidden = false;
   }
+  if (final && S.mp) sendProg({ status: 'submitting', round: S.round, score: S.score, len });
   S.betweenTimer = setTimeout(() => {
     if (S.phase !== 'between') return;
     b.hidden = true;
     const w = document.querySelector('.field .wave'); if (w) w.remove(); $('pw').classList.remove('waving');
-    if (S.round >= ROUNDS) finish(); else if (S.mp) mpAfterClear(); else { nextRound(); if ($('modal').hidden) $('pw').focus(); }
+    if (final) { if (S.mp) pvpRunEnd('finished'); else finish(); }
+    else if (S.mp && S.mode === 'score') mpAfterClear();
+    else { nextRound(); if ($('modal').hidden) $('pw').focus(); }
   }, delay);
+}
+
+/* the clock ran out */
+function timeUp() {
+  S.timeLeft = Math.max(0, S.timeLeft); $('timeOut').textContent = '0:00';
+  if (S.mode === 'dropout') return dropEnd();
+  if (S.mp && S.mode === 'ko') { S.playTime += S.roundLen; koRoundDone('f', [...$('pw').value].length); return; }
+  if (S.mp) return pvpRunEnd('out');
+  fail();
 }
 
 /* every letter of the final password bounces in a wave; returns its length in ms */
@@ -1473,6 +1588,7 @@ function letterWave(pw) {
   return Math.round(step * n + 500);
 }
 
+/* ---------- standard records + stats ---------- */
 function saveScore(completed) {
   const entry = { score: S.score, rounds: completed ? ROUNDS : S.round - 1, completed, date: new Date().toISOString().slice(0, 10), pw: $('pw').value };
   const prevBest = Math.max(store.get('pg.best', 0) || 0, ...scores.map(x => x.score), 0);
@@ -1484,17 +1600,24 @@ function saveScore(completed) {
   renderMenuStats();
   return hadBest && S.score > prevBest;
 }
-
+function baseStats() { return store.get('pg.stats', null) || statsMem || { games: 0, wins: 0, time: 0, quick: null, slow: null, short: null, long: null }; }
+function ensureStd(st) {
+  if (!st.std) st.std = { games: st.games || 0, wins: st.wins || 0, points: st.points || 0, fastest: st.quick ? st.quick.time : null };
+  return st.std;
+}
 function recordStats(completed) {
-  const st = store.get('pg.stats', null) || statsMem || { games: 0, wins: 0, time: 0, quick: null, slow: null, short: null, long: null };
+  const st = baseStats();
   S.prevMedalVals = MEDALS.map(m => m.value(st));
   st.streak = st.streak || 0; st.bestStreak = st.bestStreak || 0;
+  const std = ensureStd(st);
   const pw = $('pw').value, len = [...pw].length, date = new Date().toISOString().slice(0, 10);
   st.games++; st.time += S.playTime;
   st.points = (st.points || 0) + S.score;
   st.chars = (st.chars || 0) + S.chars;
+  std.games++; std.points += S.score;
   if (completed) {
-    st.wins++;
+    st.wins++; std.wins++;
+    if (std.fastest == null || S.playTime < std.fastest) std.fastest = S.playTime;
     st.streak++; st.bestStreak = Math.max(st.bestStreak, st.streak);
     const run = { time: S.playTime, date, score: S.score };
     if (!st.quick || S.playTime < st.quick.time) st.quick = run;
@@ -1529,66 +1652,98 @@ function pickMsg(list) {
   lastMsg = m;
   return `<h2 class="result${m.length > 18 ? ' long' : ''}">${escapeHtml(m)}</h2>`;
 }
-
-function finish() {
-  S.phase = 'over'; S.lastWin = true;
-  toastHold = true;
-  const isBest = saveScore(true);
-  if (S.mp) mpEndMine('finished');
-  const pwLen = [...$('pw').value].length;
-  const rows = S.history.map(h => `<tr><td>${h.round}</td><td>${h.rules}</td><td>${fmtTime(h.time)}</td><td>${h.len}</td><td>+${nf(h.points)}</td></tr>`).join('');
-  openModal(`
-    ${pickMsg(WIN_MSGS)}
-    ${isBest ? '<span class="tag">NEW HIGHSCORE</span>' : ''}
-    <span class="skiphint" id="skipHint">CLICK TO SKIP</span>
-    ${mpResultHTML()}
-    <div id="resultInfo"><div class="big-score" id="bigScore">0</div>
-    <div class="runline"><span><small>RUN TIME</small><b>${fmtRun(S.playTime)}</b></span><span><small>ROUNDS</small><b>5/5</b></span><span><small>PASSWORD</small><b>${pwLen} ch</b></span></div>
-    ${progHTML(S.rewards)}</div>
-    <h3>Your final password<span class="meta">${pwLen} ${pwLen === 1 ? 'character' : 'characters'}</span></h3>
-    <div class="final-pw" id="finalPw"></div>
-    <div class="row"><button class="btn dark" id="copyPw" type="button">COPY</button></div>
-    <h3>Rounds</h3>
-    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>ROUND</th><th>RULES</th><th>TIME LEFT</th><th>LENGTH</th><th>POINTS</th></tr></thead><tbody>${rows}</tbody></table></div>
-    ${resultButtons('PLAY AGAIN')}`, 'slide');
-  if (S.mp) mpResolve();
+function copyPwRow() { return `<div class="final-pw" id="finalPw"></div><div class="row"><button class="btn dark" id="copyPw" type="button">COPY</button></div>`; }
+function wireCopy() {
+  if (!$('finalPw')) return;
   $('finalPw').textContent = $('pw').value;
   $('copyPw').onclick = () => {
     const txt = $('pw').value;
     const done = () => { $('copyPw').textContent = 'COPIED'; };
     try { navigator.clipboard.writeText(txt).then(done, () => selectText($('finalPw'))); } catch (e) { selectText($('finalPw')); }
   };
+}
+
+function finish() {
+  S.phase = 'over'; S.lastWin = true;
+  toastHold = true;
+  const isBest = saveScore(true);
+  const pwLen = [...$('pw').value].length;
+  const rows = S.history.map(h => `<tr><td>${h.round}</td><td>${h.rules}</td><td>${fmtTime(h.time)}</td><td>${h.len}</td><td>+${nf(h.points)}</td></tr>`).join('');
+  openModal(`
+    ${pickMsg(WIN_MSGS)}
+    ${isBest ? '<span class="tag">NEW HIGHSCORE</span>' : ''}
+    <span class="skiphint" id="skipHint">CLICK TO SKIP</span>
+    <div id="resultInfo"><div class="big-score" id="bigScore">0</div>
+    <div class="runline"><span><small>RUN TIME</small><b>${fmtRun(S.playTime)}</b></span><span><small>ROUNDS</small><b>5/5</b></span><span><small>PASSWORD</small><b>${pwLen} ch</b></span></div>
+    ${progHTML(S.rewards)}</div>
+    <h3>Your final password<span class="meta">${pwLen} ${pwLen === 1 ? 'character' : 'characters'}</span></h3>
+    ${copyPwRow()}
+    <h3>Rounds</h3>
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>ROUND</th><th>RULES</th><th>TIME LEFT</th><th>LENGTH</th><th>POINTS</th></tr></thead><tbody>${rows}</tbody></table></div>
+    ${resultButtons('PLAY AGAIN')}`, 'slide');
+  wireCopy();
   runVictory(S.rewards).then(() => { releaseToasts(); tutEvent('gameWin'); });
 }
 function selectText(el) { const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }
 
+function missedHTML() {
+  const missed = S.active.filter(e => !e.ok);
+  return { missed, html: missed.map(e => { let ex = []; try { ex = e.inst.examples(); } catch (err) {} return `<div><b></b><span>Would have worked: ${ex.map(escapeHtml).join(', ')}</span></div>`; }).join('') };
+}
+function fillMissed(missed) { const bs = $('modal').querySelectorAll('.failed b'); missed.forEach((e, i) => { if (bs[i]) bs[i].textContent = e.inst.text; }); }
+
 function fail() {
   S.phase = 'over'; S.lastWin = false;
-  S.playTime += ROUND_TIME;
+  S.playTime += S.roundLen;
   sfx.fail();
   const isBest = saveScore(false);
-  if (S.mp) mpEndMine('out');
-  const missed = S.active.filter(e => !e.ok);
-  const items = missed.map(e => {
-    let ex = [];
-    try { ex = e.inst.examples(); } catch (err) {}
-    return `<div><b></b><span>Would have worked: ${ex.map(escapeHtml).join(', ')}</span></div>`;
-  }).join('');
+  const { missed, html } = missedHTML();
   openModal(`
     ${pickMsg(LOSE_MSGS)}
     ${isBest ? '<span class="tag">NEW HIGHSCORE</span>' : ''}
-    ${mpResultHTML()}
     <div id="resultInfo"><div class="big-score">${nf(S.score)}</div>
     <div class="runline"><span><small>RUN TIME</small><b>${fmtRun(S.playTime)}</b></span><span><small>ROUNDS CLEARED</small><b>${S.round - 1}/${ROUNDS}</b></span></div>
     ${xpLineHTML(S.rewards)}</div>
     <h3>Rules you missed</h3>
-    <div class="failed">${items}</div>
+    <div class="failed">${html}</div>
     ${resultButtons('TRY AGAIN')}`);
-  if (S.mp) mpResolve();
-  const bs = $('modal').querySelectorAll('.failed b');
-  missed.forEach((e, i) => { bs[i].textContent = e.inst.text; });
+  fillMissed(missed);
   tutEvent('gameLose');
 }
+
+/* ---------- Drop Out ---------- */
+function dropScores() { return store.get('pg.dropScores', []) || []; }
+function dropBest() { return dropScores().reduce((m, d) => Math.max(m, d.round || 0), 0); }
+function dropEnd() {
+  S.phase = 'over'; S.lastWin = false;
+  S.playTime += S.roundLen;
+  sfx.fail();
+  const reached = S.round, cleared = S.round - 1, date = new Date().toISOString().slice(0, 10);
+  const prevBest = dropBest();
+  const list = dropScores(); list.push({ round: reached, date, time: Math.round(S.playTime * 10) / 10 });
+  list.sort((a, b) => b.round - a.round || a.time - b.time); store.set('pg.dropScores', list.slice(0, 10));
+  const st = baseStats();
+  S.prevMedalVals = MEDALS.map(m => m.value(st));
+  st.time = (st.time || 0) + S.playTime; st.chars = (st.chars || 0) + S.chars;
+  st.drop = st.drop || { games: 0, best: 0, rounds: 0 };
+  st.drop.games++; st.drop.rounds += cleared; st.drop.best = Math.max(st.drop.best, reached);
+  store.set('pg.stats', st); statsMem = st;
+  S.pending.add('dropout'); if (reached >= 20) S.pending.add('hurry');
+  S.rewards = endRewards(false, st, { base: Math.min(2000, 80 * cleared), baseLabel: cleared === 1 ? '1 round' : cleared + ' rounds' });
+  lbPushSoon();
+  const { missed, html } = missedHTML();
+  openModal(`
+    <h2 class="result">DROPPED OUT</h2>
+    ${prevBest && reached > prevBest ? '<span class="tag">NEW BEST</span>' : ''}
+    <div id="resultInfo"><div class="drop-score"><small>YOU REACHED ROUND</small><div class="big-score">${reached}</div></div>
+    <div class="runline"><span><small>RUN TIME</small><b>${fmtRun(S.playTime)}</b></span><span><small>BEST</small><b>${Math.max(prevBest, reached)}</b></span><span><small>LAST ROUND</small><b>${S.roundLen}s</b></span></div>
+    ${xpLineHTML(S.rewards)}</div>
+    <h3>Rules that got you</h3>
+    <div class="failed">${html}</div>
+    <div class="row"><button class="btn orange" data-act="play-drop" type="button">TRY AGAIN</button><button class="btn" data-act="menu" type="button">MENU</button></div>`);
+  fillMissed(missed);
+}
+
 function escapeHtml(s) { return String(s).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch])); }
 
 /* ---------- modal & screens ---------- */
@@ -1600,7 +1755,11 @@ $('modal').addEventListener('click', e => {
   if (a) {
     sfx.click();
     const act = a.dataset.act;
-    if (act === 'play') startGame();
+    if (act === 'play') startGame({ mode: 'standard' });
+    if (act === 'play-drop') { startGame({ mode: 'dropout' }); return; }
+    if (act === 'mp-mode') { if (MP.host && PVP_MODES.includes(a.dataset.mode)) { MP.mode = a.dataset.mode; sayHello(true); renderLobby(); } return; }
+    if (act === 'lb-player') { openProfile(lbRows[+a.dataset.i]); return; }
+    if (act === 'lb-back') { openBoards(lastBoard); return; }
     if (act === 'menu') { closeModal(); toMenu(); }
     if (act === 'close') closeModal();
     if (act === 'reveal') { revealAch(a); return; }
@@ -1615,9 +1774,7 @@ $('modal').addEventListener('click', e => {
     if (act === 'mp-copy') { const t = MP.code; try { navigator.clipboard.writeText(t).then(() => { a.textContent = 'COPIED'; }, () => {}); } catch (err) {} return; }
     if (act === 'mp-room') { mpBackToRoom(); return; }
     if (act === 'mp-menu') { leaveRoom(); S.mp = false; closeModal(); toMenu(); return; }
-    if (act === 'hs-local') { openScores('local'); return; }
-    if (act === 'hs-global') { openScores('global'); return; }
-    if (act === 'lb-cat') { openScores('global', a.dataset.cat); return; }
+    if (act === 'lb-cat') { lastBoard = a.dataset.cat; openBoards(a.dataset.cat); return; }
     if (act === 'answers') {
       const box = a.closest('.disc-item').querySelector('.answers');
       box.hidden = !box.hidden; a.textContent = box.hidden ? 'Show answers' : 'Hide answers';
@@ -1626,7 +1783,22 @@ $('modal').addEventListener('click', e => {
   }
   if (e.target === $('modal') && S.phase !== 'over' && !$('modal').querySelector('.no-dismiss')) closeModal();
 });
-addEventListener('keydown', e => { if (e.key === 'Escape' && !$('modal').hidden && S.phase !== 'over' && !$('modal').querySelector('.no-dismiss')) closeModal(); });
+/* Esc: close what's open, or quit the game (press it twice in a game) */
+addEventListener('keydown', e => {
+  if (e.key !== 'Escape' || e.defaultPrevented) return;
+  if (TUT.on || !$('countdown').hidden) return;
+  const modalOpen = !$('modal').hidden;
+  if (modalOpen) {
+    if ($('modal').querySelector('[data-act="quit-yes"]')) { e.preventDefault(); quitGame(); return; }
+    if (S.seq && !S.seq.done && !S.seq.dead) { S.seq.skip = true; return; }
+    if ($('modal').querySelector('.no-dismiss')) { if (MP.ch && !matchLive()) { leaveRoom(); MP.msg = ''; renderLobby(); } else if (!MP.ch) { MP.lobbyOpen = false; closeModal(); } return; }
+    if (S.phase === 'over') { if (S.mp && MP.ch) mpBackToRoom(); else { closeModal(); toMenu(); } return; }
+    closeModal(); return;
+  }
+  if (!$('game').hidden && (S.phase === 'playing' || S.phase === 'between' || S.phase === 'waiting')) { e.preventDefault(); askQuit(); return; }
+  if (!$('account').hidden) { if (!$('accEditForm').hidden) closeEdit(); else { sfx.click(); toMenu(); } return; }
+  if (!$('playSplit').hidden) collapsePlay();
+});
 
 function toMenu() { S.phase = 'menu'; S.paused = false; flameLevel = 0; show('menu'); renderMenuStats(); renderOppBar(); tutEvent('menu'); }
 
@@ -1634,8 +1806,8 @@ function askQuit() {
   if (S.phase !== 'playing' && S.phase !== 'between' && S.phase !== 'waiting') return;
   sfx.click();
   openModal(`<h2>QUIT GAME?</h2>
-    <p class="warn"><b>WARNING:</b> Any new rules discovered or achievements unlocked in this game will be discarded. The game won't count toward your highscore or statistics.${S.mp ? ' You will also <b>forfeit the 1v1</b>, which counts as a loss.' : ''}</p>
-    <p class="progress">The clock keeps running while you decide.</p>
+    <p class="warn"><b>WARNING:</b> Any new rules discovered or achievements unlocked in this game will be discarded. The game won't count toward your highscore or statistics.${S.mp ? ' You will also <b>forfeit the PvP match</b>, which counts as a loss.' : ''}</p>
+    <p class="progress">The clock keeps running while you decide. <span class="esc-hint">Press Esc again to quit.</span></p>
     <div class="row"><button class="btn red" data-act="quit-yes" type="button">QUIT GAME</button><button class="btn dark" data-act="quit-no" type="button">KEEP PLAYING</button></div>`);
 }
 function quitGame() {
@@ -1680,37 +1852,58 @@ const PX = {
   sword: ['..........##','.........###','........###.','.......###..','..#...###...','..##.###....','...####.....','....##......','...####.....','..##..##....','.##.........','##..........'],
   fist: ['............','..##.##.##..','.#########..','.##########.','.##########.','.##########.','.#########..','..########..','...######...','...######...','...######...','............'],
   versus: ['............','#...#..####.','#...#.#.....','#...#.#.....','.#.#...###..','.#.#......#.','..#.......#.','..#...####..','............','............','............','............'],
+  shield: ['.##########.','.#........#.','.#.######.#.','.#.######.#.','.#.######.#.','.#.######.#.','..#.####.#..','..#.####.#..','...#.##.#...','....#..#....','.....##.....','............'],
+  flag: ['.##.........','.##########.','.##.##.##.#.','.####.##.##.','.##.##.##.#.','.##########.','.##.........','.##.........','.##.........','.##.........','####........','............'],
+  glove: ['...######...','..########..','.##########.','.##########.','.###.######.','.###.######.','.##########.','..########..','..#######...','...######...','...######...','...######...'],
+  door: ['..########..','..#......#..','..#......#..','..#......#..','..#......#..','..#....#.#..','..#......#..','..#......#..','..#......#..','..#......#..','############','............'],
+  alarm: ['.##......##.','##..####..##','...#....#...','..#..#...#..','.#...#....#.','.#...###..#.','.#........#.','..#......#..','...#....#...','....####....','...#....#...','..#......#..'],
+  zzz: ['............','.......#####','..........#.','.........#..','....####.###','.......#....','......#.....','#####.####..','...#........','..#.........','.#..........','#####.......'],
   q: ['....####....','...##..##...','..##....##..','.......##...','......##....','.....##.....','.....##.....','............','.....##.....','.....##.....','............','............']
 };
 const ACH = [
-  { id: 'robot', name: 'You are not a robot', desc: 'Fail a game', icon: 'robot', test: x => !x.completed },
-  { id: 'buddy', name: 'Great job buddy', desc: 'Win a game', icon: 'trophy', test: x => x.completed },
-  { id: 'holy', name: 'Holy mother of god', desc: 'Beat a game in under 20 seconds', icon: 'bolt', test: x => x.completed && x.time < 20 },
-  { id: 'quick', name: 'Pretty Quick', desc: 'Beat a game in under 1 minute', icon: 'watch', test: x => x.completed && x.time < 60 },
-  { id: 'long', name: "That's a looooooong password", desc: 'Win a game with a password over 100 characters', icon: 'longkey', test: x => x.completed && x.len > 100 },
-  { id: 'short', name: 'That reminds me of my pe… nevermind', desc: 'Win a game with a password under 25 characters', icon: 'tinykey', test: x => x.completed && x.len < 25 },
-  { id: 'explorer', passive: true, name: 'Explorer', desc: 'Discover all rules', icon: 'compass', test: x => x.discovered >= RULES.length },
-  { id: 'hard', passive: true, name: "It isn't that hard", desc: 'Lose 5 games', icon: 'skull', test: x => x.st.games - x.st.wins >= 5 },
-  { id: 'addicted', passive: true, name: 'Addicted', desc: 'Play for 30 minutes in total', icon: 'coffee', test: x => x.st.time >= 1800 },
-  { id: 'beginning', passive: true, name: 'The beginning', desc: 'Play for 1 minute in total', icon: 'sprout', test: x => x.st.time >= 60 },
-  { id: 'there', name: 'Are we there yet?', desc: 'Beat a game in over 4 minutes', icon: 'snail', test: x => x.completed && x.time > 240 },
+  { id: 'robot', name: 'You are not a robot', desc: 'Fail a game', icon: 'robot', test: x => !x.completed, prog: x => [Math.min(1, (x.st.games || 0) - (x.st.wins || 0)), 1] },
+  { id: 'buddy', name: 'Great job buddy', desc: 'Win a game', icon: 'trophy', test: x => x.completed, prog: x => [Math.min(1, x.st.wins || 0), 1] },
+  { id: 'holy', name: 'Holy mother of god', desc: 'Beat a game in under 20 seconds', icon: 'bolt', test: x => x.fullRun && x.time < 20 },
+  { id: 'quick', name: 'Pretty Quick', desc: 'Beat a game in under 1 minute', icon: 'watch', test: x => x.fullRun && x.time < 60 },
+  { id: 'long', name: "That's a looooooong password", desc: 'Win a game with a password over 100 characters', icon: 'longkey', test: x => x.fullRun && x.len > 100 },
+  { id: 'short', name: 'That reminds me of my pe… nevermind', desc: 'Win a game with a password under 25 characters', icon: 'tinykey', test: x => x.fullRun && x.len < 25 },
+  { id: 'explorer', passive: true, name: 'Explorer', desc: 'Discover all rules', icon: 'compass', test: x => x.discovered >= RULES.length, prog: x => [x.discovered, RULES.length] },
+  { id: 'hard', passive: true, name: "It isn't that hard", desc: 'Lose 5 games', icon: 'skull', test: x => x.st.games - x.st.wins >= 5, prog: x => [(x.st.games || 0) - (x.st.wins || 0), 5] },
+  { id: 'addicted', passive: true, name: 'Addicted', desc: 'Play for 30 minutes in total', icon: 'coffee', test: x => x.st.time >= 1800, prog: x => [Math.floor((x.st.time || 0) / 60), 30, 'min'] },
+  { id: 'beginning', passive: true, name: 'The beginning', desc: 'Play for 1 minute in total', icon: 'sprout', test: x => x.st.time >= 60, prog: x => [Math.floor((x.st.time || 0) / 60), 1, 'min'] },
+  { id: 'there', name: 'Are we there yet?', desc: 'Beat a game in over 4 minutes', icon: 'snail', test: x => x.fullRun && x.time > 240 },
   { id: 'justintime', name: 'Just in time', desc: 'Complete a round with under 5 seconds left', icon: 'hourglass', test: () => false },
   { id: 'quickster', name: 'Quickster', desc: 'Complete a single round in under 3 seconds', icon: 'rocket', test: () => false },
-  { id: 'muted', name: 'Get muted', desc: 'Turn off the sound', icon: 'muted', test: () => muted },
-  { id: 'leader', name: 'Topping the leaderboards', desc: 'Get over 15,000 points in one game', icon: 'crown', test: x => x.score > 15000 },
-  { id: 'office', passive: true, name: 'Office job', desc: 'Type out 1,000 characters', icon: 'keyboard', test: x => (x.st.chars || 0) >= 1000 },
-  { id: 'maxxer', passive: true, name: 'Point maxxer', desc: 'Earn 100,000 points in total', icon: 'diamond', test: x => (x.st.points || 0) >= 100000 },
-  { id: 'millionaire', passive: true, name: 'Millionaire', desc: 'Earn 1,000,000 points in total', icon: 'moneybag', test: x => (x.st.points || 0) >= 1000000 },
-  { id: 'chicken', passive: true, name: 'Chicken dinner', desc: 'Win 100 games', icon: 'drumstick', test: x => (x.st.wins || 0) >= 100 },
-  { id: 'rainbow', passive: true, name: 'LGBTQIA2+', desc: 'Unlock a rainbow medal', icon: 'rainbow', test: () => Object.values(acct.medals).some(l => l >= 11) },
-  { id: 'champion', passive: true, name: 'Champion', desc: 'Unlock a medal', icon: 'medal', test: () => Object.values(acct.medals).some(l => l >= 1) },
+  { id: 'muted', name: 'Get muted', desc: 'Turn off the sound', icon: 'muted', test: () => muted, prog: () => [muted ? 1 : 0, 1] },
+  { id: 'leader', name: 'Topping the leaderboards', desc: 'Get over 15,000 points in one game', icon: 'crown', test: x => x.score > 15000, prog: () => [Math.max(0, store.get('pg.best', 0) || 0, ...scores.map(q => q.score || 0)), 15000] },
+  { id: 'office', passive: true, name: 'Office job', desc: 'Type out 1,000 characters', icon: 'keyboard', test: x => (x.st.chars || 0) >= 1000, prog: x => [x.st.chars || 0, 1000] },
+  { id: 'maxxer', passive: true, name: 'Point maxxer', desc: 'Earn 100,000 points in total', icon: 'diamond', test: x => (x.st.points || 0) >= 100000, prog: x => [x.st.points || 0, 100000] },
+  { id: 'millionaire', passive: true, name: 'Millionaire', desc: 'Earn 1,000,000 points in total', icon: 'moneybag', test: x => (x.st.points || 0) >= 1000000, prog: x => [x.st.points || 0, 1000000] },
+  { id: 'chicken', passive: true, name: 'Chicken dinner', desc: 'Win 100 games', icon: 'drumstick', test: x => (x.st.wins || 0) >= 100, prog: x => [x.st.wins || 0, 100] },
+  { id: 'rainbow', passive: true, name: 'LGBTQIA2+', desc: 'Unlock a rainbow medal', icon: 'rainbow', test: () => Object.values(acct.medals).some(l => l >= 11), prog: () => [Math.max(0, ...Object.values(acct.medals)), 11, 'lvl'] },
+  { id: 'champion', passive: true, name: 'Champion', desc: 'Unlock a medal', icon: 'medal', test: () => Object.values(acct.medals).some(l => l >= 1), prog: () => [Object.values(acct.medals).some(l => l >= 1) ? 1 : 0, 1] },
   { id: 'style', name: "I've got style", desc: 'Set a title', icon: 'shades', test: () => false },
   { id: 'uncertain', name: 'Uncertain', desc: 'Change your username', icon: 'pencil', test: () => false },
   { id: 'hello', name: 'Hello, my name is...', desc: 'Set your username for the first time', icon: 'nametag', test: () => false },
-  { id: 'mpfirst', name: 'Gotcha', desc: 'Win a 1v1 match', icon: 'sword', test: () => false },
-  { id: 'mpcrush', name: 'Absolutely crushed', desc: 'Win a 1v1 by more than 5,000 points', icon: 'fist', test: () => false },
-  { id: 'mprival', name: 'Rivals', desc: 'Play 10 1v1 matches', icon: 'versus', passive: true, test: x => (x.st.mpPlayed || 0) >= 10 }
+  { id: 'mpfirst', name: 'Gotcha!', desc: 'Win a game of Score', icon: 'sword', test: () => false, prog: x => [Math.min(1, ((x.st.pvp || {}).score || {}).w || 0), 1] },
+  { id: 'mpcrush', name: 'Absolutely crushed', desc: 'Win a game of Score by more than 5,000 points', icon: 'fist', test: () => false },
+  { id: 'mprival', name: 'Rivals', desc: 'Play 10 PvP games', icon: 'versus', passive: true, test: x => (x.st.mpPlayed || 0) >= 10, prog: x => [x.st.mpPlayed || 0, 10] },
+  { id: 'undefeated', name: 'Undefeated', desc: 'Win 3 PvP games in a row', icon: 'shield', test: () => false, prog: x => [x.st.mpStreak || 0, 3] },
+  { id: 'racewin', name: "I'm fast as flop", desc: 'Win a game of Race', icon: 'flag', test: () => false, prog: x => [Math.min(1, ((x.st.pvp || {}).race || {}).w || 0), 1] },
+  { id: 'kowin', name: 'KO', desc: 'Win a game of Knockout', icon: 'glove', test: () => false, prog: x => [Math.min(1, ((x.st.pvp || {}).ko || {}).w || 0), 1] },
+  { id: 'dropout', name: 'College Drop Out', desc: 'Play a game of Drop Out', icon: 'door', test: () => false, prog: x => [Math.min(1, (x.st.drop || {}).games || 0), 1] },
+  { id: 'hurry', name: 'I need to hurry up!', desc: 'Reach round 20 in Drop Out', icon: 'alarm', test: () => false, prog: x => [(x.st.drop || {}).best || 0, 20, 'rounds'] },
+  { id: 'stillthere', name: 'Are you still there?', desc: 'Look at the menu for 5 minutes straight', icon: 'zzz', test: () => false, prog: () => [Math.floor(S.menuIdle / 60), 5, 'min'] }
 ];
+const achKey = a => a.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+function sortedAch() { return ACH.slice().sort((a, b) => achKey(a).localeCompare(achKey(b))); }
+function achProgHTML(a, done) {
+  let cur = done ? 1 : 0, goal = 1, unit = '';
+  if (!done && a.prog) { try { const p = a.prog({ st: getStats(), acct, discovered: discovered.size }); cur = num(+p[0], 0); goal = num(+p[1], 1) || 1; unit = p[2] || ''; } catch (e) {} }
+  const pct = done ? 100 : Math.max(0, Math.min(100, cur / goal * 100));
+  const label = done ? 'Done' : goal > 1 ? `${nf(Math.min(cur, goal))} / ${nf(goal)}${unit ? ' ' + unit : ''}` : 'Not yet';
+  return `<div class="achbar"><i style="width:${pct.toFixed(1)}%"></i></div><span class="achnum">${label}</span>`;
+}
 let unlocked = store.get('pg.ach', {}) || {};
 function emblem(icon, on) {
   const rows = PX[icon] || PX.q;
@@ -1719,7 +1912,7 @@ function emblem(icon, on) {
   return `<svg class="emblem${on ? ' on' : ''}" viewBox="0 0 40 44" aria-hidden="true"><polygon class="hex-shadow" points="20,4 37,13.5 37,34.5 20,44 3,34.5 3,13.5"/><polygon class="hex" points="20,1 37,10.5 37,31.5 20,41 3,31.5 3,10.5"/><polygon class="hex-in" points="20,5 33.5,12.8 33.5,29.2 20,37 6.5,29.2 6.5,12.8"/><g class="px" transform="translate(9.5 10.5) scale(1.75)">${rects}</g></svg>`;
 }
 function checkAchievements(completed, st) {
-  const x = { completed, time: S.playTime, len: [...$('pw').value].length, st, discovered: discovered.size, score: S.score, acct };
+  const x = { completed, fullRun: completed && S.history.length >= 5, mode: S.mode, time: S.playTime, len: [...$('pw').value].length, st, discovered: discovered.size, score: S.score, acct };
   const fresh = [];
   const today = new Date().toISOString().slice(0, 10);
   for (const id of S.pending) { const a = ACH.find(q => q.id === id); if (a && !unlocked[id]) { unlocked[id] = today; fresh.push(a); } }
@@ -1754,22 +1947,25 @@ function revealAch(btn) {
   const a = ACH.find(x => x.id === btn.dataset.id); if (!a) return;
   btn.classList.add('revealed'); btn.removeAttribute('data-act');
   btn.querySelector('.emblem').outerHTML = emblem(a.icon, false);
-  btn.querySelector('.ach-txt').innerHTML = `<b>${escapeHtml(a.name)}</b><span>${escapeHtml(a.desc)}</span><em>Locked</em>`;
+  btn.querySelector('.ach-txt').innerHTML = `<b>${escapeHtml(a.name)}</b><span>${escapeHtml(a.desc)}</span>${achProgHTML(a, false)}`;
 }
 
 /* ---------- progression: XP, levels, medals, titles ---------- */
 const TIERS = ['Bronze', 'Copper', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Emerald', 'Ruby', 'Sapphire', 'Prismatic', 'Rainbow'];
 const tierCls = i => 't-' + TIERS[Math.max(0, Math.min(10, i))].toLowerCase();
 const MEDALS = [
-  { id: 'wins', name: 'Wins', icon: 'trophy', steps: [1, 5, 10, 20, 40, 50, 75, 100, 125, 150, 200], value: st => st.wins || 0, unit: n => nf(n) + (n === 1 ? ' win' : ' wins'),
+  { id: 'wins', name: 'Wins', icon: 'trophy', steps: [1, 5, 10, 15, 20, 25, 50, 75, 100, 125, 150], value: st => st.wins || 0, unit: n => nf(n) + (n === 1 ? ' win' : ' wins'),
     titles: ['Beginner', 'Novice', 'Apprentice', 'Skilled', 'Expert', 'Master', 'Elite', 'Champion', 'Legend', 'Mythic', 'ULTIMATE'] },
   { id: 'typed', name: 'Typed', icon: 'keyboard', steps: [10, 250, 500, 750, 1000, 1500, 2000, 2500, 3000, 5000, 10000], value: st => st.chars || 0, unit: n => nf(n) + ' chars',
     titles: ['Applicant', 'Candidate', 'Intern', 'Junior', 'Associate', 'Specialist', 'Senior', 'Manager', 'Director', 'Executive', 'CEO'] },
-  { id: 'points', name: 'Points', icon: 'diamond', steps: [10000, 50000, 100000, 200000, 300000, 400000, 500000, 600000, 750000, 1000000, 2000000], value: st => st.points || 0, unit: n => nf(n) + ' pts',
+  { id: 'points', name: 'Points', icon: 'diamond', steps: [10000, 50000, 100000, 200000, 300000, 400000, 500000, 600000, 700000, 800000, 1000000], value: st => st.points || 0, unit: n => nf(n) + ' pts',
     titles: ['Ultra noob', 'Noob', 'Button Masher', 'Rookie', 'Casual', 'Grinder', 'Tryhard', 'Sweat', 'Pro', 'Gaming legend', 'Peak gamer'] },
   { id: 'time', name: 'Time played', icon: 'watch', steps: [1, 5, 10, 15, 30, 45, 60, 90, 120, 150, 180], value: st => (st.time || 0) / 60, unit: n => nf(Math.floor(n)) + ' min',
-    titles: ['I have a full-time job', 'I need to pay my bills', 'I should probably do something with my life', 'I rarely shower', 'My girlfriend left me', 'What is grass?', 'I never had a girlfriend', 'Terminally online', 'Unemployed by choice', 'Discord mod', 'Reddit mod'] }
+    titles: ['I have a full-time job', 'I need to pay my bills', 'I should probably do something with my life', 'I rarely shower', 'My girlfriend left me', 'What is grass?', 'I never had a girlfriend', 'Terminally online', 'Unemployed by choice', 'Discord mod', 'Reddit mod'] },
+  { id: 'pvp', name: 'PvP played', icon: 'versus', steps: [1, 5, 10, 20, 30, 40, 50, 60, 70, 80, 100], value: st => st.mpPlayed || 0, unit: n => nf(n) + (n === 1 ? ' game' : ' games'),
+    titles: ['Rival', 'Challenger', 'Adversary', 'Competitor', 'Opponent', 'Antagonist', 'Nemesis', 'Blood Rival', 'Eternal Enemy', 'Mortal Foe', 'Arch-Nemesis'] }
 ];
+function medalLevelV(m, v) { let l = 0; m.steps.forEach((s, i) => { if (v >= s) l = i + 1; }); return l; }
 const XP_ACH = 2000, XP_MEDAL = 5000, XP_RAINBOW = 10000;
 let acct = Object.assign({ name: 'Player', named: false, title: '', xp: 0, medals: {}, migrated: false }, store.get('pg.acct', {}) || {});
 function saveAcct() { store.set('pg.acct', acct); }
@@ -1831,16 +2027,18 @@ function grantXP(amount) {
   renderMenuStats();
   return { before, after };
 }
-function endRewards(completed, st) {
+function endRewards(completed, st, opts) {
+  opts = opts || {};
   const r = { parts: [], xp: 0, xpBefore: acct.xp, medBefore: Object.assign({}, acct.medals), valBefore: (S.prevMedalVals || MEDALS.map(() => 0)).slice(), valAfter: MEDALS.map(m => m.value(st)) };
-  if (completed) { const w = winXP(S.playTime, [...$('pw').value].length); r.parts.push(['Win', w]); r.xp += w; }
+  if (opts.base != null) { if (opts.base > 0) { r.parts.push([opts.baseLabel || 'Game', opts.base]); r.xp += opts.base; } }
+  else if (completed) { const w = winXP(S.playTime, [...$('pw').value].length); r.parts.push(['Win', w]); r.xp += w; }
   const ups = updateMedals(st);
   const fresh = checkAchievements(completed, st);
   if (fresh.length) { r.parts.push([fresh.length === 1 ? 'Achievement' : fresh.length + ' achievements', fresh.length * XP_ACH]); r.xp += fresh.length * XP_ACH; }
   if (ups.length) { const mx = medalXP(ups); r.parts.push([ups.length === 1 ? 'Medal level' : ups.length + ' medal levels', mx]); r.xp += mx; }
   S.lastFresh = fresh;
   fresh.forEach(a => queueToast(() => toastEl('ach', emblem(a.icon, true), 'ACHIEVEMENT UNLOCKED · +2,000 XP', a.name, a.desc), 'ach'));
-  if (!completed) ups.forEach(u => queueToast(() => toastEl('medal', medalHTML(u.m, u.level, st, true), `MEDAL UP · +${nf(XP_MEDAL + (u.level === 11 ? XP_RAINBOW : 0))} XP`, `${u.m.name}: ${u.level === 11 ? 'ULTIMATE' : 'Level ' + u.level} (${TIERS[u.level - 1]})`, `New title unlocked: ${u.m.titles[u.level - 1]}`), 'medal'));
+  if (!completed && S.mode === 'standard') ups.forEach(u => queueToast(() => toastEl('medal', medalHTML(u.m, u.level, st, true), `MEDAL UP · +${nf(XP_MEDAL + (u.level === 11 ? XP_RAINBOW : 0))} XP`, `${u.m.name}: ${u.level === 11 ? 'ULTIMATE' : 'Level ' + u.level} (${TIERS[u.level - 1]})`, `New title unlocked: ${u.m.titles[u.level - 1]}`), 'medal'));
   const lv = grantXP(r.xp);
   r.before = lv.before; r.after = lv.after; r.xpAfter = acct.xp;
   saveAcct();
@@ -1904,6 +2102,19 @@ async function runVictory(r) {
   await flyXP(seq, r);
   if (seq.dead) return;
   $('progGain').classList.add('on');
+  await levelAndMedals(seq, r);
+}
+/* PvP: just the level bar and medals once the match result is in */
+async function runProgress(r) {
+  const seq = { skip: false, dead: false, done: false };
+  S.seq = seq;
+  if (!r) { seq.done = true; return; }
+  await pause(seq, 400);
+  if (seq.dead) return;
+  $('progGain').classList.add('on');
+  await levelAndMedals(seq, r);
+}
+async function levelAndMedals(seq, r) {
   // 3. level bar: fast, then slow, exactly 4 seconds, with an arpeggio
   const N = 22; let played = 0, lastLvl = levelInfo(r.xpBefore).lvl;
   const gain = r.xpAfter - r.xpBefore;
@@ -1931,9 +2142,9 @@ async function runVictory(r) {
     let lastShown = '';
     await tween(seq, 1000, p => {
       const v = v0 + (v1 - v0) * easeOut3(p);
-      const nl = medalLevel(m, { wins: v, chars: v, points: v, time: v * 60 });
+      const nl = medalLevelV(m, v);
       const extra = nl > (r.medBefore[m.id] || 0) ? `<span class="newtitle">New title: ${escapeHtml(m.titles[nl - 1])}</span>` : '';
-      const html = medalHTMLv(m, nl, m.id === 'wins' ? Math.round(v) : v, false, extra);
+      const html = medalHTMLv(m, nl, m.id === 'wins' || m.id === 'pvp' ? Math.round(v) : v, false, extra);
       if (html !== lastShown) {
         const fresh = document.createElement('div'); fresh.innerHTML = html;
         const nb = fresh.firstElementChild; nb.classList.add('in');
@@ -2026,8 +2237,10 @@ function statsHTML(st) {
       ${tile('GAMES LOST', nf((st.games || 0) - (st.wins || 0)), '')}
       ${tile('WIN STREAK', nf(st.streak || 0), 'Wins in a row right now')}
       ${tile('HIGHEST WIN STREAK', nf(st.bestStreak || 0), 'Your best ever')}
-      ${tile('1V1 RECORD', `${nf(st.mpWins || 0)}–${nf(st.mpLosses || 0)}${st.mpDraws ? '–' + nf(st.mpDraws) : ''}`, st.mpPlayed ? 'Wins – losses' + (st.mpDraws ? ' – draws' : '') : 'Play 1v1 Online with a friend')}
-      ${tile('1V1 MATCHES', nf(st.mpPlayed || 0), '')}
+      ${tile('PVP RECORD', `${nf(st.mpWins || 0)}–${nf(st.mpLosses || 0)}${st.mpDraws ? '–' + nf(st.mpDraws) : ''}`, st.mpPlayed ? 'Wins – losses' + (st.mpDraws ? ' – draws' : '') : 'Play PvP with a friend')}
+      ${tile('PVP GAMES', nf(st.mpPlayed || 0), st.pvp ? ['score', 'race', 'ko'].filter(k => st.pvp[k]).map(k => `${MODES[k].name} ${st.pvp[k].w}–${st.pvp[k].l}`).join(' · ') : '')}
+      ${tile('PVP WIN STREAK', nf(st.mpStreak || 0), 'PvP wins in a row right now')}
+      ${tile('DROP OUT GAMES', nf((st.drop || {}).games || 0), (st.drop || {}).games ? `${nf(st.drop.rounds)} rounds cleared in total` : 'Press Play → Drop Out')}
       ${tile('TOTAL POINTS EARNED', nf(st.points || 0), 'Every game, won or lost')}
       ${tile('TOTAL CHARACTERS TYPED', nf(st.chars || 0), "Pasted text doesn't count")}
       ${tile('AVERAGE GAME TIME', st.games ? fmtRun(st.time / st.games) : '–', st.games ? 'Every game, won or lost' : 'Press Play to start')}
@@ -2040,19 +2253,26 @@ function statsHTML(st) {
     <p class="progress note">Quickest, slowest, shortest and longest count only finished 5-round runs. Quit games don't count. Saved in this browser only.</p>`;
 }
 function achCardsHTML(fresh) {
-  return ACH.map(a => {
-    if (unlocked[a.id]) return `<div class="ach on">${emblem(a.icon, true)}<div class="ach-txt"><b>${escapeHtml(a.name)}${fresh && fresh.has(a.id) ? '<span class="newtag">NEW</span>' : ''}</b><span>${escapeHtml(a.desc)}</span><em>Unlocked ${unlocked[a.id]}</em></div></div>`;
+  return sortedAch().map(a => {
+    if (unlocked[a.id]) return `<div class="ach on">${emblem(a.icon, true)}<div class="ach-txt"><b>${escapeHtml(a.name)}${fresh && fresh.has(a.id) ? '<span class="newtag">NEW</span>' : ''}</b><span>${escapeHtml(a.desc)}</span><em>Unlocked ${unlocked[a.id]}</em>${achProgHTML(a, true)}</div></div>`;
     return `<button type="button" class="ach locked" data-act="reveal" data-id="${a.id}">${emblem('q', false)}<div class="ach-txt"><b class="q">???</b><b class="hov">Click to reveal</b></div></button>`;
   }).join('');
 }
-const MEDAL_HOW = { wins: 'by winning games', typed: 'by typing characters in games', points: 'by earning points', time: 'by playing (time spent in rounds)' };
+const MEDAL_HOW = { wins: 'by winning games', typed: 'by typing characters in games', points: 'by earning points', time: 'by playing (time spent in rounds)', pvp: 'by playing PvP games' };
 function titleWhy(key) {
   if (!key) return 'No title selected. You unlock titles by leveling up your medals.';
   const [id, l] = key.split(':'); const m = MEDALS.find(q => q.id === id); const lvl = +l;
   return `<b>${escapeHtml(m.titles[lvl - 1])}</b> comes from your <b>${escapeHtml(m.name)}</b> medal at ${lvl === 11 ? 'ULTIMATE' : 'level ' + lvl} (${TIERS[lvl - 1]}). That medal levels up ${MEDAL_HOW[id]}.`;
 }
+function scoresHTML() {
+  const std = scores.slice(0, 5), drop = dropScores().slice(0, 5);
+  const t1 = std.length ? `<table class="tbl"><thead><tr><th>#</th><th>SCORE</th><th>RESULT</th><th>DATE</th></tr></thead><tbody>${std.map((s, i) => `<tr><td>${i + 1}</td><td><b>${nf(s.score)}</b></td><td>${s.completed ? 'Won' : s.rounds + '/5'}</td><td>${s.date}</td></tr>`).join('')}</tbody></table>` : '<p class="progress">No Standard runs yet.</p>';
+  const t2 = drop.length ? `<table class="tbl"><thead><tr><th>#</th><th>ROUND</th><th>TIME</th><th>DATE</th></tr></thead><tbody>${drop.map((d, i) => `<tr><td>${i + 1}</td><td><b>${nf(d.round)}</b></td><td>${fmtRun(d.time || 0)}</td><td>${d.date}</td></tr>`).join('')}</tbody></table>` : '<p class="progress">No Drop Out runs yet.</p>';
+  return `<div class="tbl-wrap"><h4>STANDARD</h4>${t1}</div><div class="tbl-wrap"><h4>DROP OUT</h4>${t2}</div>`;
+}
 function renderAccount(freshAch) {
   const st = getStats();
+  $('accScoresBody').innerHTML = scoresHTML();
   const li = levelInfo(acct.xp);
   $('accNameText').textContent = acct.name;
   requestAnimationFrame(fitName);
@@ -2132,7 +2352,7 @@ function ruleSummary() {
 const END_WAITS = () => ({ gameWin: () => tutGo('win'), gameLose: () => tutGo('lose'), menu: () => tutGo('play') });
 const STEPS = {
   welcome: { html: () => `<b>Welcome to The (New and improved) Password Game!</b><br>Let's take a quick tour so you know how everything works.`, btn: "LET'S GO", next: () => tutGo('play') },
-  play: { target: '#play', html: () => 'Press <b>Play</b> to start your first game.', wait: { gameStart: () => tutGo('timer') } },
+  play: { target: '#playWrap', html: () => 'Press <b>Play</b>, then <b>Standard</b> to start your first game.', wait: { gameStart: () => tutGo('timer') } },
   timer: { target: '#timeBox', pause: true, html: () => "This is the <b>clock</b>. You get <b>2:00</b> per round. It's paused while I explain.", btn: 'NEXT', next: () => tutGo('rules') },
   rules: { target: '#rules', pause: true, html: () => `These are the <b>rules</b>. Right now your password must ${ruleSummary()}.`, btn: 'NEXT', next: () => tutGo('type') },
   type: { target: '.field', pause: true, html: () => 'Type a password that follows every rule. Each rule turns <b>green</b> when it\'s met. When they\'re all green, press <b>Enter</b> to submit. The clock starts when you press Go.', btn: 'GO',
@@ -2152,7 +2372,7 @@ const STEPS = {
   accname: { target: '#accNameText', html: () => 'This is your <b>username</b>. Your <b>title</b> shows right below it once you pick one.', btn: 'NEXT', next: () => tutGo('acctitle') },
   acctitle: { target: '#accEdit', html: () => 'Click <b>Edit</b> to change your username or pick a title. You unlock new titles when your medals level up.', btn: 'NEXT', next: () => tutGo('acclvl') },
   acclvl: { target: '#accLvl', html: () => 'Your <b>account level</b>. You earn XP by winning games, unlocking achievements and leveling up medals. The badge changes color every 10 levels.', btn: 'NEXT', next: () => tutGo('accmedals') },
-  accmedals: { target: '#accMedals', html: () => 'Your four <b>medals</b>: wins, characters typed, points and time played. Each one goes from level 1 to 10 and then <b>ULTIMATE</b>, changing color as it climbs.', btn: 'NEXT', next: () => tutGo('accach') },
+  accmedals: { target: '#accMedals', html: () => 'Your five <b>medals</b>: wins, characters typed, points, time played and PvP games. Each one goes from level 1 to 10 and then <b>ULTIMATE</b>, changing color as it climbs.', btn: 'NEXT', next: () => tutGo('accach') },
   accach: { target: '#accAch', html: () => 'All your <b>achievements</b>. Locked ones show ??? until you unlock them. Click one if you want to peek.', btn: 'NEXT', next: () => tutGo('accstats') },
   accstats: { target: '#accStats', html: () => 'And your <b>statistics</b>.', btn: 'NEXT', next: () => tutGo('bye') },
   bye: { html: () => "That's everything! Now go beat your <b>highscore</b> and unlock every <b>achievement</b>. Good luck!", btn: 'FINISH', next: () => tutEnd() }
@@ -2246,81 +2466,129 @@ async function ensureUser() {
   NET.user = r.data.user; return NET.user;
 }
 
-/* ---------- global leaderboard ---------- */
+/* ---------- global leaderboards ---------- */
 let lbTimer = 0;
 function lbPushSoon() { clearTimeout(lbTimer); lbTimer = setTimeout(lbPush, 1500); }
+function myProfile() {
+  const st = getStats(), std = st.std || {};
+  const ti = titleInfo(acct.title);
+  const stats = { games: st.games || 0, wins: st.wins || 0, time: Math.round(st.time || 0), chars: st.chars || 0, points: st.points || 0,
+    mpPlayed: st.mpPlayed || 0, mpWins: st.mpWins || 0, mpLosses: st.mpLosses || 0, mpDraws: st.mpDraws || 0, bestStreak: st.bestStreak || 0,
+    stdBest: Math.max(0, store.get('pg.best', 0) || 0, ...scores.map(x => x.score || 0)), stdFastest: std.fastest != null ? Math.round(std.fastest * 10) / 10 : null,
+    dropBest: dropBest(), dropGames: (st.drop && st.drop.games) || 0 };
+  return { v: 1, title: ti ? ti.text : '', titleTier: ti ? ti.tier : -1, medals: Object.assign({}, acct.medals), ach: Object.keys(unlocked).filter(id => ACH.some(a => a.id === id)), stats };
+}
 async function lbPush() {
   try {
-    const u = await ensureUser(); const st = getStats();
-    const best = Math.max(0, store.get('pg.best', 0) || 0, ...scores.map(x => x.score || 0));
+    const u = await ensureUser(); const st = getStats(); const std = ensureStd(Object.assign({}, st));
+    const prof = myProfile();
     const row = {
       id: u.id, name: String(acct.name || 'Player').slice(0, 14), level: levelInfo(acct.xp).lvl, xp: Math.max(0, Math.round(acct.xp)),
-      best_score: Math.min(100000, Math.round(best)), fastest_win: st.quick ? Math.max(0.1, Math.round(st.quick.time * 10) / 10) : null,
-      mp_wins: st.mpWins || 0, updated_at: new Date().toISOString()
+      std_best: Math.min(100000, Math.round(prof.stats.stdBest)), std_fastest: prof.stats.stdFastest ? Math.max(0.1, prof.stats.stdFastest) : null,
+      std_points: Math.round(std.points || 0), std_wins: std.wins || 0, drop_best: prof.stats.dropBest, pvp_wins: st.mpWins || 0,
+      time_played: Math.round(st.time || 0), chars_typed: st.chars || 0, profile: prof, updated_at: new Date().toISOString()
     };
     const { error } = await withTimeout(sbClient().from('leaderboard').upsert(row), 10000);
     NET.lbErr = error ? (error.message || 'write failed') : '';
   } catch (e) { NET.lbErr = (e && e.message) || 'offline'; }
 }
 const LB_CATS = {
-  best: { label: 'BEST SCORE', col: 'best_score', asc: false, filter: q => q.gt('best_score', 0), fmt: r => nf(r.best_score) },
-  level: { label: 'LEVEL', col: 'xp', asc: false, filter: q => q, fmt: r => 'Lvl ' + nf(r.level) },
-  mp: { label: '1V1 WINS', col: 'mp_wins', asc: false, filter: q => q.gt('mp_wins', 0), fmt: r => nf(r.mp_wins) },
-  fast: { label: 'FASTEST WIN', col: 'fastest_win', asc: true, filter: q => q.not('fastest_win', 'is', null), fmt: r => fmtRun(+r.fastest_win) }
+  std_best: { label: 'Best score', sub: 'Standard', col: 'std_best', asc: false, filter: q => q.gt('std_best', 0), fmt: r => nf(r.std_best) },
+  drop_best: { label: 'Best round', sub: 'Drop Out', col: 'drop_best', asc: false, filter: q => q.gt('drop_best', 0), fmt: r => 'Round ' + nf(r.drop_best) },
+  std_fastest: { label: 'Fastest win', sub: 'Standard', col: 'std_fastest', asc: true, filter: q => q.not('std_fastest', 'is', null), fmt: r => fmtRun(+r.std_fastest) },
+  level: { label: 'Account level', col: 'xp', asc: false, filter: q => q, fmt: r => 'Lvl ' + nf(r.level) },
+  pvp_wins: { label: 'PvP wins', col: 'pvp_wins', asc: false, filter: q => q.gt('pvp_wins', 0), fmt: r => nf(r.pvp_wins) },
+  time_played: { label: 'Time played', col: 'time_played', asc: false, filter: q => q.gt('time_played', 0), fmt: r => fmtLong(+r.time_played) },
+  chars_typed: { label: 'Characters typed', col: 'chars_typed', asc: false, filter: q => q.gt('chars_typed', 0), fmt: r => nf(r.chars_typed) },
+  std_points: { label: 'Total points', sub: 'Standard', col: 'std_points', asc: false, filter: q => q.gt('std_points', 0), fmt: r => nf(r.std_points) },
+  std_wins: { label: 'Total wins', sub: 'Standard', col: 'std_wins', asc: false, filter: q => q.gt('std_wins', 0), fmt: r => nf(r.std_wins) }
 };
-function openScores(tab, cat) {
+let lbRows = [];
+function openBoards(cat) {
   sfx.click();
-  const chips = Object.entries(LB_CATS).map(([k, v]) => `<button type="button" class="chip${k === (cat || 'best') ? ' on' : ''}" data-act="lb-cat" data-cat="${k}">${v.label}</button>`).join('');
-  const local = scores.length ? scores.map((s, i) => `<tr><td>${i + 1}</td><td><b>${nf(s.score)}</b></td><td>${s.completed ? 'Won' : s.rounds + '/5'}</td><td>${s.date}</td><td class="pwcell" title="${escapeHtml(s.pw)}">${escapeHtml(s.pw)}</td></tr>`).join('') : '<tr><td colspan="5">No runs yet. Press Play.</td></tr>';
-  openModal(`<h2>HIGHSCORE</h2>
-    <div class="tabs"><button type="button" class="tab${tab === 'global' ? '' : ' on'}" data-act="hs-local">THIS BROWSER</button><button type="button" class="tab${tab === 'global' ? ' on' : ''}" data-act="hs-global">GLOBAL</button></div>
-    ${tab === 'global' ? `<div class="chips">${chips}</div><div id="lbBody" class="lb-body"><p class="progress">Loading…</p></div>`
-      : `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>#</th><th>SCORE</th><th>ROUNDS</th><th>DATE</th><th>PASSWORD</th></tr></thead><tbody>${local}</tbody></table></div><p class="progress" style="margin-top:12px">Your 10 best runs in this browser.</p>`}
+  cat = LB_CATS[cat] ? cat : 'std_best';
+  lastBoard = cat;
+  const chips = Object.entries(LB_CATS).map(([k, v]) => `<button type="button" class="chip${k === cat ? ' on' : ''}" data-act="lb-cat" data-cat="${k}">${v.label}${v.sub ? ` <i>${v.sub}</i>` : ''}</button>`).join('');
+  openModal(`<h2>LEADERBOARDS</h2><div class="chips">${chips}</div><div id="lbBody" class="lb-body"><p class="progress">Loading…</p></div>
+    <p class="progress">Click a player to see their account.</p>
     <div class="row"><button class="btn dark" data-act="close" type="button">CLOSE</button></div>`);
-  if (tab === 'global') loadGlobal(cat || 'best');
+  loadBoard(cat);
 }
-async function loadGlobal(cat) {
+async function loadBoard(cat) {
   const body = $('lbBody'); if (!body) return;
   const c = sbClient();
-  if (!c) { body.innerHTML = `<p class="warn"><b>Offline.</b> The global leaderboard needs an internet connection and the hosted version of the game.</p>`; return; }
+  if (!c) { body.innerHTML = `<p class="warn"><b>Offline.</b> Leaderboards need an internet connection and the hosted version of the game.</p>`; return; }
   try {
     try { await ensureUser(); await lbPush(); } catch (e) {}
     const def = LB_CATS[cat];
-    let q = c.from('leaderboard').select('id,name,level,xp,best_score,fastest_win,mp_wins');
-    q = def.filter(q).order(def.col, { ascending: def.asc }).limit(25);
+    let q = c.from('leaderboard').select('id,name,level,xp,std_best,std_fastest,std_points,std_wins,drop_best,pvp_wins,time_played,chars_typed,profile');
+    q = def.filter(q).order(def.col, { ascending: def.asc }).limit(50);
     const { data, error } = await withTimeout(q, 10000);
     if ($('lbBody') !== body) return;
     if (error) throw error;
     const myId = NET.user && NET.user.id;
-    if (!data || !data.length) { body.innerHTML = '<p class="progress">No one on this board yet. Play a game to get on it.</p>'; return; }
-    body.innerHTML = `<div class="tbl-wrap"><table class="tbl lb"><thead><tr><th>#</th><th>PLAYER</th><th>${def.label}</th></tr></thead><tbody>${data.map((r, i) =>
-      `<tr class="${r.id === myId ? 'me' : ''}"><td>${i + 1}</td><td><b>${escapeHtml(String(r.name || 'Player').slice(0, 14))}</b>${r.id === myId ? ' <span class="newtag">YOU</span>' : ''}<small> · Lvl ${nf(+r.level || 0)}</small></td><td>${def.fmt(r)}</td></tr>`).join('')}</tbody></table></div>
-      ${NET.authErr ? `<p class="progress">You're not on the board yet: ${escapeHtml(NET.authErr)}. Ask the game's owner to turn on anonymous sign-ins in Supabase.</p>` : ''}`;
+    lbRows = data || [];
+    if (!lbRows.length) { body.innerHTML = '<p class="progress">No one on this board yet. Play a game to get on it.</p>'; return; }
+    body.innerHTML = `<div class="tbl-wrap"><table class="tbl lb"><thead><tr><th>#</th><th>PLAYER</th><th>${def.label.toUpperCase()}</th></tr></thead><tbody>${lbRows.map((r, i) =>
+      `<tr class="lbrow${r.id === myId ? ' me' : ''}" data-act="lb-player" data-i="${i}" tabindex="0"><td>${i + 1}</td><td><b>${escapeHtml(String(r.name || 'Player').slice(0, 14))}</b>${r.id === myId ? ' <span class="newtag">YOU</span>' : ''}<small> · Lvl ${nf(num(+r.level, 0))}</small></td><td>${def.fmt(r)}</td></tr>`).join('')}</tbody></table></div>
+      ${NET.lbErr ? `<p class="warn"><b>You're not on the board yet:</b> ${escapeHtml(NET.lbErr)}</p>` : ''}`;
   } catch (e) {
-    if ($('lbBody') === body) body.innerHTML = `<p class="warn"><b>Couldn't load the leaderboard.</b> ${escapeHtml((e && e.message) || '')}</p>`;
+    const msg = (e && e.message) || '';
+    if ($('lbBody') === body) body.innerHTML = `<p class="warn"><b>Couldn't load the leaderboards.</b> ${escapeHtml(msg)}${/schema cache|does not exist|leaderboard/i.test(msg) ? '<br>The database table is missing. Whoever runs the game needs to run the latest supabase-setup.sql in Supabase.' : ''}</p>`;
   }
 }
 
-/* ---------- 1v1 rooms ---------- */
+/* someone else's account, read-only, from their public profile */
+function openProfile(r) {
+  if (!r) return;
+  sfx.click();
+  const p = (r.profile && typeof r.profile === 'object') ? r.profile : {};
+  const st = (p.stats && typeof p.stats === 'object') ? p.stats : {};
+  const n = (k) => num(+st[k], 0);
+  const lvl = num(+r.level, 0);
+  const medals = MEDALS.map(m => { const l = Math.max(0, Math.min(11, Math.floor(num(+(p.medals || {})[m.id], 0)))); const tc = l ? tierCls(l - 1) : 't-locked'; return `<div class="medal sm"><div class="disc tier-fill ${tc}">${pixelSvg(m.icon)}<span class="lv">${l === 11 ? '★' : l || '–'}</span></div><b>${escapeHtml(m.name)}</b><span class="tier-name">${l ? TIERS[l - 1] : 'Locked'}</span></div>`; }).join('');
+  const have = new Set(Array.isArray(p.ach) ? p.ach.filter(id => typeof id === 'string') : []);
+  const achs = sortedAch().map(a => have.has(a.id) ? `<div class="ach on mini">${emblem(a.icon, true)}<div class="ach-txt"><b>${escapeHtml(a.name)}</b></div></div>` : `<div class="ach locked mini">${emblem('q', false)}<div class="ach-txt"><b class="q">???</b></div></div>`).join('');
+  const tile = (label, value) => `<div class="stat"><small>${label}</small><b>${value}</b></div>`;
+  const titleTier = Math.max(-1, Math.min(10, Math.floor(num(+p.titleTier, -1))));
+  openModal(`<div class="profile">
+    <div class="pf-head"><div><small class="acc-label">PLAYER</small><div class="pf-name"></div><div class="acc-titletext pf-title"></div></div>${lvlBadge(lvl)}</div>
+    <div class="acc-medals pf-medals">${medals}</div>
+    <h3>Highscores</h3>
+    <div class="stats">${tile('BEST SCORE · STANDARD', n('stdBest') ? nf(n('stdBest')) : '–')}${tile('BEST ROUND · DROP OUT', n('dropBest') || '–')}${tile('FASTEST WIN · STANDARD', st.stdFastest ? fmtRun(n('stdFastest')) : '–')}${tile('PVP RECORD', `${nf(n('mpWins'))}–${nf(n('mpLosses'))}${n('mpDraws') ? '–' + nf(n('mpDraws')) : ''}`)}</div>
+    <h3>Statistics</h3>
+    <div class="stats">${tile('GAMES PLAYED', nf(n('games')))}${tile('GAMES WON', nf(n('wins')))}${tile('TIME PLAYED', fmtLong(n('time')))}${tile('CHARACTERS TYPED', nf(n('chars')))}${tile('TOTAL POINTS', nf(n('points')))}${tile('HIGHEST WIN STREAK', nf(n('bestStreak')))}</div>
+    <h3>Achievements <small>${[...have].filter(id => ACH.some(a => a.id === id)).length}/${ACH.length}</small></h3>
+    <div class="achs pf-achs">${achs}</div>
+  </div>
+  <div class="row"><button class="btn" data-act="lb-back" type="button">BACK TO LEADERBOARDS</button><button class="btn dark" data-act="close" type="button">CLOSE</button></div>`);
+  const nm = $('modal').querySelector('.pf-name'); nm.textContent = String(r.name || 'Player').slice(0, 14);
+  const tt = $('modal').querySelector('.pf-title'); tt.textContent = typeof p.title === 'string' && p.title ? p.title.slice(0, 60) : 'No title';
+  if (!p.title) tt.classList.add('none');
+  if (titleTier >= 0) tt.dataset.tier = titleTier;
+}
+
+/* ---------- PvP rooms ---------- */
 const PEER = Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
 const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-const MP = { ch: null, code: '', host: false, status: 'idle', opp: null, oppSeen: 0, joinedAt: 0, hb: 0, where: 'lobby', match: null, goneAt: 0, msg: '', lobbyOpen: false, log: [], seenAt: 0 };
+let lastBoard = 'std_best';
+const MP = { mode: 'score', ch: null, code: '', host: false, status: 'idle', opp: null, oppSeen: 0, joinedAt: 0, hb: 0, where: 'lobby', match: null, goneAt: 0, msg: '', lobbyOpen: false, log: [], seenAt: 0 };
 function mpLog(line) {
   const t = new Date(); const ts = t.toTimeString().slice(0, 8);
   MP.log.push(ts + '  ' + line); if (MP.log.length > 40) MP.log.shift();
   const pre = $('mpDiag'); if (pre) pre.textContent = MP.log.join('\n');
 }
 function diagHTML() {
-  return `<details class="diag"><summary>Connection details</summary><pre id="mpDiag"></pre><p class="progress">If 1v1 isn't working, copy this and send it to whoever maintains the game.</p></details>`;
+  return `<details class="diag"><summary>Connection details</summary><pre id="mpDiag"></pre><p class="progress">If PvP isn't working, copy this and send it to whoever maintains the game.</p></details>`;
 }
-const END = s => s === 'finished' || s === 'out' || s === 'forfeit' || s === 'gone';
+const END = s => s === 'finished' || s === 'out' || s === 'forfeit' || s === 'gone' || s === 'beaten' || s === 'ko';
 const num = (v, d) => (typeof v === 'number' && isFinite(v) ? v : d);
 
 function openLobby(msg) {
   sfx.click();
   MP.msg = msg || '';
   MP.lobbyOpen = true;
-  openModal(`<div class="no-dismiss"></div><h2>1V1 ONLINE</h2><div id="lobbyBox"></div>`);
+  openModal(`<div class="no-dismiss"></div><h2>PVP</h2><div id="lobbyBox"></div>`);
   renderLobby();
 }
 function renderLobby() {
@@ -2333,7 +2601,7 @@ function renderLobbyInner(box) {
   const meName = escapeHtml(acct.name), meLvl = levelInfo(acct.xp).lvl;
   if (!MP.ch) {
     const ok = !!sbClient();
-    box.innerHTML = `<p>Race a friend: you both get the same rules at the same time. Both play every round, and the highest total after 5 rounds wins.</p>
+    box.innerHTML = `<p>Play a friend 1v1: you both get the same rules at the same time. The host picks the game mode: <b>Score</b>, <b>Race</b> or <b>Knockout</b>.</p>
       ${MP.msg ? `<p class="warn"><b>${escapeHtml(MP.msg)}</b></p>` : ''}
       ${ok ? `<div class="lobby-grid">
         <div class="lobby-card"><h3>Create a room</h3><p class="progress">You get a code to send to your friend.</p><button class="btn red" data-act="mp-create" type="button">CREATE ROOM</button></div>
@@ -2362,6 +2630,8 @@ function renderLobbyInner(box) {
       ${o ? `<div class="pcard"><small>${o.host ? 'HOST' : 'GUEST'}${o.where !== 'lobby' ? ' · STILL ON RESULTS' : ''}</small><b>${escapeHtml(String(o.name || 'Player').slice(0, 14))}</b><span>Level ${num(o.level, 0)}${o.title ? ' · ' + escapeHtml(String(o.title).slice(0, 40)) : ''}</span></div>`
         : `<div class="pcard empty"><small>WAITING</small><b>…</b><span>Send the code to a friend</span></div>`}
     </div>
+    <div class="modes">${PVP_MODES.map(k => MP.host ? `<button type="button" class="mode-opt${k === MP.mode ? ' on' : ''}" data-act="mp-mode" data-mode="${k}"><b>${MODES[k].name}</b><span>${MODES[k].desc}</span></button>`
+      : k === MP.mode ? `<div class="mode-opt on static"><small class="acc-label">MODE · PICKED BY THE HOST</small><b>${MODES[k].name}</b><span>${MODES[k].desc}</span></div>` : '').join('')}</div>
     ${MP.match && MP.match.result ? `<p class="progress">Last match: <b>${{ win: 'you won', loss: 'you lost', draw: 'draw' }[MP.match.result]}</b>.</p>` : ''}
     <div class="row">${MP.host ? `<button class="btn red" data-act="mp-start" type="button"${canStart ? '' : ' disabled'}>START</button>` : `<p class="progress wait-dots">Waiting for the host to start</p>`}
       <button class="btn dark" data-act="mp-leave" type="button">LEAVE ROOM</button></div>`;
@@ -2402,7 +2672,7 @@ async function joinRoom(code, asHost) {
 }
 function myInfo() {
   const ti = titleInfo(acct.title);
-  return { peer: PEER, name: String(acct.name).slice(0, 14), level: levelInfo(acct.xp).lvl, title: ti ? ti.text : '', host: MP.host, joinedAt: MP.joinedAt, where: MP.where };
+  return { peer: PEER, name: String(acct.name).slice(0, 14), level: levelInfo(acct.xp).lvl, title: ti ? ti.text : '', host: MP.host, joinedAt: MP.joinedAt, where: MP.where, mode: MP.mode };
 }
 function sayHello(reply) { send(Object.assign({ t: 'hello', reply: !!reply }, myInfo())); }
 function setOpp(info, via) {
@@ -2414,6 +2684,7 @@ function setOpp(info, via) {
   const had = MP.opp;
   MP.opp = { peer: info.peer, name: String(info.name || 'Player').slice(0, 14), level: num(info.level, 0), title: String(info.title || '').slice(0, 60), host: !!info.host, joinedAt: num(info.joinedAt, 0), where: info.where === 'game' || info.where === 'result' ? info.where : 'lobby' };
   MP.oppSeen = Date.now(); MP.goneAt = 0;
+  if (!MP.host && info.host && PVP_MODES.includes(info.mode) && MP.mode !== info.mode && !matchLive()) MP.mode = info.mode;
   if (!had) { mpLog(`found ${MP.opp.host ? 'host' : 'guest'} ${MP.opp.name} (via ${via})`); if (MP.host && !MP.match) tone(880, .1, 'square', .04); }
 }
 function mpFail(msg) { leaveRoom(); MP.msg = msg; renderLobby(); }
@@ -2453,7 +2724,7 @@ function onMsg(p) {
   if (!MP.opp) return;
   MP.oppSeen = Date.now(); if (MP.goneAt) { MP.goneAt = 0; renderOppBar(); }
   if (p.t === 'start') mpLog('host started the match');
-  if (p.t === 'start' && !MP.host && typeof p.seed === 'number' && (!MP.match || MP.match.seed !== p.seed) && MP.where === 'lobby') beginMatch(p.seed);
+  if (p.t === 'start' && !MP.host && typeof p.seed === 'number' && (!MP.match || MP.match.seed !== p.seed) && MP.where === 'lobby') beginMatch(p.seed, p.mode);
   if (p.t === 'prog' && MP.match && p.seed === MP.match.seed) {
     const o = MP.match.opp, wasEnded = END(o.status);
     if (wasEnded && !END(p.status)) return; // never un-end
@@ -2461,6 +2732,8 @@ function onMsg(p) {
     if (typeof p.status === 'string') o.status = p.status;
     if (typeof p.pw === 'string') o.pw = p.pw.slice(0, 400);
     if (typeof p.time === 'number') o.time = p.time;
+    if (typeof p.len === 'number') o.len = p.len;
+    if (Array.isArray(p.hist)) o.hist = p.hist.slice(0, 5).map(h => h && (h.s === 'c' || h.s === 'f') ? { s: h.s, len: num(h.len, 999) } : null);
     afterOppUpdate(!wasEnded && END(o.status));
   }
 }
@@ -2483,18 +2756,20 @@ function startGone() { if (!MP.goneAt) MP.goneAt = Date.now(); renderOppBar(); }
 function mpStart() {
   if (!MP.host || !MP.opp || MP.opp.where !== 'lobby') return;
   const seed = (Math.random() * 4294967296) >>> 0;
-  mpLog('starting match');
-  send({ t: 'start', seed });
-  beginMatch(seed);
+  mpLog('starting ' + MODES[MP.mode].name + ' match');
+  send({ t: 'start', seed, mode: MP.mode });
+  beginMatch(seed, MP.mode);
 }
-function beginMatch(seed) {
+function beginMatch(seed, mode) {
+  mode = PVP_MODES.includes(mode) ? mode : 'score';
   const oppName = MP.opp ? String(MP.opp.name || 'Opponent').slice(0, 14) : 'Opponent';
-  MP.match = { seed, oppName, result: null, recorded: false,
-    me: { round: 1, ok: 0, total: 2, score: 0, status: 'playing' },
-    opp: { round: 1, ok: 0, total: 2, score: 0, status: 'playing' } };
+  MP.match = { seed, mode, oppName, result: null, recorded: false, capRound: 0,
+    me: { round: 1, ok: 0, total: 2, score: 0, status: 'playing', hist: [] },
+    opp: { round: 1, ok: 0, total: 2, score: 0, status: 'playing', hist: [] },
+    ko: { hp: { me: 100, opp: 100 }, applied: 0, done: false, last: null } };
   MP.where = 'game'; MP.oppSeen = Date.now(); MP.goneAt = 0; trackMe();
   MP.lobbyOpen = false; closeModal();
-  countdown(() => { if (MP.match && MP.match.seed === seed) startGame({ seed }); });
+  countdown(() => { if (MP.match && MP.match.seed === seed) startGame({ seed, mode }); });
 }
 function countdown(done) {
   const el = $('countdown'); el.hidden = false;
@@ -2513,9 +2788,20 @@ function sendProg(extra) {
   if (extra) Object.assign(me, extra);
   send(Object.assign({ t: 'prog', seed: MP.match.seed }, me));
 }
+
+/* Score mode: hidden catch-up for whoever keeps submitting last while far behind (never shown to players) */
+function catchUp() {
+  const o = MP.match.opp;
+  const wasLast = (o.status === 'cleared' || o.status === 'submitting' || o.status === 'finished') && o.round >= S.round;
+  S.lastStreak = wasLast ? S.lastStreak + 1 : 0;
+  if (S.lastStreak >= 2 && S.score < 0.85 * o.score) return 1 + Math.min(0.25, 0.08 * S.lastStreak);
+  return 1;
+}
+
+/* Score mode: rounds stay in sync */
 function oppReadyFor(n) {
   const o = MP.match.opp;
-  return END(o.status) || (o.status === 'cleared' && o.round >= n) || o.round > n;
+  return END(o.status) || ((o.status === 'cleared' || o.status === 'submitting') && o.round >= n) || o.round > n;
 }
 function mpAfterClear() {
   if (oppReadyFor(S.round)) { $('burst').hidden = true; nextRound(); if ($('modal').hidden) $('pw').focus(); return; }
@@ -2524,61 +2810,196 @@ function mpAfterClear() {
 }
 function renderWait() {
   if (S.phase !== 'waiting' || !MP.match) return;
-  const o = MP.match.opp, b = $('burst');
-  b.innerHTML = `<div class="card wait"><h2>ROUND ${S.round} CLEARED</h2><p>Waiting for <b>${escapeHtml(MP.match.oppName)}</b> to clear it…</p><div class="why">${o.ok}/${o.total} rules · ${nf(o.score)} points${MP.goneAt ? ' · connection lost' : ''}</div></div>`;
+  const m = MP.match, o = m.opp, b = $('burst');
+  if (S.mode === 'ko') {
+    b.innerHTML = `<div class="card wait"><h2>ROUND ${S.round} ${m.ko.myFail ? 'FAILED' : 'DONE'}</h2><p>Waiting for <b>${escapeHtml(m.oppName)}</b>…</p><div class="why">${o.ok}/${o.total} rules${MP.goneAt ? ' · connection lost' : ''}</div></div>`;
+  } else {
+    b.innerHTML = `<div class="card wait"><h2>ROUND ${S.round} CLEARED</h2><p>Waiting for <b>${escapeHtml(m.oppName)}</b> to clear it…</p><div class="why">${o.ok}/${o.total} rules · ${nf(o.score)} points${MP.goneAt ? ' · connection lost' : ''}</div></div>`;
+  }
   b.hidden = false;
 }
+
+/* Knockout */
+function koRoundDone(s, len) {
+  const m = MP.match; if (!m) return;
+  m.me.hist[S.round - 1] = { s, len };
+  m.ko.myFail = s === 'f';
+  if (s === 'f') sfx.no(); else sfx.clear();
+  sendProg({ status: s === 'f' ? 'failed' : 'cleared', round: S.round, len, hist: m.me.hist });
+  S.phase = 'waiting';
+  renderWait();
+  koTryResolve();
+}
+function koDamage(a, b) {
+  // returns [damage to me, damage to opponent]
+  if (a.s === 'f' && b.s === 'f') return [20, 20];
+  if (a.s === 'f') return [40, 0];
+  if (b.s === 'f') return [0, 40];
+  if (a.len === b.len) return [0, 0];
+  const d = Math.min(40, 10 + 2 * Math.abs(a.len - b.len));
+  return a.len < b.len ? [0, d] : [d, 0];
+}
+function koTryResolve() {
+  const m = MP.match; if (!m || S.mode !== 'ko' || m.ko.done) return;
+  const n = S.round;
+  if (m.ko.applied >= n) return;
+  const a = m.me.hist[n - 1];
+  if (!a) return;
+  const oEnded = m.opp.status === 'forfeit' || m.opp.status === 'gone';
+  const b = m.opp.hist[n - 1];
+  if (!b && !oEnded) return;
+  m.ko.applied = n;
+  let dm = [0, 0];
+  if (b) dm = koDamage(a, b);
+  m.ko.hp.me = Math.max(0, m.ko.hp.me - dm[0]); m.ko.hp.opp = Math.max(0, m.ko.hp.opp - dm[1]);
+  m.ko.last = { dm, a, b };
+  renderHp(true);
+  const bEl = $('burst');
+  const line = !b ? `${escapeHtml(m.oppName)} left the match` :
+    dm[0] && dm[1] ? `You both failed: <b>-${dm[0]} HP</b> each` :
+    dm[1] ? `${a.s === 'f' ? '' : `Your password was ${b.s === 'f' ? 'in' : 'shorter (' + a.len + ' vs ' + b.len + ')'}. `}You dealt <b class="dmg-out">${dm[1]} damage</b>` :
+    dm[0] ? `${a.s === 'f' ? 'You ran out of time. ' : `Their password was shorter (${b.len} vs ${a.len}). `}You took <b class="dmg-in">${dm[0]} damage</b>` :
+    'Same length: no damage';
+  bEl.innerHTML = `<div class="card ko"><h2>ROUND ${n} RESULT</h2><p>${line}</p><div class="hp-mini"><span>YOU ${m.ko.hp.me} HP</span><span>${escapeHtml(m.oppName)} ${m.ko.hp.opp} HP</span></div></div>`;
+  bEl.hidden = false;
+  if (dm[1]) tone(220, .2, 'sawtooth', .05, .5); if (dm[0]) tone(140, .3, 'sawtooth', .06, .6);
+  const over = m.ko.hp.me <= 0 || m.ko.hp.opp <= 0 || n >= 5 || oEnded;
+  setTimeout(() => {
+    if (!MP.match || MP.match !== m || S.phase !== 'waiting') return;
+    bEl.hidden = true;
+    if (over) { m.ko.done = true; pvpRunEnd(m.ko.hp.me <= 0 ? 'ko' : 'finished'); }
+    else nextRound();
+  }, 2600);
+}
+function renderHp(hit) {
+  const wrap = $('hpWrap'); if (!wrap) return;
+  if (!S.mp || S.mode !== 'ko' || !MP.match) { wrap.hidden = true; return; }
+  const hp = MP.match.ko.hp;
+  wrap.innerHTML = `<div class="hp me"><small>YOU</small><div class="hpbar"><i style="width:${hp.me}%"></i></div><b>${hp.me}</b></div><div class="hp opp"><small></small><div class="hpbar"><i style="width:${hp.opp}%"></i></div><b>${hp.opp}</b></div>`;
+  wrap.querySelector('.opp small').textContent = MP.match.oppName.toUpperCase();
+  wrap.hidden = false;
+  if (hit) { wrap.classList.remove('hit'); void wrap.offsetWidth; wrap.classList.add('hit'); }
+}
+
+/* opponent updates */
 function afterOppUpdate(justEnded) {
   if (!MP.match) return;
-  const o = MP.match.opp;
+  const m = MP.match, o = m.opp;
   renderOppBar();
-  if (justEnded && S.mp && (S.phase === 'playing' || S.phase === 'waiting' || S.phase === 'between')) {
-    const what = o.status === 'out' ? 'ran out of time' : o.status === 'finished' ? 'finished all 5 rounds' : 'left the match';
-    toastEl('info', '<span class="bang">!</span>', '1V1', `${MP.match.oppName} ${what}`, o.status === 'finished' ? `Their score: ${nf(o.score)}. Keep going!` : 'Finish your run to lock in the win.');
+  const live = S.mp && (S.phase === 'playing' || S.phase === 'waiting' || S.phase === 'between');
+  // Score: when the opponent submits a round you're still on, your clock drops to 15 seconds
+  if (live && S.mode === 'score' && S.phase === 'playing' && m.capRound !== S.round && (o.status === 'cleared' || o.status === 'submitting' || o.status === 'finished') && o.round === S.round) {
+    m.capRound = S.round;
+    if (S.dispLeft > 15) { S.capAt = performance.now() + 15000; $('timeOut').classList.add('capped'); }
+    toastEl('info', '<span class="bang">!</span>', 'SCORE', `${m.oppName} submitted!`, S.dispLeft > 15 ? 'You have 15 seconds left this round.' : 'Hurry up!');
   }
-  if (S.phase === 'waiting' && oppReadyFor(S.round)) { $('burst').hidden = true; nextRound(); if ($('modal').hidden) $('pw').focus(); }
+  // Race: someone finishing first ends the race
+  if (live && S.mode === 'race' && o.status === 'finished' && !S.finalSubmitted) { pvpRunEnd('beaten'); return; }
+  // Knockout: opponent results arrive round by round
+  if (S.mode === 'ko' && S.phase === 'waiting') koTryResolve();
+  if (justEnded && live) {
+    if (S.mode === 'ko' && (o.status === 'forfeit' || o.status === 'gone')) { koTryResolve(); if (S.phase === 'playing') { m.ko.done = true; pvpRunEnd('finished'); } return; }
+    const what = o.status === 'out' ? 'ran out of time' : o.status === 'finished' ? 'finished all 5 rounds' : o.status === 'beaten' ? 'is out' : 'left the match';
+    toastEl('info', '<span class="bang">!</span>', 'PVP', `${m.oppName} ${what}`, o.status === 'finished' ? `Their score: ${nf(o.score)}. Keep going!` : 'Finish your run to lock in the win.');
+  }
+  if (S.mode === 'score' && S.phase === 'waiting' && oppReadyFor(S.round)) { $('burst').hidden = true; nextRound(); if ($('modal').hidden) $('pw').focus(); }
   else if (S.phase === 'waiting') renderWait();
   if (S.phase === 'over') mpResolve();
 }
+
+/* ---------- results ---------- */
 function mpOutcome(m) {
   const me = m.me, op = m.opp;
   if (me.status === 'forfeit') return 'loss';
   if (!END(me.status)) return null;
   if (op.status === 'forfeit' || op.status === 'gone') return 'win';
+  if (m.mode === 'ko') {
+    if (!m.ko.done) return null;
+    return m.ko.hp.me > m.ko.hp.opp ? 'win' : m.ko.hp.me < m.ko.hp.opp ? 'loss' : 'draw';
+  }
   if (!END(op.status)) return null;
-  if (me.status === 'out' && op.status === 'out' && me.round !== op.round) return me.round > op.round ? 'win' : 'loss';
-  if (me.status === 'out' && op.status !== 'out') return 'loss';
-  if (op.status === 'out' && me.status !== 'out') return 'win';
+  const outish = s => s === 'out' || s === 'beaten';
+  if (m.mode === 'race') {
+    if (me.status === 'finished' && op.status === 'finished') { const a = num(me.time, 1e9), b = num(op.time, 1e9); return a < b ? 'win' : a > b ? 'loss' : me.score >= op.score ? 'win' : 'loss'; }
+    if (me.status === 'finished') return 'win';
+    if (op.status === 'finished') return 'loss';
+    if (me.round !== op.round) return me.round > op.round ? 'win' : 'loss';
+    return me.score > op.score ? 'win' : me.score < op.score ? 'loss' : 'draw';
+  }
+  if (outish(me.status) && outish(op.status) && me.round !== op.round) return me.round > op.round ? 'win' : 'loss';
+  if (outish(me.status) && !outish(op.status)) return 'loss';
+  if (outish(op.status) && !outish(me.status)) return 'win';
   return me.score > op.score ? 'win' : me.score < op.score ? 'loss' : 'draw';
 }
-function mpEndMine(status) {
-  if (!S.mp || !MP.match) return;
-  sendProg({ status, pw: $('pw').value.slice(0, 400), time: Math.round(S.playTime * 10) / 10, score: S.score, round: S.round });
+/* my run is over (finished, out of time, beaten in a race, or knocked out) */
+function pvpRunEnd(status) {
+  if (S.phase === 'over') return;
+  const m = MP.match;
+  S.phase = 'over'; S.lastWin = status === 'finished';
+  clearTimeout(S.betweenTimer); $('burst').hidden = true;
+  const w = document.querySelector('.field .wave'); if (w) w.remove(); $('pw').classList.remove('waving');
+  if (status === 'out') { S.playTime += S.roundLen; sfx.fail(); }
+  if (status === 'ko' || status === 'beaten') sfx.fail();
+  if (m) sendProg({ status, pw: $('pw').value.slice(0, 400), time: Math.round(S.playTime * 10) / 10, score: S.score, round: S.round, len: [...$('pw').value].length, hist: m.me.hist });
+  toastHold = true;
+  const pwLen = [...$('pw').value].length;
+  const label = { finished: S.mode === 'ko' ? 'You survived all 5 rounds' : 'You finished all 5 rounds', out: 'You ran out of time', beaten: `${m ? escapeHtml(m.oppName) : 'Your opponent'} finished first`, ko: 'You got knocked out' }[status] || '';
+  openModal(`<h2 class="result">${escapeHtml((m ? MODES[m.mode].name : 'PvP').toUpperCase())}</h2>
+    <p class="progress">${label}</p>
+    <div class="mpres" id="mpRes"></div>
+    <div id="resultInfo"><div class="runline"><span><small>SCORE</small><b>${nf(S.score)}</b></span><span><small>RUN TIME</small><b>${fmtRun(S.playTime)}</b></span><span><small>ROUND</small><b>${Math.min(S.round, 5)}/5</b></span><span><small>PASSWORD</small><b>${pwLen} ch</b></span></div>
+    <div id="pvpRewards"></div></div>
+    <h3>Your password<span class="meta">${pwLen} ${pwLen === 1 ? 'character' : 'characters'}</span></h3>
+    ${copyPwRow()}
+    ${resultButtons('PLAY AGAIN')}`, 'slide');
+  wireCopy();
+  mpResolve();
 }
 function mpResolve() {
   const m = MP.match; if (!m) return;
   const res = mpOutcome(m);
-  if (res && !m.recorded) {
-    m.recorded = true; m.result = res;
-    const st = getStats();
-    st.mpPlayed = (st.mpPlayed || 0) + 1;
-    if (res === 'win') st.mpWins = (st.mpWins || 0) + 1; else if (res === 'loss') st.mpLosses = (st.mpLosses || 0) + 1; else st.mpDraws = (st.mpDraws || 0) + 1;
-    store.set('pg.stats', st); statsMem = st;
-    if (res === 'win') { award('mpfirst'); if (m.me.score - m.opp.score > 5000 && m.opp.status !== 'forfeit' && m.opp.status !== 'gone') award('mpcrush'); }
-    if (st.mpPlayed >= 10) award('mprival');
-    if (res === 'win') [523, 659, 784, 1046].forEach((f, k) => tone(f, .14, 'square', .045, 0, k * .09));
-    lbPushSoon();
-  }
+  if (res && !m.recorded) { m.recorded = true; m.result = res; mpRecord(res); }
   renderMpResult();
 }
-function mpResultHTML() { return S.mp && MP.match ? '<div class="mpres" id="mpRes"></div>' : ''; }
+/* stats, achievements and XP once the result is known */
+function mpRecord(res) {
+  const m = MP.match;
+  const st = baseStats();
+  S.prevMedalVals = MEDALS.map(x => x.value(st));
+  st.games = (st.games || 0) + 1; st.time = (st.time || 0) + S.playTime;
+  st.points = (st.points || 0) + S.score; st.chars = (st.chars || 0) + S.chars;
+  if (res === 'win') { st.wins = (st.wins || 0) + 1; st.streak = (st.streak || 0) + 1; st.bestStreak = Math.max(st.bestStreak || 0, st.streak); }
+  else st.streak = 0;
+  st.mpPlayed = (st.mpPlayed || 0) + 1;
+  if (res === 'win') st.mpWins = (st.mpWins || 0) + 1; else if (res === 'loss') st.mpLosses = (st.mpLosses || 0) + 1; else st.mpDraws = (st.mpDraws || 0) + 1;
+  st.mpStreak = res === 'win' ? (st.mpStreak || 0) + 1 : 0;
+  st.pvp = st.pvp || {}; const pm = st.pvp[m.mode] = st.pvp[m.mode] || { w: 0, l: 0, d: 0 };
+  pm[res === 'win' ? 'w' : res === 'loss' ? 'l' : 'd']++;
+  store.set('pg.stats', st); statsMem = st;
+  if (res === 'win') {
+    S.pending.add({ score: 'mpfirst', race: 'racewin', ko: 'kowin' }[m.mode]);
+    if (m.mode === 'score' && m.me.score - m.opp.score > 5000 && m.opp.status !== 'forfeit' && m.opp.status !== 'gone') S.pending.add('mpcrush');
+    if (st.mpStreak >= 3) S.pending.add('undefeated');
+    [523, 659, 784, 1046].forEach((f, k) => tone(f, .14, 'square', .045, 0, k * .09));
+  }
+  const base = res === 'win' ? 800 : res === 'draw' ? 400 : 200;
+  S.rewards = endRewards(res === 'win', st, { base, baseLabel: 'PvP ' + res });
+  lbPushSoon();
+  const box = $('pvpRewards');
+  if (box) {
+    box.innerHTML = progHTML(S.rewards);
+    runProgress(S.rewards).then(() => releaseToasts());
+  } else releaseToasts();
+}
+function mpResultHTML() { return '<div class="mpres" id="mpRes"></div>'; }
 function renderMpResult() {
   const box = $('mpRes'); const m = MP.match; if (!box || !m) return;
-  const st = s => ({ finished: 'Finished all 5 rounds', out: 'Ran out of time', forfeit: 'Left the match', gone: 'Disconnected', cleared: 'Playing', playing: 'Playing', lobby: '' }[s] || '');
-  const head = m.result === 'win' ? '<b class="w">YOU WIN THE 1V1!</b>' : m.result === 'loss' ? '<b class="l">YOU LOST THE 1V1</b>' : m.result === 'draw' ? '<b>IT\'S A DRAW</b>'
-    : `<b class="p">WAITING FOR ${escapeHtml(m.oppName.toUpperCase())}…</b><span>Round ${m.opp.round}/5 · ${m.opp.ok}/${m.opp.total} rules</span>`;
-  const col = (who, name, p, mine) => `<div class="mp-p${mine ? ' me' : ''}${m.result && ((m.result === 'win') === mine) && m.result !== 'draw' ? ' won' : ''}"><small>${who}</small><b class="nm"></b><span class="sc">${nf(p.score)}</span><em>${st(p.status)}</em>${p.pw != null && END(p.status) ? `<code></code>` : ''}</div>`;
-  box.innerHTML = `<div class="mp-head">${head}</div><div class="mp-cols">${col('YOU', acct.name, m.me, true)}<div class="vs">VS</div>${col('OPPONENT', m.oppName, m.opp, false)}</div>`;
+  const st = s => ({ finished: m.mode === 'ko' ? 'Survived' : 'Finished all 5 rounds', out: 'Ran out of time', beaten: 'Finished second', ko: 'Knocked out', forfeit: 'Left the match', gone: 'Disconnected', cleared: 'Playing', submitting: 'Playing', failed: 'Playing', playing: 'Playing', lobby: '' }[s] || '');
+  const head = m.result === 'win' ? '<b class="w">YOU WIN!</b>' : m.result === 'loss' ? '<b class="l">YOU LOST</b>' : m.result === 'draw' ? '<b>IT\'S A DRAW</b>'
+    : `<b class="p">WAITING FOR ${escapeHtml(m.oppName.toUpperCase())}…</b><span>Round ${Math.min(5, m.opp.round)}/5 · ${m.opp.ok}/${m.opp.total} rules</span>`;
+  const big = p => m.mode === 'ko' ? `${p === m.me ? m.ko.hp.me : m.ko.hp.opp} HP` : m.mode === 'race' && p.time != null && END(p.status) ? fmtRun(p.time) : nf(p.score);
+  const col = (who, p, mine) => `<div class="mp-p${mine ? ' me' : ''}${m.result && ((m.result === 'win') === mine) && m.result !== 'draw' ? ' won' : ''}"><small>${who}</small><b class="nm"></b><span class="sc">${big(p)}</span><em>${st(p.status)}${m.mode !== 'score' ? ' · ' + nf(p.score) + ' pts' : ''}</em>${p.pw != null && END(p.status) ? `<code></code>` : ''}</div>`;
+  box.innerHTML = `<div class="mp-head">${head}</div><div class="mp-cols">${col('YOU', m.me, true)}<div class="vs">VS</div>${col('OPPONENT', m.opp, false)}</div>`;
   const cols = box.querySelectorAll('.mp-p');
   cols[0].querySelector('.nm').textContent = acct.name; cols[1].querySelector('.nm').textContent = m.oppName;
   const c0 = cols[0].querySelector('code'), c1 = cols[1].querySelector('code');
@@ -2597,7 +3018,11 @@ function mpForfeit() {
   if (!S.mp || !MP.match || MP.match.recorded) return;
   MP.match.me.status = 'forfeit';
   sendProg({ status: 'forfeit' });
-  mpResolve();
+  const m = MP.match; m.recorded = true; m.result = 'loss';
+  const st = baseStats();
+  st.mpPlayed = (st.mpPlayed || 0) + 1; st.mpLosses = (st.mpLosses || 0) + 1; st.mpStreak = 0;
+  st.pvp = st.pvp || {}; const pm = st.pvp[m.mode] = st.pvp[m.mode] || { w: 0, l: 0, d: 0 }; pm.l++;
+  store.set('pg.stats', st); statsMem = st;
 }
 
 /* opponent bar during a match */
@@ -2606,11 +3031,39 @@ function renderOppBar() {
   if (!S.mp || !MP.match || S.phase === 'menu') { bar.hidden = true; return; }
   const o = MP.match.opp;
   const status = MP.goneAt && !END(o.status) ? `CONNECTION LOST · ${Math.max(0, 20 - Math.floor((Date.now() - MP.goneAt) / 1000))}s`
-    : { playing: 'TYPING…', cleared: `CLEARED ROUND ${o.round}`, finished: 'FINISHED', out: 'OUT OF TIME', forfeit: 'LEFT', gone: 'DISCONNECTED' }[o.status] || '';
+    : { playing: 'TYPING…', cleared: `CLEARED ROUND ${o.round}`, submitting: `CLEARED ROUND ${o.round}`, failed: `FAILED ROUND ${o.round}`, finished: 'FINISHED', out: 'OUT OF TIME', beaten: 'OUT', ko: 'KNOCKED OUT', forfeit: 'LEFT', gone: 'DISCONNECTED' }[o.status] || '';
   const pips = Array.from({ length: Math.max(0, Math.min(10, o.total)) }, (_, i) => `<i class="${i < o.ok ? 'on' : ''}"></i>`).join('');
-  bar.innerHTML = `<span class="opp-tag">VS</span><b class="opp-name"></b><span class="opp-round">R${Math.min(5, o.round)}</span><span class="pips">${pips}</span><span class="opp-score">${nf(o.score)}</span><span class="opp-status s-${o.status}${MP.goneAt ? ' s-gone' : ''}">${status}</span>`;
+  bar.innerHTML = `<span class="opp-tag">VS</span><b class="opp-name"></b><span class="opp-round">R${Math.min(5, o.round)}</span><span class="pips">${pips}</span><span class="opp-score">${S.mode === 'ko' ? MP.match.ko.hp.opp + ' HP' : nf(o.score)}</span><span class="opp-status s-${o.status}${MP.goneAt ? ' s-gone' : ''}">${status}</span>`;
   bar.querySelector('.opp-name').textContent = MP.match.oppName;
   bar.hidden = false;
+}
+
+/* ---------- version + patch notes ---------- */
+const VERSION = 'V8';
+const PATCH_NOTES = [
+  ['V8', 'Game Modes', ['New single-player mode: Drop Out. Endless rounds of 3 fresh rules, with a clock that shrinks from 1 minute to 10 seconds.',
+    'PvP now has three modes the host can pick: Score, Race and Knockout (with health bars).', 'Play splits into Standard and Drop Out.',
+    'Leaderboards with 9 boards. Click a player to see their account.', 'Your highscores for each mode are shown in your Account.',
+    'New PvP medal with 11 titles. Updated Wins and Points medal levels.', '7 new achievements, sorted alphabetically, with progress bars.',
+    'Esc closes windows, goes back, or quits the game (press twice).', '1v1 Online is now called PvP. The Highscore button is gone.',
+    'Fixed: the score from your last game showed in a new game until it changed.']],
+  ['V7.1', 'Connection Fix', ["Players find each other's rooms reliably, even when Supabase presence is slow.", 'Connection details log in the PvP lobby.']],
+  ['V7', 'Online', ['1v1 multiplayer with room codes: same rules, same time.', 'Global leaderboard.', 'Self-hostable with Supabase.', '3 PvP achievements and PvP stats.']],
+  ['V6', 'Juice', ['Victory sequence: letter wave, sliding results, counting score, falling XP, 4-second level bar with arpeggio and ticking medals.',
+    'Account layout reworked. Title editing moved into Edit.', 'Red ! markers and notifications for new rules and titles.', 'Fixed the broken level-up popup.']],
+  ['V5', 'Level Up', ['Accounts: username, title, XP and levels.', '4 medals with 11 levels, colors and titles.', '14 new rules (67 in total).',
+    '7 new achievements.', 'First-time tutorial.', 'Background bright patches toned down.']],
+  ['V4', 'Polish', ['Much slower background.', 'Quit button.', 'Run time and password length on the results.', 'Fire dies out under 1 minute; FX quality setting.',
+    '4 new statistics and 6 new achievements.', 'Random victory and defeat titles.', 'Menu reordered.']],
+  ['V3', 'Achievement Hunter', ['11 achievements with hexagon emblems and pop-up notifications.', 'Win streak and games won/lost statistics.', 'Easier-to-read fonts.']],
+  ['V2', 'Fair Play', ['Fixed the false "new highscore" badge.', 'Rule hints explain the format instead of giving answers away.', 'Statistics screen.']],
+  ['V1', 'First Password', ['The (New and improved) Password Game: 5 rounds, 2 new rules a round, 54 rules, scoring, flames and a retro look.', 'Discovered rules and highscores.']]
+];
+function openNotes() {
+  sfx.click();
+  openModal(`<h2>PATCH NOTES</h2><p class="progress">You're playing ${VERSION}.</p><div class="notes">${PATCH_NOTES.map(([v, name, items]) =>
+    `<section class="note-v"><h3>${v} · ${escapeHtml(name)}${v === VERSION ? '<small>CURRENT</small>' : ''}</h3><ul>${items.map(i => `<li>${escapeHtml(i)}</li>`).join('')}</ul></section>`).join('')}</div>
+    <div class="row"><button class="btn dark" data-act="close" type="button">CLOSE</button></div>`);
 }
 
 /* ---------- "new" markers ---------- */
@@ -2636,10 +3089,13 @@ function renderMenuStats() {
     $('menuPlayer').innerHTML = `<b>${escapeHtml(acct.name)}</b>${ti ? ' · ' + escapeHtml(ti.text) : ''} · Level ${lv}`;
   }
   $('discCount').textContent = discovered.size + '/' + RULES.length;
-  $('bestSmall').textContent = scores.length ? nf(scores[0].score) : '–';
 }
 
-$('play').onclick = startGame;
+function collapsePlay() { if ($('playSplit')) { $('playSplit').hidden = true; $('play').hidden = false; } }
+$('play').onclick = () => { sfx.click(); $('play').hidden = true; $('playSplit').hidden = false; $('playStd').focus(); };
+$('playStd').onclick = () => startGame({ mode: 'standard' });
+$('playDrop').onclick = () => startGame({ mode: 'dropout' });
+document.addEventListener('click', e => { if (!$('playSplit').hidden && !e.target.closest('#playWrap')) collapsePlay(); });
 $('howBtn').onclick = () => { sfx.click(); openModal(`
   <h2>HOW TO PLAY</h2>
   <ol>
@@ -2649,6 +3105,8 @@ $('howBtn').onclick = () => { sfx.click(); openModal(`
     <li>Your password carries over. Old rules can break again if you edit it.</li>
     <li>If the clock hits 0:00, the run is over.</li>
   </ol>
+  <h3>Game modes</h3>
+  <p><b>Standard</b> is the game described above. <b>Drop Out</b> is endless: every round gives 3 brand-new rules and a fresh password, starting with 1 minute and getting 5 seconds shorter every 2 rounds (down to 10 seconds). Your score is the round you reach. <b>PvP</b> lets you play a friend in <b>Score</b>, <b>Race</b> or <b>Knockout</b>.</p>
   <h3>Spelling is forgiving</h3>
   <p>Case, spaces, hyphens and accents don't matter: <i>Under the Dome</i>, <i>UnderTheDome</i> and <i>under-the-dome</i> all count. Numbers hidden inside longer numbers count too (1942 contains 42). A few rules ask for a specific format, and their card tells you how.</p>
   <h3>Scoring</h3>
@@ -2657,7 +3115,7 @@ $('howBtn').onclick = () => { sfx.click(); openModal(`
   <p>Clear a round with more than a minute left and the floor catches fire. Keep the streak going and the fire grows. It dies out when less than a minute is left.</p>
   <h3>Account</h3>
   <p>Wins give XP (more for fast runs with short passwords). Achievements give 2,000 XP, medal levels 5,000 XP and rainbow medals another 10,000 XP. Medal levels unlock titles you can show in your Account.</p>
-  <div class="row"><button class="btn red" data-act="play" type="button">PLAY</button><button class="btn" data-act="tutorial" type="button">REPLAY TUTORIAL</button><button class="btn dark" data-act="close" type="button">CLOSE</button></div>`); };
+  <div class="row"><button class="btn red" data-act="play" type="button">PLAY STANDARD</button><button class="btn" data-act="tutorial" type="button">REPLAY TUTORIAL</button><button class="btn dark" data-act="close" type="button">CLOSE</button></div>`); };
 
 $('discBtn').onclick = () => {
   sfx.click();
@@ -2673,12 +3131,9 @@ $('discBtn').onclick = () => {
   markSeen('rules', [...fresh]);
 };
 
-$('hsBtn').onclick = () => openScores('local');
 $('mpBtn').onclick = () => openLobby();
-const _oldHs = () => {
-  const rows = scores.length ? scores.map((s, i) => `<tr><td>${i + 1}</td><td><b>${nf(s.score)}</b></td><td>${s.completed ? 'Won' : s.rounds + '/5'}</td><td>${s.date}</td><td class="pwcell" title="${escapeHtml(s.pw)}">${escapeHtml(s.pw)}</td></tr>`).join('') : '<tr><td colspan="5">No runs yet. Press Play.</td></tr>';
-  openModal(`<h2>HIGHSCORE</h2><div class="tbl-wrap"><table class="tbl"><thead><tr><th>#</th><th>SCORE</th><th>ROUNDS</th><th>DATE</th><th>PASSWORD</th></tr></thead><tbody>${rows}</tbody></table></div><p class="progress" style="margin-top:12px">Saved in this browser only.</p><div class="row"><button class="btn dark" data-act="close" type="button">CLOSE</button></div>`);
-};
+$('lbBtn').onclick = () => openBoards(lastBoard);
+$('verBtn').onclick = openNotes;
 
 /* ---------- input ---------- */
 const pwEl = $('pw');
@@ -2702,17 +3157,21 @@ function frame() {
   const dt = Math.min(0.1, Math.max(0, (now - lastFrame) / 1000));
   lastFrame = now;
   if (S.phase === 'playing' && !S.paused) {
-    S.timeLeft = ROUND_TIME - (now - S.roundStart) / 1000;
-    const secs = Math.ceil(S.timeLeft);
-    $('timeOut').textContent = fmtTime(S.timeLeft);
-    $('timeBox').classList.toggle('hurry', S.timeLeft < 20);
-    if (secs <= 15 && secs < S.lastTick && secs > 0) { S.lastTick = secs; sfx.tick(); }
-    if (S.timeLeft <= 0) { S.timeLeft = 0; $('timeOut').textContent = '0:00'; fail(); }
+    S.timeLeft = S.roundLen - (now - S.roundStart) / 1000;
+    S.dispLeft = S.capAt ? Math.min(S.timeLeft, (S.capAt - now) / 1000) : S.timeLeft;
+    const secs = Math.ceil(S.dispLeft);
+    $('timeOut').textContent = fmtTime(S.dispLeft);
+    $('timeBox').classList.toggle('hurry', S.dispLeft < Math.min(20, S.roundLen / 3));
+    if (secs <= Math.min(15, S.roundLen / 2) && secs < S.lastTick && secs > 0) { S.lastTick = secs; sfx.tick(); }
+    if (S.dispLeft <= 0) timeUp();
   }
+  // "Are you still there?": the menu, untouched by modals, for 5 minutes straight
+  if (!$('menu').hidden && $('modal').hidden && !TUT.on && document.visibilityState === 'visible') { S.menuIdle += dt; if (S.menuIdle >= 300 && !unlocked.stillthere) award('stillthere'); }
+  else S.menuIdle = 0;
   // heat target
   let target;
-  if (S.phase === 'playing') target = 1 - Math.max(0, S.timeLeft) / ROUND_TIME;
-  else if (S.phase === 'between') target = 0;
+  if (S.phase === 'playing') target = 1 - Math.max(0, S.dispLeft) / S.roundLen;
+  else if (S.phase === 'between' || S.phase === 'waiting') target = 0;
   else if (S.phase === 'over') target = S.lastWin ? .15 : 1;
   else target = .06 + .05 * Math.sin(now / 3000);
   heatShown += (target - heatShown) * .04;
