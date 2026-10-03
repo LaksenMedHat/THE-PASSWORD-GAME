@@ -412,6 +412,9 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .mp-p em { font-style: normal; font-size: 12px; color: var(--dim); }
 .mp-p code { font-family: var(--body); font-size: 12px; word-break: break-all; color: var(--ink); background: var(--edge); border-radius: 6px; padding: 6px 8px; max-height: 6em; overflow-y: auto; }
 
+.diag { margin-top: 16px; font-size: 12px; color: var(--dim); }
+.diag summary { cursor: pointer; }
+.diag pre { background: var(--edge); border-radius: 8px; padding: 10px; max-height: 180px; overflow: auto; font-size: 11px; white-space: pre-wrap; color: var(--ink); user-select: text; }
 .progress { color: var(--dim); font-size: 14px; margin: -4px 0 14px; }
 
 @media (max-width: 860px) {
@@ -2301,7 +2304,15 @@ async function loadGlobal(cat) {
 /* ---------- 1v1 rooms ---------- */
 const PEER = Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
 const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-const MP = { ch: null, code: '', host: false, status: 'idle', opp: null, oppSeen: 0, joinedAt: 0, hb: 0, where: 'lobby', match: null, goneAt: 0, msg: '', lobbyOpen: false };
+const MP = { ch: null, code: '', host: false, status: 'idle', opp: null, oppSeen: 0, joinedAt: 0, hb: 0, where: 'lobby', match: null, goneAt: 0, msg: '', lobbyOpen: false, log: [], seenAt: 0 };
+function mpLog(line) {
+  const t = new Date(); const ts = t.toTimeString().slice(0, 8);
+  MP.log.push(ts + '  ' + line); if (MP.log.length > 40) MP.log.shift();
+  const pre = $('mpDiag'); if (pre) pre.textContent = MP.log.join('\n');
+}
+function diagHTML() {
+  return `<details class="diag"><summary>Connection details</summary><pre id="mpDiag"></pre><p class="progress">If 1v1 isn't working, copy this and send it to whoever maintains the game.</p></details>`;
+}
 const END = s => s === 'finished' || s === 'out' || s === 'forfeit' || s === 'gone';
 const num = (v, d) => (typeof v === 'number' && isFinite(v) ? v : d);
 
@@ -2314,6 +2325,11 @@ function openLobby(msg) {
 }
 function renderLobby() {
   const box = $('lobbyBox'); if (!box) return;
+  renderLobbyInner(box);
+  if (!box.querySelector('.diag')) box.insertAdjacentHTML('beforeend', diagHTML());
+  const pre = $('mpDiag'); if (pre) pre.textContent = MP.log.join('\n') || 'Nothing yet.';
+}
+function renderLobbyInner(box) {
   const meName = escapeHtml(acct.name), meLvl = levelInfo(acct.xp).lvl;
   if (!MP.ch) {
     const ok = !!sbClient();
@@ -2328,7 +2344,14 @@ function renderLobby() {
     if (inp) { inp.addEventListener('input', () => { inp.value = inp.value.toUpperCase().replace(/[^A-Z0-9]/g, ''); }); inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); mpJoin(); } }); }
     return;
   }
-  if (MP.status === 'connecting') { box.innerHTML = `<p class="progress">Connecting to room <b>${MP.code}</b>…</p><div class="row"><button class="btn dark" data-act="mp-leave" type="button">CANCEL</button></div>`; return; }
+  if (MP.status === 'connecting') { box.innerHTML = `<p class="progress wait-dots">${MP.host ? 'Creating your room' : 'Connecting to room <b>' + MP.code + '</b>'}</p><div class="row"><button class="btn dark" data-act="mp-leave" type="button">CANCEL</button></div>`; return; }
+  if (!MP.host && !MP.opp) {
+    const long = Date.now() - MP.joinedAt > 12000;
+    box.innerHTML = `<p class="progress wait-dots">Looking for room <b>${MP.code}</b></p>
+      ${long ? `<p class="warn"><b>Can't find that room yet.</b> Check that your friend's room shows the code <b>${MP.code}</b>, that they're still in it, and that you're both on the same website (the hosted game, not the claude.ai copy). This keeps searching.</p>` : ''}
+      <div class="row"><button class="btn dark" data-act="mp-leave" type="button">CANCEL</button></div>`;
+    return;
+  }
   if (MP.status === 'error') { box.innerHTML = `<p class="warn"><b>Couldn't connect to the multiplayer server.</b> Check your connection and try again. Multiplayer only works on the hosted version of the game.</p><div class="row"><button class="btn dark" data-act="mp-leave" type="button">BACK</button></div>`; return; }
   const o = MP.opp;
   const canStart = MP.host && o && o.where === 'lobby';
@@ -2350,29 +2373,55 @@ function mpJoin() {
   if (!/^[A-Z0-9]{4}$/.test(v)) { MP.msg = 'Room codes are 4 letters or numbers.'; renderLobby(); return; }
   joinRoom(v, false);
 }
-function joinRoom(code, asHost) {
+async function joinRoom(code, asHost) {
   leaveRoom();
-  const c = sbClient(); if (!c) { MP.msg = 'Multiplayer couldn\'t load.'; renderLobby(); return; }
-  Object.assign(MP, { code, host: asHost, status: 'connecting', opp: null, joinedAt: Date.now(), where: 'lobby', match: null, msg: '', goneAt: 0 });
-  const ch = c.channel('pg-room-' + code, { config: { broadcast: { self: false }, presence: { key: PEER } } });
+  const c = sbClient(); if (!c) { MP.msg = 'Multiplayer couldn\'t load.'; mpLog('supabase library not loaded'); renderLobby(); return; }
+  const topic = 'pg-room-' + code;
+  Object.assign(MP, { code, host: asHost, status: 'connecting', opp: null, joinedAt: Date.now(), where: 'lobby', match: null, msg: '', goneAt: 0, oppSeen: 0 });
+  mpLog(`${asHost ? 'creating' : 'joining'} room ${code}`);
+  renderLobby();
+  // supabase-js hands back an existing channel with the same name, so make sure an old one is fully gone
+  try { for (const old of (c.getChannels ? c.getChannels() : [])) if (old.topic === 'realtime:' + topic) { mpLog('removing stale channel'); await c.removeChannel(old); } } catch (e) {}
+  if (MP.code !== code || MP.status !== 'connecting') return;
+  const ch = c.channel(topic, { config: { broadcast: { self: false }, presence: { key: PEER } } });
   MP.ch = ch;
   ch.on('broadcast', { event: 'msg' }, m => { if (MP.ch === ch) onMsg(m && m.payload); });
   ch.on('presence', { event: 'sync' }, () => { if (MP.ch === ch) onPresence(); });
-  ch.subscribe(status => {
+  ch.subscribe((status, err) => {
     if (MP.ch !== ch) return;
+    mpLog('channel: ' + status + (err ? ' (' + (err.message || err) + ')' : ''));
     if (status === 'SUBSCRIBED') {
-      MP.status = 'online'; trackMe(); renderLobby();
-      if (!asHost) setTimeout(() => { if (MP.ch === ch && !(MP.opp && MP.opp.host)) mpFail(`No open room with code ${code}. Check the code with your friend.`); }, 3500);
-    } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') { if (MP.status !== 'online') { MP.status = 'error'; renderLobby(); } }
+      MP.status = 'online'; trackMe(); sayHello(false); renderLobby();
+      setTimeout(() => { if (MP.ch === ch) renderLobby(); }, 12500);
+    } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
+      if (MP.status !== 'online') { MP.status = 'error'; renderLobby(); }
+    }
   });
-  setTimeout(() => { if (MP.ch === ch && MP.status === 'connecting') { MP.status = 'error'; renderLobby(); } }, 9000);
-  MP.hb = setInterval(heartbeat, 2000);
-  renderLobby();
+  setTimeout(() => { if (MP.ch === ch && MP.status === 'connecting') { mpLog('gave up: no answer from the server after 10s'); MP.status = 'error'; renderLobby(); } }, 10000);
+  MP.hb = setInterval(heartbeat, 2500);
+}
+function myInfo() {
+  const ti = titleInfo(acct.title);
+  return { peer: PEER, name: String(acct.name).slice(0, 14), level: levelInfo(acct.xp).lvl, title: ti ? ti.text : '', host: MP.host, joinedAt: MP.joinedAt, where: MP.where };
+}
+function sayHello(reply) { send(Object.assign({ t: 'hello', reply: !!reply }, myInfo())); }
+function setOpp(info, via) {
+  if (!info || typeof info.peer !== 'string' || info.peer === PEER) return;
+  if (!!info.host === MP.host) { if (via === 'hello') mpLog('ignored another ' + (MP.host ? 'host' : 'guest')); return; }
+  if (MP.opp && MP.opp.peer !== info.peer) {
+    if (num(info.joinedAt, 0) > num(MP.opp.joinedAt, 0)) { send({ t: 'full', to: info.peer }); return; }
+  }
+  const had = MP.opp;
+  MP.opp = { peer: info.peer, name: String(info.name || 'Player').slice(0, 14), level: num(info.level, 0), title: String(info.title || '').slice(0, 60), host: !!info.host, joinedAt: num(info.joinedAt, 0), where: info.where === 'game' || info.where === 'result' ? info.where : 'lobby' };
+  MP.oppSeen = Date.now(); MP.goneAt = 0;
+  if (!had) { mpLog(`found ${MP.opp.host ? 'host' : 'guest'} ${MP.opp.name} (via ${via})`); if (MP.host && !MP.match) tone(880, .1, 'square', .04); }
 }
 function mpFail(msg) { leaveRoom(); MP.msg = msg; renderLobby(); }
 function leaveRoom() {
   clearInterval(MP.hb);
   if (MP.ch) {
+    send({ t: 'bye' });
+    mpLog('left room ' + MP.code);
     const ch = MP.ch; MP.ch = null;
     try { ch.untrack && ch.untrack(); } catch (e) {}
     try { sbClient().removeChannel(ch); } catch (e) {}
@@ -2381,26 +2430,29 @@ function leaveRoom() {
 }
 function trackMe() {
   if (!MP.ch || MP.status !== 'online') return;
-  const ti = titleInfo(acct.title);
-  try { MP.ch.track({ peer: PEER, name: String(acct.name).slice(0, 14), level: levelInfo(acct.xp).lvl, title: ti ? ti.text : '', host: MP.host, joinedAt: MP.joinedAt, where: MP.where }); } catch (e) {}
+  try { const r = MP.ch.track(myInfo()); if (r && r.then) r.then(v => { if (v && v !== 'ok') mpLog('presence track: ' + v); }, e => mpLog('presence track failed: ' + (e && e.message))); } catch (e) { mpLog('presence track error'); }
+  sayHello(true);
 }
 function onPresence() {
   let peers = [];
   try { peers = Object.values(MP.ch.presenceState() || {}).map(a => a && a[0]).filter(Boolean); } catch (e) {}
   const others = peers.filter(p => p.peer !== PEER).sort((a, b) => num(a.joinedAt, 0) - num(b.joinedAt, 0));
   if (others.length >= 2 && others.every(o => num(o.joinedAt, 0) < MP.joinedAt)) { mpFail('That room is already full.'); return; }
-  const opp = others.find(o => o.host !== MP.host) || null;
-  const had = MP.opp;
-  MP.opp = opp;
-  if (opp) { MP.oppSeen = Date.now(); MP.goneAt = 0; }
-  else if (had && matchLive()) startGone();
-  if (opp && !had && MP.host && !MP.match) tone(880, .1, 'square', .04);
+  if (!MP.presenceSeen) { MP.presenceSeen = true; mpLog('presence working: ' + others.length + ' other player(s) here'); }
+  const opp = others.find(o => !!o.host !== MP.host) || null;
+  if (opp) setOpp(opp, 'presence');
+  else if (MP.opp && Date.now() - MP.oppSeen > 6000) { if (matchLive()) startGone(); else { mpLog(MP.opp.name + ' left'); MP.opp = null; } }
   renderLobby(); renderOppBar();
 }
 function send(payload) { if (!MP.ch || MP.status !== 'online') return; try { MP.ch.send({ type: 'broadcast', event: 'msg', payload }); } catch (e) {} }
 function onMsg(p) {
   if (!p || typeof p !== 'object') return;
+  if (p.t === 'hello') { const isNew = !MP.opp; setOpp(p, 'hello'); if (!p.reply || isNew) sayHello(true); renderLobby(); renderOppBar(); return; }
+  if (p.t === 'full') { if (p.to === PEER) { mpLog('room is full'); mpFail('That room is already full.'); } return; }
+  if (p.t === 'bye') { if (MP.opp) { mpLog(MP.opp.name + ' left the room'); if (matchLive()) startGone(); else MP.opp = null; renderLobby(); } return; }
+  if (!MP.opp) return;
   MP.oppSeen = Date.now(); if (MP.goneAt) { MP.goneAt = 0; renderOppBar(); }
+  if (p.t === 'start') mpLog('host started the match');
   if (p.t === 'start' && !MP.host && typeof p.seed === 'number' && (!MP.match || MP.match.seed !== p.seed) && MP.where === 'lobby') beginMatch(p.seed);
   if (p.t === 'prog' && MP.match && p.seed === MP.match.seed) {
     const o = MP.match.opp, wasEnded = END(o.status);
@@ -2415,7 +2467,9 @@ function onMsg(p) {
 const matchLive = () => !!(MP.match && !MP.match.result);
 function heartbeat() {
   if (!MP.ch) return;
-  if (MP.status === 'online') trackMe();
+  if (MP.status === 'online') sayHello(true);
+  if (MP.opp && !matchLive() && Date.now() - MP.oppSeen > 12000) { mpLog(MP.opp.name + ' timed out'); MP.opp = null; renderLobby(); }
+  if (!MP.host && !MP.opp && MP.status === 'online' && !MP.seenAt) renderLobby();
   if (matchLive()) {
     sendProg();
     if (!END(MP.match.opp.status) && !MP.goneAt && Date.now() - MP.oppSeen > 10000) startGone();
@@ -2429,6 +2483,7 @@ function startGone() { if (!MP.goneAt) MP.goneAt = Date.now(); renderOppBar(); }
 function mpStart() {
   if (!MP.host || !MP.opp || MP.opp.where !== 'lobby') return;
   const seed = (Math.random() * 4294967296) >>> 0;
+  mpLog('starting match');
   send({ t: 'start', seed });
   beginMatch(seed);
 }
