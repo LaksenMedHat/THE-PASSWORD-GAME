@@ -50,11 +50,14 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .btn { transition: transform .2s cubic-bezier(.3,1.7,.5,1), box-shadow .1s, filter .18s; }
 .btn:hover { filter: brightness(1.13) saturate(1.12); animation: btnfloat 1.8s ease-in-out infinite; }
 @keyframes btnfloat { 0%, 100% { transform: translateY(-3px) rotate(-1deg); } 50% { transform: translateY(-7px) rotate(.8deg); } }
-.btn:active { animation: none; transform: translateY(4px) scale(.97); box-shadow: 0 2px 0 var(--edge); filter: brightness(.88) saturate(1.2); transition-duration: .05s; }
+.btn:active { animation: none; transform: translateY(4px) scale(1.03, .92); box-shadow: 0 2px 0 var(--edge); background: var(--b3); filter: none; transition-duration: .06s; }
+.btn.pop { animation: btnpop .5s cubic-bezier(.3,1.6,.5,1); }
+@keyframes btnpop { 0% { background: var(--b3); transform: translateY(4px) scale(1.03, .92); } 35% { background: var(--b2); transform: translateY(-3px) scale(.98, 1.05); } 100% { background: var(--b1); transform: none; } }
 .btn:active::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: rgba(255,255,255,.16); box-shadow: inset 0 0 0 2px rgba(255,255,255,.35); pointer-events: none; }
-.btn.red { background: var(--red); }
-.btn.gold { background: var(--gold); color: var(--edge); text-shadow: none; }
-.btn.dark { background: var(--panel-hi); }
+.btn { --b1: var(--blue); --b2: #7b5cff; --b3: #5ad1ff; background: var(--b1); }
+.btn.red { --b1: var(--red); --b2: #ff8a2b; --b3: #ffd23d; }
+.btn.gold { --b1: var(--gold); --b2: #ff8a2b; --b3: #fff07a; color: var(--edge); text-shadow: none; }
+.btn.dark { --b1: var(--panel-hi); --b2: #4a3f9e; --b3: #7262d6; }
 .btn small { font-family: var(--body); font-size: 14px; opacity: .85; margin-left: .5em; letter-spacing: 0; }
 
 /* ---------- menu ---------- */
@@ -82,6 +85,11 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .ap-row { display: grid; grid-template-columns: 64px 1fr 40px; align-items: center; gap: 8px; font-size: 12px; letter-spacing: .1em; color: var(--dim); }
 .ap-row output { text-align: right; color: var(--ink); font-variant-numeric: tabular-nums; }
 .ap-row input { width: 100%; accent-color: var(--gold); }
+.ap-check { display: grid; grid-template-columns: auto 1fr; gap: 8px; align-items: start; font-size: 12px; cursor: pointer; }
+.ap-check input { accent-color: var(--gold); width: 16px; height: 16px; margin-top: 1px; }
+.ap-check b { display: block; letter-spacing: .1em; color: var(--dim); font-weight: 400; }
+.ap-check small { display: block; color: var(--dim); opacity: .8; font-size: 11px; line-height: 1.35; }
+.ap-check .reload-link { display: inline; color: var(--gold); text-decoration: underline; cursor: pointer; }
 .audiopop .btn { font-size: 14px; padding: 8px; }
 .corners { position: fixed; top: calc(12px + env(safe-area-inset-top, 0px)); right: 12px; z-index: 6; display: flex; gap: 8px; }
 .quit { position: fixed; top: calc(12px + env(safe-area-inset-top, 0px)); left: 12px; z-index: 6; }
@@ -224,7 +232,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .emblem.on .hex-in { fill: #c9771d; }
 .emblem.on .px { fill: #fff6dc; }
 #toasts { position: fixed; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 25; display: flex; flex-direction: column; width: min(calc(100% - 32px), 420px); pointer-events: none; }
-.toast.info { grid-template-columns: 1fr; }
+.toast.info.plain { grid-template-columns: 1fr; }
 .toast { display: grid; grid-template-columns: 52px 1fr; gap: 12px; align-items: center; box-sizing: border-box; height: 88px; margin-top: 12px; overflow: hidden; background: var(--panel); border: 4px solid var(--edge); border-radius: 12px; box-shadow: 0 8px 0 var(--edge); padding: 8px 14px; animation: toastin .55s cubic-bezier(.2,.9,.3,1) both; }
 .toast-txt, .toast > div { min-width: 0; }
 .toast b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -439,6 +447,8 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .mp-cols { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 10px; align-items: start; }
 .mp-p { background: var(--panel); border-radius: 10px; padding: 10px 12px; display: grid; gap: 3px; min-width: 0; }
 .mp-p.won { box-shadow: inset 0 0 0 3px var(--good); }
+.mp-cols.solo { grid-template-columns: minmax(0, 1fr); }
+.race-loser { margin: 8px 0 0; }
 .mp-p small { font-size: 11px; letter-spacing: .14em; color: var(--dim); }
 .mp-p .nm { font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .mp-p .sc { font-family: var(--display); font-size: 40px; line-height: 1; color: var(--gold); font-variant-numeric: tabular-nums; }
@@ -449,32 +459,36 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .diag summary { cursor: pointer; }
 .diag pre { background: var(--edge); border-radius: 8px; padding: 10px; max-height: 180px; overflow: auto; font-size: 11px; white-space: pre-wrap; color: var(--ink); user-select: text; }
 /* ---------- V8 ---------- */
-.btn.orange { background: #ff8a2b; color: var(--edge); text-shadow: none; }
-.playwrap { position: relative; height: 88px; }
+.btn.orange { --b1: #ff8a2b; --b2: var(--red); --b3: #ffd23d; color: var(--edge); text-shadow: none; }
+.playwrap { position: relative; height: 88px; --c1: var(--red); --c2: #ff8a2b; --cm: #ffd23d; --t1: var(--ink); --t2: var(--edge); }
+.pvpwrap { height: 76px; --c1: var(--good); --c2: #2fb7ff; --cm: #b6ff6a; --t1: var(--edge); --t2: var(--edge); }
 .goo { position: absolute; inset: -6px -6px 0; filter: url(#goo) drop-shadow(0 6px 0 var(--edge)); pointer-events: none; }
-.blob { position: absolute; top: 6px; bottom: 6px; left: 6px; right: 6px; border-radius: 12px; background: var(--red);
+.blob { position: absolute; top: 6px; bottom: 6px; left: 6px; right: 6px; border-radius: 12px; background: var(--c1);
   transition: left .62s cubic-bezier(.55,-0.35,.3,1.45), right .62s cubic-bezier(.55,-0.35,.3,1.45), transform .2s cubic-bezier(.3,1.6,.5,1), filter .2s; }
 .playwrap.split .bl { right: calc(50% + 6px); }
-.strand { position: absolute; left: 44%; right: 44%; top: 34%; bottom: 34%; border-radius: 40%; background: linear-gradient(90deg, var(--red), #ffb03d); opacity: 0; }
+.strand { position: absolute; left: 44%; right: 44%; top: 34%; bottom: 34%; border-radius: 40%; background: linear-gradient(90deg, var(--c1), var(--cm)); opacity: 0; }
 .playwrap.split .strand { animation: strand .75s cubic-bezier(.4,0,.3,1); }
 .playwrap.joining .strand { animation: strand .6s cubic-bezier(.4,0,.3,1) reverse; }
 @keyframes strand { 0% { opacity: 1; transform: scaleX(.3) scaleY(1.6); } 35% { opacity: 1; transform: scaleX(1.6) scaleY(.7); } 70% { opacity: 1; transform: scaleX(2.2) scaleY(.22); } 100% { opacity: 0; transform: scaleX(2.4) scaleY(0); } }
-.playwrap.split .br { left: calc(50% + 6px); animation: tooranje .62s ease-out forwards; }
-.playwrap.joining .br { animation: tored .62s ease-in forwards; }
-@keyframes tooranje { 0% { background: var(--red); } 45% { background: #ffd23d; } 100% { background: #ff8a2b; } }
-@keyframes tored { 0% { background: #ff8a2b; } 55% { background: #ffd23d; } 100% { background: var(--red); } }
-.pbtn { position: absolute; top: 0; bottom: 0; border: 0; background: none; font-family: var(--display); font-size: 44px; letter-spacing: .04em; line-height: 1; color: var(--ink); text-shadow: 0 3px 0 rgba(0,0,0,.35); cursor: pointer; transition: opacity .25s, transform .3s cubic-bezier(.3,1.6,.5,1); }
+.playwrap.split .br { left: calc(50% + 6px); animation: tosecond .62s ease-out forwards; }
+.playwrap.joining .br { animation: tofirst .62s ease-in forwards; }
+@keyframes tosecond { 0% { background: var(--c1); } 45% { background: var(--cm); } 100% { background: var(--c2); } }
+@keyframes tofirst { 0% { background: var(--c2); } 55% { background: var(--cm); } 100% { background: var(--c1); } }
+.pbtn { position: absolute; top: 0; bottom: 0; border: 0; background: none; font-family: var(--display); font-size: 44px; letter-spacing: .04em; line-height: 1; color: var(--t1); text-shadow: 0 3px 0 rgba(0,0,0,.35); cursor: pointer; transition: opacity .25s, transform .3s cubic-bezier(.3,1.6,.5,1); }
+.pvpwrap .pbtn { text-shadow: none; font-size: 36px; }
 .pjoin { left: 0; right: 0; }
 .playwrap.split .pjoin { opacity: 0; transform: scale(.7); pointer-events: none; }
 .playsplit { position: absolute; inset: 0; }
 .playsplit .pbtn { width: calc(50% - 6px); font-size: 30px; opacity: 0; transform: scale(.6); }
-#playStd { left: 0; } #playDrop { right: 0; color: var(--edge); text-shadow: none; }
+.playsplit .pbtn:first-child { left: 0; } .playsplit .pbtn:last-child { right: 0; color: var(--t2); text-shadow: none; }
 .playwrap.split .playsplit .pbtn { opacity: 1; transform: none; transition-delay: .18s; }
-.playwrap:not(.split):hover .blob { transform: translateY(-4px); filter: brightness(1.1); }
-.playwrap:not(.split):active .blob { transform: translateY(4px); filter: brightness(.9); }
-.playwrap.split:has(#playStd:hover) .bl, .playwrap.split:has(#playDrop:hover) .br { transform: translateY(-4px) rotate(-1deg); filter: brightness(1.1); }
-.playwrap.split:has(#playStd:active) .bl, .playwrap.split:has(#playDrop:active) .br { transform: translateY(4px); filter: brightness(.9); }
-.playwrap.split:has(#playStd:hover) #playStd, .playwrap.split:has(#playDrop:hover) #playDrop { transform: translateY(-4px); }
+/* floating, like every other button */
+.playwrap:not(.split):hover .goo, .playwrap:not(.split):hover .pjoin { animation: btnfloat 1.8s ease-in-out infinite; }
+.playwrap:not(.split):hover .blob { filter: brightness(1.1); }
+.playwrap:not(.split):active .goo, .playwrap:not(.split):active .pjoin { animation: none; transform: translateY(4px) scale(1.02, .95); }
+.playwrap.split:has(.pbtn:first-child:hover) .bl, .playwrap.split:has(.pbtn:last-child:hover) .br { animation: btnfloat 1.8s ease-in-out infinite; filter: brightness(1.1); }
+.playwrap.split .playsplit .pbtn:hover { animation: btnfloat 1.8s ease-in-out infinite; transition-delay: 0s; }
+.playwrap.split:has(.pbtn:first-child:active) .bl, .playwrap.split:has(.pbtn:last-child:active) .br { animation: none; transform: translateY(4px) scale(1.02, .94); filter: brightness(.9); }
 @keyframes splitin { 0% { transform: scaleX(.6); opacity: 0; } 100% { transform: none; opacity: 1; } }
 .version { margin-top: 6px; background: none; border: 0; color: var(--dim); font-size: 12px; letter-spacing: .12em; }
 .version:hover u { color: var(--gold); }
@@ -560,7 +574,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
   .modes, .scores-grid, .hpwrap { grid-template-columns: minmax(0, 1fr); }
   .pf-medals { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .pf-achs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .playsplit .pbtn { font-size: 24px; } .pjoin { font-size: 40px; }
+  .playsplit .pbtn { font-size: 24px; } .pjoin { font-size: 40px; } .pvpwrap .pjoin { font-size: 32px; }
   .players, .mp-cols { grid-template-columns: minmax(0, 1fr); }
   .players .vs, .mp-cols .vs { justify-self: center; }
   .room-code b { font-size: 52px; }
@@ -584,12 +598,28 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .pcard .pwins { font-style: normal; font-size: 11px; letter-spacing: .14em; color: var(--gold); }
 .pcard span i { font-style: normal; }
 .progress.tiny { font-size: 12px; margin: 6px 0 0; }
+.devtime { margin-left: auto; font-family: var(--body); font-size: 12px; color: var(--dim); white-space: nowrap; }
+.note-v h3 { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
 .modes { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
 .mode-opt { transition: transform .15s, border-color .15s, opacity .2s; cursor: pointer; }
 .mode-opt:not(.off):not(.static):hover { transform: translateY(-2px); border-color: var(--dim); }
 .mode-opt.on:hover { border-color: var(--gold); }
 .mode-opt.off { opacity: .38; cursor: not-allowed; }
 .mode-opt .mode-n { display: none; }
+.mode-opt { position: relative; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-height: 54px; }
+.mode-opt.guest:not(.on) { opacity: .75; } .mode-opt.guest:not(.on):hover { opacity: 1; }
+.mode-tag { font-style: normal; font-size: 10px; letter-spacing: .14em; border-radius: 5px; padding: 2px 6px; margin-left: auto; }
+.mode-tag.on { background: var(--gold); color: var(--edge); } .mode-tag.req { background: var(--red); color: #fff; animation: blink 1.4s steps(2) infinite; }
+.info { position: relative; display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--panel-hi); color: var(--dim); font-family: var(--body); font-size: 12px; font-weight: 700; font-style: italic; cursor: help; flex: none; }
+.info:hover, .info:focus-visible { background: var(--gold); color: var(--edge); outline: none; }
+.info .tip { position: absolute; z-index: 20; bottom: calc(100% + 10px); left: 50%; transform: translate(-50%, 6px); width: 240px; padding: 10px 12px; border-radius: 10px; background: var(--edge); border: 2px solid var(--panel-hi); box-shadow: 0 6px 0 rgba(0,0,0,.4);
+  font-family: var(--body); font-style: normal; font-weight: 400; font-size: 12.5px; line-height: 1.45; color: var(--ink); text-align: left; letter-spacing: 0; pointer-events: none; opacity: 0; transition: opacity .18s, transform .18s; }
+.info:hover .tip, .info:focus .tip { opacity: 1; transform: translate(-50%, 0); }
+.chat-emotes { display: flex; gap: 2px; flex-wrap: wrap; }
+.chat-emotes .emo { width: 32px; height: 30px; font-size: 18px; }
+.cm.big > span:last-child { font-size: 26px; line-height: 1; vertical-align: middle; }
+.nchip span.uname, .nchip span.uname span.l { font-size: inherit; line-height: inherit; margin: 0; letter-spacing: inherit; }
+.nchip span.uname { display: inline-block; }
 .mode-group { margin-top: 12px; } .mode-group .modes { margin-top: 4px; }
 .modes.three { grid-template-columns: repeat(3, minmax(0, 1fr)); } .modes.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .mode-group:has(.mode-opt.off) > .acc-label { opacity: .5; }
@@ -684,6 +714,8 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .sheet-ghost { position: fixed !important; margin: 0 !important; z-index: 7; pointer-events: none; animation: sheetout .26s cubic-bezier(.4,0,.8,.6) forwards !important; }
 @keyframes sheetout { to { opacity: 0; transform: translateY(22px) scale(.94); } }
 .modal-ghost-bd { position: fixed; inset: 0; z-index: 7; background: rgba(6,4,16,.72); pointer-events: none; animation: bdout .28s ease-in forwards; } @keyframes bdout { to { opacity: 0; } }
+.prog-medals .medal .disc { transition: transform .5s cubic-bezier(.3,1.5,.5,1); }
+.prog-medals .medal .disc::after { content: ''; position: absolute; inset: 0; border-radius: 50%; pointer-events: none; opacity: 0; transition: opacity .3s; background: radial-gradient(circle at var(--mx, 50%) var(--my, 30%), rgba(255,255,255,.5), rgba(255,255,255,0) 48%); mix-blend-mode: soft-light; }
 .acc-medals .medal .disc, .pf-medals .medal .disc { transition: transform .5s cubic-bezier(.3,1.5,.5,1); will-change: transform; }
 .medal.tilting .disc { transition: transform .08s linear; z-index: 2; }
 .acc-medals .medal .disc::after, .pf-medals .medal .disc::after, .halo .disc::after { content: ''; position: absolute; inset: 0; border-radius: 50%; pointer-events: none; opacity: 0; transition: opacity .3s;
@@ -705,6 +737,88 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .halo .sparks i:nth-child(4) { --dx: 80px; --dy: 90px; animation-delay: .9s; } .halo .sparks i:nth-child(5) { --dx: 0; --dy: -120px; animation-delay: 1.2s; } .halo .sparks i:nth-child(6) { --dx: -120px; --dy: 10px; animation-delay: 1.5s; }
 @keyframes spark { 0% { transform: translate(0,0) scale(.4); opacity: 0; } 20% { opacity: 1; } 100% { transform: translate(var(--dx), var(--dy)) scale(1.2); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .btn:hover { animation: none; } .screen.scr-r, .screen.scr-l { animation: none; } }
+
+/* ---------- V11: bars glide instead of snapping ---------- */
+.xpbar i, .mbar i, .achbar i, .ptrack-fill { transition: width .8s cubic-bezier(.25,.8,.3,1); }
+#account .xpbar i, #account .mbar i, #account .achbar i, .profile .mbar i, #menu .xpbar i { animation: barin 1.1s cubic-bezier(.25,.8,.3,1) backwards; }
+@keyframes barin { from { width: 0; } }
+/* the part of the password that satisfies a hovered rule */
+.pw-hl { position: absolute; inset: 0; z-index: 2; pointer-events: none; box-sizing: border-box; border: 4px solid transparent; padding: 16px 18px; overflow: hidden;
+  font-family: var(--body); font-size: clamp(20px, 3.6vw, 28px); line-height: 1.35; color: transparent; white-space: pre-wrap; word-break: break-all; }
+.pw-hl mark { color: transparent; background: rgba(61, 220, 143, .32); border-radius: 4px; box-shadow: 0 0 0 2px rgba(61, 220, 143, .75); animation: hlin .25s ease-out; }
+@keyframes hlin { from { background: rgba(61, 220, 143, .7); } }
+#rules li.rule.ok { cursor: help; }
+
+/* ---------- V11: account layout, Pristine, colors ---------- */
+.acc-head { grid-template-columns: minmax(0, 1fr) minmax(0, 420px); align-items: center; }
+.acc-right { align-self: center; }
+.acc-rightcol { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+#accMedalsBox h3 small { font-family: var(--body); font-size: 12px; }
+#accMedals .medal { cursor: pointer; }
+#accMedals .medal:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; border-radius: 10px; }
+.pristine-btn { display: inline-flex; align-items: baseline; gap: 6px; background: none; border: 0; padding: 2px 0; color: var(--gold); cursor: pointer; font: inherit; }
+.pristine-btn b { font-family: var(--display); font-weight: 400; font-size: 26px; line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums; }
+.pristine-btn small { font-size: 11px; letter-spacing: .16em; color: var(--dim); }
+.pristine-btn:hover b { color: var(--gold); } .pristine-btn:hover .pr-gem { transform: rotate(45deg) scale(1.15); }
+.pr-gem { display: inline-block; color: #ff9fd6; text-shadow: 0 0 8px rgba(255,159,214,.6); transition: transform .3s cubic-bezier(.3,1.6,.5,1); }
+.pr-gem.big { font-size: 34px; }
+.pr-inline { color: #ffc4e6; white-space: nowrap; }
+.prog-pr { display: grid; grid-template-columns: auto auto 1fr; grid-template-areas: "g t n" "p p p"; align-items: center; gap: 4px 12px; background: var(--panel); border-radius: 10px; padding: 10px 14px; opacity: .25; transition: opacity .3s; }
+.prog-pr.in { opacity: 1; } .prog-pr .pr-gem { grid-area: g; font-size: 34px; } .prog-pr-txt { grid-area: t; display: grid; }
+.prog-pr-txt b { font-family: var(--display); font-weight: 400; font-size: 34px; line-height: 1; font-variant-numeric: tabular-nums; }
+.prog-pr-txt small { font-size: 10px; letter-spacing: .16em; color: var(--dim); }
+.prog-pr em { grid-area: n; justify-self: end; font-style: normal; font-family: var(--display); font-size: 30px; color: #ff9fd6; opacity: 0; transform: scale(.4); transition: opacity .2s, transform .35s cubic-bezier(.3,1.8,.5,1); }
+.prog-pr em.on { opacity: 1; transform: none; }
+.prog-pr .pr-parts { grid-area: p; font-size: 11px; color: var(--dim); }
+.prog-pr.unlock { animation: prflash 1s ease-out; } @keyframes prflash { 30% { box-shadow: 0 0 0 3px #ff9fd6, 0 0 30px rgba(255,159,214,.6); } }
+/* progress tracks */
+.ptrack { overflow-x: auto; padding: 8px 4px 4px; margin: 6px 0 12px; overscroll-behavior-x: contain; }
+.ptrack-inner { position: relative; min-width: max(100%, calc(var(--n) * 64px)); height: 132px; margin: 0 26px; }
+.ptrack-bar { position: absolute; left: 0; right: 0; top: 60px; height: 10px; border-radius: 6px; background: var(--edge); overflow: hidden; }
+.ptrack-fill { display: block; height: 100%; background: linear-gradient(90deg, #ff9fd6, var(--gold)); border-radius: 6px; animation: barin 1.2s cubic-bezier(.25,.8,.3,1) backwards; }
+.pnode { position: absolute; top: 0; transform: translateX(-50%); display: grid; justify-items: center; width: 64px; }
+.pn-top { height: 50px; display: flex; flex-wrap: wrap; justify-content: center; align-content: flex-end; gap: 3px; }
+.pn-top .swatch { width: 16px; height: 16px; } .pnode:not(.got) .pn-top { opacity: .45; filter: saturate(.5); }
+.pn-dot { width: 14px; height: 14px; margin-top: 3px; border-radius: 50%; background: var(--edge); border: 3px solid var(--panel-hi); box-sizing: border-box; }
+.pnode.got .pn-dot { background: var(--gold); border-color: var(--gold); }
+.pn-at { font-size: 11px; color: var(--dim); margin-top: 6px; font-variant-numeric: tabular-nums; }
+.pn-lbl { font-size: 10px; color: var(--ink); text-align: center; line-height: 1.2; margin-top: 2px; max-width: 64px; }
+.pnode:not(.got) .pn-lbl { color: var(--dim); }
+.pmarker { position: absolute; top: 80px; transform: translateX(-50%); }
+.pmarker b { display: block; margin-top: 30px; font-size: 11px; background: var(--gold); color: var(--edge); border-radius: 5px; padding: 1px 6px; white-space: nowrap; }
+.pmarker::before { content: ''; position: absolute; left: 50%; top: -24px; width: 3px; height: 50px; margin-left: -1.5px; background: var(--gold); border-radius: 2px; }
+.mini-disc { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--edge); display: grid; place-items: center; }
+.mini-disc .pxi { width: 16px; height: 16px; }
+.pnode:not(.got) .mini-disc { filter: grayscale(.8) brightness(.6); }
+.tbl tr.got td { color: var(--ink); } .tbl tr:not(.got) td { color: var(--dim); }
+.pr-extra { display: flex; gap: 10px; align-items: center; font-size: 13px; color: var(--dim); }
+.pr-extra .swatch { width: 22px; height: 22px; flex: none; }
+/* swatches + color picker */
+.swatch { display: inline-block; width: 20px; height: 20px; border-radius: 5px; overflow: hidden; box-shadow: 0 0 0 2px var(--edge), 0 0 0 3px rgba(255,255,255,.18); vertical-align: middle; }
+.swatch.big { width: 40px; height: 40px; border-radius: 8px; }
+.cpicker { display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 6px; max-height: 220px; overflow-y: auto; padding: 4px; }
+.cpick { position: relative; display: grid; justify-items: center; gap: 3px; padding: 7px 4px 5px; background: var(--panel); border: 2px solid transparent; border-radius: 8px; cursor: pointer; font: inherit; color: var(--ink); transition: transform .15s cubic-bezier(.3,1.6,.5,1), border-color .15s; }
+.cpick:not(.locked):hover { transform: translateY(-2px); border-color: var(--dim); }
+.cpick.on { border-color: var(--gold); }
+.cpick small { font-size: 10px; line-height: 1.15; text-align: center; }
+.cpick.locked { opacity: .45; cursor: not-allowed; } .cpick.locked .swatch { filter: grayscale(.6); }
+.cpick em { font-style: normal; font-size: 9px; color: var(--dim); } .cpick .newtag { position: absolute; top: -6px; right: -4px; margin: 0; font-size: 10px; }
+.cpreview { display: flex; align-items: center; gap: 10px; margin-top: 6px; font-size: 12px; color: var(--dim); }
+.toast.color .toast-art { display: grid; place-items: center; }
+/* names in boxes */
+.nchip.big { padding: 3px 10px 4px; border-radius: 8px; }
+.nchip.tiny { font-size: 11px; padding: 0 5px 1px; }
+.pcard b.pname { font-size: inherit; overflow: visible; } .pcard b.pname .nchip { font-size: 30px; }
+.players.party .pcard b.pname .nchip { font-size: 22px; }
+.pf-name .nchip { font-family: var(--display); font-size: 44px; }
+.pl-name small.you { font-size: 10px; letter-spacing: .14em; color: var(--gold); }
+.cm .nchip { font-size: 12px; margin-right: 2px; }
+.menu-player .nchip { font-weight: 700; }
+.opp-name { max-width: none !important; overflow: visible !important; } .opp-name .nchip { font-size: 18px; }
+.oppbar.party .opp-name .nchip { font-size: 15px; }
+#account.themed { --good: color-mix(in srgb, var(--gold) 55%, #3ddc8f); }
+.profile.themed { background: var(--panel); border-radius: 12px; padding: 10px; color: var(--ink); }
+@media (max-width: 640px) { .pf-name .nchip { font-size: 34px; } .pcard b.pname .nchip { font-size: 24px; } }
 </style>
 
 <canvas id="bg" class="layer" aria-hidden="true"></canvas>
@@ -717,6 +831,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
   <b class="ap-title">AUDIO</b>
   <label class="ap-row"><span>MUSIC</span><input type="range" id="volMusic" min="0" max="100" step="5"><output id="volMusicOut">60%</output></label>
   <label class="ap-row"><span>EFFECTS</span><input type="range" id="volSfx" min="0" max="100" step="5"><output id="volSfxOut">100%</output></label>
+  <label class="ap-check"><input type="checkbox" id="smoothAudio"><span><b>SMOOTH AUDIO</b><small>Fixes crackling on some computers. Applies after a reload.</small></span></label>
   <button class="btn dark" id="muteAll" type="button" aria-pressed="false">MUTE ALL</button>
 </div>
 
@@ -735,18 +850,23 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
         <div class="playsplit" id="playSplit" inert><button class="pbtn" id="playStd" type="button">STANDARD</button><button class="pbtn" id="playDrop" type="button">DROP OUT</button></div>
       </div>
       <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="goo" x="-10%" y="-30%" width="120%" height="160%"><feGaussianBlur in="SourceGraphic" stdDeviation="6" result="b"/><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -9" result="g"/><feBlend in="SourceGraphic" in2="g" mode="normal"/></filter></svg>
-      <button class="btn mpbtn" id="mpBtn" type="button">PVP</button>
+      <div class="playwrap pvpwrap" id="pvpWrap">
+        <div class="goo" aria-hidden="true"><i class="blob bl"></i><i class="strand"></i><i class="blob br"></i></div>
+        <button class="pbtn pjoin" id="mpBtn" type="button">PVP</button>
+        <div class="playsplit" id="pvpSplit" inert><button class="pbtn" id="pvpHost" type="button">HOST</button><button class="pbtn" id="pvpJoin" type="button">JOIN</button></div>
+      </div>
       <button class="btn gold" id="lbBtn" type="button">LEADERBOARDS</button>
       <button class="btn" id="discBtn" type="button">DISCOVERED RULES <small id="discCount">0/67</small><span class="dot" id="dotDisc" hidden>!</span></button>
       <button class="btn" id="accBtn" type="button">ACCOUNT <small id="accSmall">LVL 0</small><span class="dot" id="dotAcc" hidden>!</span></button>
       <button class="btn dark" id="howBtn" type="button">HOW TO PLAY</button>
     </div>
-    <button class="version" id="verBtn" type="button">V10 · PARTY TIME · <u>PATCH NOTES</u></button>
+    <button class="version" id="verBtn" type="button">V11 · PRISTINE · <u>PATCH NOTES</u></button>
   </section>
 
   <section id="account" class="screen account" hidden>
     <header class="acc-head">
       <div class="acc-left" id="accNameRow">
+        <button class="pristine-btn" id="accPristine" type="button" title="See what Pristine unlocks"><span class="pr-gem">◆</span><b id="accPrNum">0</b><small>PRISTINE</small></button>
         <div class="acc-name" id="accNameText">Player</div>
         <div class="acc-titletext" id="accTitleText"></div>
         <button class="btn small dark edit-btn" id="accEdit" type="button">✎ EDIT<span class="dot" id="dotEdit" hidden>!</span></button>
@@ -754,12 +874,12 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
           <label class="acc-field"><small class="acc-label">USERNAME · MAX 14 CHARACTERS</small><input id="accNameInput" maxlength="14" autocomplete="off" spellcheck="false"></label>
           <label class="acc-field"><small class="acc-label">TITLE</small><select id="accTitle"></select></label>
           <p class="acc-why" id="accTitleWhy"></p>
+          <div class="acc-field"><small class="acc-label">COLOR · YOUR NAME AND ACCOUNT</small><div class="cpicker" id="accColors"></div><div class="cpreview" id="accColorPrev"></div></div>
           <div class="acc-edit-row"><button class="btn small red" type="submit">SAVE</button><button class="btn small dark" id="accCancel" type="button">CANCEL</button></div>
         </form>
       </div>
       <div class="acc-right">
         <div class="acc-lvl" id="accLvl"></div>
-        <div class="acc-medals" id="accMedals"></div>
       </div>
     </header>
     <div class="acc-body">
@@ -767,7 +887,10 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
         <section class="acc-col acc-scores" id="accScores"><h3>HIGHSCORES</h3><div id="accScoresBody" class="scores-grid"></div></section>
         <section class="acc-col acc-achcol" id="accAch"><h3>ACHIEVEMENTS <small id="accAchCount">0/30</small></h3><div class="ach-scroll"><div class="achs one" id="accAchList"></div></div></section>
       </div>
-      <section class="acc-col" id="accStats"><h3>STATISTICS</h3><div id="accStatsBody"></div></section>
+      <div class="acc-rightcol">
+        <section class="acc-col" id="accMedalsBox"><h3>MEDALS <small>Click one for its titles</small></h3><div class="acc-medals" id="accMedals"></div></section>
+        <section class="acc-col" id="accStats"><h3>STATISTICS</h3><div id="accStatsBody"></div></section>
+      </div>
     </div>
     <div class="acc-foot"><button class="btn dark" id="accBack" type="button">BACK TO MENU</button></div>
   </section>
@@ -784,6 +907,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
     </div>
     <div class="hudnote" id="hudNote" hidden></div>
     <div class="field">
+      <div class="pw-hl" id="pwHl" aria-hidden="true"></div>
       <textarea id="pw" rows="1" aria-label="Password" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off" placeholder="Type your password…"></textarea>
     </div>
     <div class="field-foot">
@@ -1460,26 +1584,46 @@ let muted = store.get('pg.muted', false);
 /* ---------- sound ---------- */
 let ac = null, sfxBus = null, musicBus = null;
 let vol = Object.assign({ music: .6, sfx: 1 }, store.get('pg.vol', {}) || {});
+const IS_FIREFOX = /firefox/i.test(navigator.userAgent);
+// "Smooth audio" asks the browser for a bigger audio buffer. That stops the crackling some
+// computers get (Firefox especially) when the game is busy drawing, at the cost of ~0.1 s delay.
+let smoothAudio = store.get('pg.smoothAudio', IS_FIREFOX);
 function audio() {
-  if (!ac) { try { ac = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} }
+  if (!ac) {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    try { ac = new Ctx({ latencyHint: smoothAudio ? 'playback' : 'interactive' }); } catch (e) { try { ac = new Ctx(); } catch (e2) {} }
+  }
   if (ac && !sfxBus) {
-    sfxBus = ac.createGain(); sfxBus.gain.value = vol.sfx; sfxBus.connect(ac.destination);
-    musicBus = ac.createGain(); musicBus.gain.value = 1; musicBus.connect(ac.destination);
+    // everything goes through one gentle limiter, so stacked sounds never clip
+    const lim = ac.createDynamicsCompressor(); lim.threshold.value = -6; lim.knee.value = 4; lim.ratio.value = 12; lim.attack.value = .003; lim.release.value = .25;
+    const master = ac.createGain(); master.gain.value = .85; master.connect(lim); lim.connect(ac.destination);
+    sfxBus = ac.createGain(); sfxBus.gain.value = vol.sfx; sfxBus.connect(master);
+    musicBus = ac.createGain(); musicBus.gain.value = 1; musicBus.connect(master);
   }
   if (ac && ac.state === 'suspended') ac.resume();
   return ac;
 }
 function tone(freq, dur, type, vol, slide, delay) {
   if (muted) return; const a = audio(); if (!a) return;
-  const t = a.currentTime + (delay || 0);
+  const t = a.currentTime + .006 + (delay || 0);
   const o = a.createOscillator(), g = a.createGain();
   o.type = type || 'square'; o.frequency.setValueAtTime(freq, t);
   if (slide) o.frequency.exponentialRampToValueAtTime(freq * slide, t + dur);
-  g.gain.setValueAtTime(vol || 0.05, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-  o.connect(g); g.connect(sfxBus || a.destination); o.start(t); o.stop(t + dur + 0.02);
+  // a 4 ms fade-in instead of an instant jump: no click at the start of every note
+  g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(vol || 0.05, t + .004); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g); g.connect(sfxBus || a.destination); o.start(t); o.stop(t + dur + 0.03);
 }
 const sfx = {
-  click: () => tone(520 * (.88 + Math.random() * .24), .055 + Math.random() * .015, 'square', .036 + Math.random() * .008),
+  click: () => {
+    if (muted) return; const a = audio(); if (!a) return;
+    const p = .86 + Math.random() * .28, t = a.currentTime + .005;
+    const o = a.createOscillator(), g = a.createGain(), f = a.createBiquadFilter();
+    o.type = 'triangle'; f.type = 'lowpass'; f.frequency.value = 1200;
+    o.frequency.setValueAtTime(170 * p, t); o.frequency.exponentialRampToValueAtTime(420 * p, t + .1);
+    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.075, t + .02); g.gain.exponentialRampToValueAtTime(.0001, t + .14);
+    o.connect(f); f.connect(g); g.connect(sfxBus || a.destination); o.start(t); o.stop(t + .16);
+    tone(880 * p, .035, 'square', .022, 0, .09);
+  },
   ok: (n) => {
     if (!n || n < 2) { tone(660, .07, 'square', .045); tone(990, .1, 'square', .04, 0, .06); return; }
     const notes = n === 2 ? [660, 880, 1320] : [660, 880, 1100, 1320, 1760];
@@ -1489,6 +1633,15 @@ const sfx = {
   off: () => tone(220, .12, 'square', .035, .7),
   add: () => { tone(330, .08, 'triangle', .07); tone(440, .08, 'triangle', .07, 0, .08); },
   tick: () => tone(1200, .03, 'square', .025),
+  key: (del) => {
+    if (muted || vol.sfx <= 0) return; const a = audio(); if (!a || !sfxBus) return;
+    const now = performance.now(); if (now - (sfx._k || 0) < 28) return; sfx._k = now;
+    if (!sfx._kb) { const n = Math.floor(a.sampleRate * .03); sfx._kb = a.createBuffer(1, n, a.sampleRate); const d = sfx._kb.getChannelData(0); for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 3); }
+    const t = a.currentTime + .004, src = a.createBufferSource(), f = a.createBiquadFilter(), g = a.createGain();
+    src.buffer = sfx._kb; src.playbackRate.value = (del ? .7 : 1) * (.85 + Math.random() * .3);
+    f.type = 'bandpass'; f.frequency.value = (del ? 1800 : 2600) + Math.random() * 1200; f.Q.value = 1.4; g.gain.value = .11;
+    src.connect(f); f.connect(g); g.connect(sfxBus); src.start(t);
+  },
   no: () => tone(140, .18, 'sawtooth', .05, .8),
   clear: () => [523, 659, 784, 1046].forEach((f, i) => tone(f, .16, 'square', .045, 0, i * .07)),
   fail: () => [392, 330, 262, 196].forEach((f, i) => tone(f, .22, 'sawtooth', .045, 0, i * .13)),
@@ -1556,7 +1709,13 @@ const music = (() => {
     out = a.createGain(); out.gain.value = 0; out.connect(lim);
     filt = a.createBiquadFilter(); filt.type = 'lowpass'; filt.frequency.value = 2600; filt.Q.value = .5; filt.connect(out);
     jbus = a.createGain(); jbus.gain.value = 1.8; jbus.connect(out);
-    LAYERS.forEach(k => { const g = a.createGain(); g.gain.value = 0; g.connect(filt); L[k] = { g, tgt: 0, at: 0 }; });
+    LAYERS.forEach(k => {
+      const g = a.createGain(); g.gain.value = 0;
+      // one shared tone filter per layer instead of one per note (far fewer audio nodes)
+      if (k === 'bass' || k === 'pulse' || k === 'arp') { const lp = a.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = k === 'arp' ? 2800 : 700; g.connect(lp); lp.connect(filt); }
+      else g.connect(filt);
+      L[k] = { g, tgt: 0, at: 0 };
+    });
     // slow tape wobble for keys and bass, faster vibrato for the lead
     const lfo = (f, depth) => { const o = a.createOscillator(), g = a.createGain(); o.frequency.value = f; g.gain.value = depth; o.connect(g); o.start(); return g; };
     wob = lfo(.55, 9); vib = lfo(5.3, 13);
@@ -1583,15 +1742,12 @@ const music = (() => {
     const end = t + dur;
     notes.forEach(m => {
       const f = hz(m), g = env(t, .05 * vel, .012, .45, .55, end); g.connect(dest);
-      osc('triangle', f, t, end, g, -7, wob); osc('sine', f, t, end, g, 7, wob);
-      const b = a.createGain(); b.gain.setValueAtTime(.025 * vel, t); b.gain.exponentialRampToValueAtTime(.0001, t + .18); b.connect(dest);
-      osc('sine', f * 2, t, t + .2, b);
+      osc('triangle', f, t, end, g, -7, wob); osc('sine', f * 2, t, end, g, 5, wob);
     });
   }
   function bass(t, m, dur, vel, dest) {
     const f = hz(m), end = t + dur;
-    const lp = a.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 700; lp.connect(dest);
-    const g = env(t, .3 * vel, .008, .18, .5, end); g.connect(lp);
+    const g = env(t, .3 * vel, .008, .18, .5, end); g.connect(dest);
     const o = osc('sine', f * 1.02, t, end, g, 0, wob); o.frequency.exponentialRampToValueAtTime(f, t + .06);
     const o2 = osc('triangle', f * 1.02, t, end, g, 4, wob); o2.frequency.exponentialRampToValueAtTime(f, t + .06);
   }
@@ -1609,8 +1765,7 @@ const music = (() => {
     });
   }
   function pluck(t, m, vel, dest) {
-    const lp = a.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 2800; lp.connect(dest);
-    const g = a.createGain(); g.gain.setValueAtTime(.03 * vel, t); g.gain.exponentialRampToValueAtTime(.0001, t + .12); g.connect(lp);
+    const g = a.createGain(); g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.03 * vel, t + .004); g.gain.exponentialRampToValueAtTime(.0001, t + .12); g.connect(dest);
     osc('square', hz(m), t, t + .13, g);
   }
   function noiseHit(t, type, f, q, vol, len, dest) {
@@ -1685,7 +1840,7 @@ const music = (() => {
         const zone = Math.min(30, S.roundLen * .5);
         let tense = S.dispLeft < zone ? 1 - Math.max(0, S.dispLeft) / zone : 0;
         if (S.capAt) tense = Math.max(tense, .65);
-        if (S.mode === 'ko' && myKoHp() <= 400) tense = Math.max(tense, .35);
+        if (S.mode === 'ko' && myKoHp() <= KO_HP * .4) tense = Math.max(tense, .35);
         w.tense = tense;
         w.tick = tense > 0 && S.dispLeft <= Math.min(10, S.roundLen * .5) ? 1 : 0;
       }
@@ -1785,7 +1940,7 @@ const music = (() => {
     const sd0 = 60 / (TRACKS[track].bpm * tempo) / 4;
     apply(want, nextT + ((4 - step % 4) % 4) * sd0);
     tempo += (want.tempo - tempo) * (want.tempo < tempo ? .008 : .1);
-    const ahead = hiddenAt ? 1.6 : .18;           // background tabs only wake up about once a second
+    const ahead = hiddenAt ? 1.6 : smoothAudio ? .3 : .18;           // background tabs only wake up about once a second
     while (nextT < a.currentTime + ahead) {
       if (step === 0 && want.track !== track) { track = want.track; bar = 0; }
       const sd = 60 / (TRACKS[track].bpm * tempo) / 4;
@@ -1938,6 +2093,13 @@ $('muteAll').onclick = () => {
     animateVols({ music: 0, sfx: 0 }, false, () => { muted = true; store.set('pg.muted', true); renderMute(); if (typeof award === 'function') award('muted'); });
   }
 };
+$('smoothAudio').checked = !!smoothAudio;
+$('smoothAudio').addEventListener('change', e => {
+  store.set('pg.smoothAudio', e.target.checked);
+  const sm = e.target.parentElement.querySelector('small');
+  sm.innerHTML = e.target.checked === !!smoothAudio ? 'Fixes crackling on some computers. Applies after a reload.' : '<b class="reload-link" role="button" tabindex="0">Reload now</b> to apply.';
+  const rl = sm.querySelector('.reload-link'); if (rl) rl.onclick = () => location.reload();
+});
 const dragFrom = {};
 [['music', 'volMusic'], ['sfx', 'volSfx']].forEach(([k, id]) => {
   const el = $(id);
@@ -1958,7 +2120,7 @@ renderMute();
 
 /* ---------- visual quality ---------- */
 const QUAL = {
-  high: { label: 'HIGH', bg: 5, fx: 4, bgFps: 60, flames: true, maxP: 2400, mult: 1 },
+  high: { label: 'HIGH', bg: 5, fx: 4, bgFps: IS_FIREFOX ? 30 : 60, flames: true, maxP: IS_FIREFOX ? 1400 : 2400, mult: IS_FIREFOX ? .7 : 1 },
   low: { label: 'LOW', bg: 9, fx: 6, bgFps: 24, flames: true, maxP: 500, mult: .35 },
   off: { label: 'OFF', bg: 12, fx: 6, bgFps: 8, flames: false, maxP: 0, mult: 0 }
 };
@@ -2093,7 +2255,7 @@ const MODES = {
   dropout: { name: 'Drop Out', rounds: Infinity, perRound: 3, fresh: true, time: r => Math.max(10, 60 - 5 * Math.floor((r - 1) / 2)) },
   score: { name: 'Score', rounds: 5, perRound: 2, pvp: true, time: () => 120, desc: 'Both play every round. When one player submits, the other has 15 seconds left. Most points after 5 rounds wins.' },
   race: { name: 'Race', rounds: 5, perRound: 2, pvp: true, time: () => 120, desc: 'Race through 5 rounds at your own pace. The first player to finish all 5 wins.' },
-  ko: { name: 'Knockout', rounds: 5, perRound: 2, pvp: true, time: () => 60, desc: '1,000 HP each, 1 minute per round. The lower round score takes the difference as damage, and the damage multiplier grows every round. Lock in early, or unlock to keep editing.' },
+  ko: { name: 'Knockout', rounds: Infinity, perRound: 2, pvp: true, time: () => 60, desc: '2,500 HP each, 1 minute per round. The lower round score takes the difference as damage, and the damage multiplier grows every round until someone is knocked out. Lock in early, or unlock to keep editing.' },
   br: { name: 'Battle Royale', rounds: Infinity, perRound: 2, pvp: true, party: true, time: () => 90, desc: '1:30 per round, rules keep piling up. Lock in and wait for the others. The last to submit, or anyone who fails, is knocked out. Last one standing wins.' },
   ffa: { name: 'FFA', rounds: 5, perRound: 2, pvp: true, party: true, time: () => 120, desc: 'Everyone plays the same 5 rounds together. Most points wins.' }
 };
@@ -2229,10 +2391,17 @@ function evaluate(silent) {
   $('lock').classList.toggle('ready', all);
   $('lock').textContent = all ? 'LOCK IN ⏎' : (S.active.filter(e => !e.ok).length + ' RULES LEFT');
   if (S.mp && !silent) sendProgSoon();
+  if (hlEntry) { if (!hlEntry.ok) hlEntry = null; syncHl(); }
   return all;
 }
 
-function autosize() { const t = $('pw'); t.style.height = 'auto'; t.style.height = t.scrollHeight + 'px'; }
+function autosize() {
+  const t = $('pw'); t.style.height = 'auto';
+  const lh = parseFloat(getComputedStyle(t).lineHeight) || 36, cap = lh * 4 + 40;   // about 4 lines, then it scrolls
+  t.style.height = Math.min(t.scrollHeight + 2, cap) + 'px';
+  t.style.overflowY = t.scrollHeight + 2 > cap ? 'auto' : 'hidden';
+  syncHl();
+}
 
 function lockIn() {
   if (S.phase !== 'playing' || S.paused) return;
@@ -2453,7 +2622,8 @@ function dropEnd() {
   st.drop.games++; st.drop.rounds += cleared; st.drop.best = Math.max(st.drop.best, reached);
   store.set('pg.stats', st); statsMem = st;
   S.pending.add('dropout'); if (reached >= 20) S.pending.add('hurry');
-  S.rewards = endRewards(false, st, { base: Math.min(1200, 50 * cleared), baseLabel: cleared === 1 ? '1 round' : cleared + ' rounds' });
+  S.rewards = endRewards(false, st, { base: Math.min(1200, 50 * cleared), baseLabel: cleared === 1 ? '1 round' : cleared + ' rounds',
+    pristine: [[cleared === 1 ? '1 round' : cleared + ' rounds', 80 * Math.min(cleared, 20) + 150 * Math.max(0, cleared - 20)]] });
   lbPushSoon();
   const { missed, html } = missedHTML();
   openModal(`
@@ -2490,7 +2660,12 @@ $('modal').addEventListener('click', e => {
     const act = a.dataset.act;
     if (act === 'play') startGame({ mode: 'standard' });
     if (act === 'play-drop') { startGame({ mode: 'dropout' }); return; }
-    if (act === 'mp-mode') { if (MP.host && modeFits(a.dataset.mode, roomCount())) { MP.mode = a.dataset.mode; sayHello(true); renderLobby(); } return; }
+    if (act === 'mp-mode') { if (MP.host && modeFits(a.dataset.mode, roomCount())) { MP.mode = a.dataset.mode; MP.requests = {}; sayHello(true); renderLobby(); } return; }
+    if (act === 'mp-req') {
+      const k = a.dataset.mode;
+      if (!MP.host && k !== MP.mode && MODES[k] && Date.now() - MP.lastReqAt > 2500) { MP.lastReqAt = Date.now(); MP.myReq = k; send({ t: 'modeReq', mode: k }); sysChat(`You asked the host for ${MODES[k].name}.`); renderLobby(); }
+      return;
+    }
     if (act === 'mp-prof') { requestProfile(a.dataset.peer); return; }
     if (act === 'mp-lobby') { MP.profWait = null; if (MP.ch) openLobby(); else closeModal(); return; }
     if (act === 'lb-player') { openProfile(lbRows[+a.dataset.i]); return; }
@@ -2519,6 +2694,8 @@ $('modal').addEventListener('click', e => {
   }
   if (e.target === $('modal') && S.phase !== 'over' && !$('modal').querySelector('.no-dismiss')) closeModal();
 });
+// after a press the button springs back through its second colour
+document.addEventListener('pointerup', e => { const b = e.target.closest && e.target.closest('.btn'); if (!b || b.disabled) return; b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop'); setTimeout(() => b.classList.remove('pop'), 520); }, true);
 /* Esc: close what's open, or quit the game (press it twice in a game) */
 addEventListener('keydown', e => {
   if (e.key !== 'Escape' || e.defaultPrevented) return;
@@ -2599,6 +2776,12 @@ const PX = {
   door: ['..########..','..#......#..','..#......#..','..#......#..','..#......#..','..#....#.#..','..#......#..','..#......#..','..#......#..','..#......#..','############','............'],
   alarm: ['.##......##.','##..####..##','...#....#...','..#..#...#..','.#...#....#.','.#...###..#.','.#........#.','..#......#..','...#....#...','....####....','...#....#...','..#......#..'],
   zzz: ['............','.......#####','..........#.','.........#..','....####.###','.......#....','......#.....','#####.####..','...#........','..#.........','.#..........','#####.......'],
+  star: ['.....##.....', '.....##.....', '....####....', '....####....', '############', '.##########.', '..########..', '...######...', '..########..', '..###..###..', '.###....###.', '.##......##.'],
+  no1: ['....####....', '..########..', '.###....###.', '.##..##..##.', '##..###...##', '##...##...##', '##...##...##', '##...##...##', '.##.####.##.', '.###....###.', '..########..', '....####....'],
+  podium: ['............', '.....##.....', '....###.....', '.....##.....', '....####....', '............', '....####....', '....####....', '########....', '############', '############', '############'],
+  umbrella: ['.....##.....', '...######...', '..########..', '.##########.', '############', '#..#..#..#..', '.....##.....', '.....##.....', '.....##.....', '.....##.....', '..#..##.....', '...###......'],
+  pad: ['............', '............', '..########..', '.##########.', '##.##..#.###', '#...#.#.#..#', '##.##..#.###', '############', '####....####', '.##......##.', '............', '............'],
+  sparkle: ['.....##.....', '.....##.....', '....####....', '....####....', '..########..', '############', '############', '..########..', '....####....', '....####....', '.....##.....', '.....##.....'],
   q: ['....####....','...##..##...','..##....##..','.......##...','......##....','.....##.....','.....##.....','............','.....##.....','.....##.....','............','............']
 };
 const ACH = [
@@ -2616,7 +2799,7 @@ const ACH = [
   { id: 'justintime', name: 'Just in time', desc: 'Complete a round with under 5 seconds left', icon: 'hourglass', test: () => false },
   { id: 'quickster', name: 'Quickster', desc: 'Complete a single round in under 3 seconds', icon: 'rocket', test: () => false },
   { id: 'muted', name: 'Get muted', desc: 'Turn off the sound', icon: 'muted', test: () => muted, prog: () => [muted ? 1 : 0, 1] },
-  { id: 'leader', name: 'Topping the leaderboards', desc: 'Get over 15,000 points in one game', icon: 'crown', test: x => x.score > 15000, prog: () => [Math.max(0, store.get('pg.best', 0) || 0, ...scores.map(q => q.score || 0)), 15000] },
+  { id: 'leader', name: 'Point Hoarder', desc: 'Get over 15,000 points in one game', icon: 'crown', test: x => x.score > 15000, prog: () => [Math.max(0, store.get('pg.best', 0) || 0, ...scores.map(q => q.score || 0)), 15000] },
   { id: 'office', passive: true, name: 'Office job', desc: 'Type out 1,000 characters', icon: 'keyboard', test: x => (x.st.chars || 0) >= 1000, prog: x => [x.st.chars || 0, 1000] },
   { id: 'maxxer', passive: true, name: 'Point maxxer', desc: 'Earn 100,000 points in total', icon: 'diamond', test: x => (x.st.points || 0) >= 100000, prog: x => [x.st.points || 0, 100000] },
   { id: 'millionaire', passive: true, name: 'Millionaire', desc: 'Earn 1,000,000 points in total', icon: 'moneybag', test: x => (x.st.points || 0) >= 1000000, prog: x => [x.st.points || 0, 1000000] },
@@ -2634,6 +2817,12 @@ const ACH = [
   { id: 'kowin', name: 'KO', desc: 'Win a game of Knockout', icon: 'glove', test: () => false, prog: x => [Math.min(1, ((x.st.pvp || {}).ko || {}).w || 0), 1] },
   { id: 'dropout', name: 'College Drop Out', desc: 'Play a game of Drop Out', icon: 'door', test: () => false, prog: x => [Math.min(1, (x.st.drop || {}).games || 0), 1] },
   { id: 'hurry', name: 'I need to hurry up!', desc: 'Reach round 20 in Drop Out', icon: 'alarm', test: () => false, prog: x => [(x.st.drop || {}).best || 0, 20, 'rounds'] },
+  { id: 'gotemall', passive: true, name: "Gotta get 'em all!", desc: 'Unlock every other achievement', icon: 'star', test: () => ACH.every(a => a.id === 'gotemall' || unlocked[a.id]), prog: () => [ACH.filter(a => a.id !== 'gotemall' && unlocked[a.id]).length, ACH.length - 1] },
+  { id: 'royale', name: 'Victory Royale', desc: 'Get 1st place in Battle Royale', icon: 'no1', test: () => false, prog: x => [Math.min(1, ((x.st.pvp || {}).br || {}).w || 0), 1] },
+  { id: 'ffabest', name: "I'm the Best!", desc: 'Get 1st place in FFA', icon: 'podium', test: () => false, prog: x => [Math.min(1, ((x.st.pvp || {}).ffa || {}).w || 0), 1] },
+  { id: 'fortnite', name: 'Fortnite', desc: 'Play a game of FFA or Battle Royale', icon: 'umbrella', test: () => false, prog: x => [Math.min(1, (((x.st.pvp || {}).ffa || {}).w || 0) + (((x.st.pvp || {}).ffa || {}).l || 0) + (((x.st.pvp || {}).br || {}).w || 0) + (((x.st.pvp || {}).br || {}).l || 0)), 1] },
+  { id: 'nolife', passive: true, name: 'No life', desc: 'Get every medal to Rainbow. Unlocks the title "No life" and the Rainbow color', icon: 'pad', test: () => MEDALS.every(m => (acct.medals[m.id] || 0) >= 11), prog: () => [MEDALS.filter(m => (acct.medals[m.id] || 0) >= 11).length, MEDALS.length, 'medals'] },
+  { id: 'spotless', passive: true, name: 'Spotless', desc: 'Reach 150,000 Pristine', icon: 'sparkle', test: () => (acct.pristine || 0) >= 150000, prog: () => [Math.min(acct.pristine || 0, 150000), 150000] },
   { id: 'stillthere', name: 'Are you still there?', desc: 'Look at the menu for 5 minutes straight', icon: 'zzz', test: () => false, prog: () => [Math.floor(S.menuIdle / 60), 5, 'min'] }
 ];
 const achKey = a => a.name.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -2643,9 +2832,9 @@ const ACH_GROUPS = [
   ['Speed', ['quickster', 'justintime', 'quick', 'holy', 'there']],
   ['Passwords', ['short', 'long', 'explorer']],
   ['Grinding', ['office', 'addicted', 'hard', 'chicken', 'leader', 'maxxer', 'millionaire']],
-  ['Medals', ['champion', 'rainbow']],
+  ['Collection', ['champion', 'rainbow', 'nolife', 'spotless', 'gotemall']],
   ['Drop Out', ['dropout', 'hurry']],
-  ['PvP', ['mpfirst', 'mpcrush', 'racewin', 'kowin', 'undefeated', 'mprival']]
+  ['PvP', ['mpfirst', 'mpcrush', 'racewin', 'kowin', 'undefeated', 'mprival', 'fortnite', 'royale', 'ffabest']]
 ];
 // grouped, alphabetical inside each group; headings show how many you have
 function groupedAchHTML(card, has) {
@@ -2695,12 +2884,14 @@ function award(id) {
   unlocked[id] = new Date().toISOString().slice(0, 10);
   store.set('pg.ach', unlocked);
   queueToast(() => toastEl('ach', emblem(a.icon, true), 'ACHIEVEMENT UNLOCKED · +2,000 XP', a.name, a.desc));
-  grantXP(XP_ACH);
+  const lv = grantXP(XP_ACH);
+  addPristine(500 + lv.pristine + lv.over100);
+  if (id === 'nolife') { markNewColors(['rainbow']); queueToast(() => toastEl('color', swatchHTML('rainbow', 'big'), 'NEW COLOR UNLOCKED', 'Rainbow', 'And the title "No life". Pick them with Edit in your Account.'), 'color'); }
   if (!$('account').hidden) { renderAccount(new Set([id])); if (seen) markSeen('ach', [id]); }
 }
 function toastInfo(title, text) {
   const t = document.createElement('div');
-  t.className = 'toast info';
+  t.className = 'toast info plain';
   t.innerHTML = '<div><small></small><b></b></div>';
   t.querySelector('small').textContent = title; t.querySelector('b').textContent = text;
   $('toasts').appendChild(t);
@@ -2755,6 +2946,7 @@ function winXP(sec, len) {
 }
 function titleInfo(key) {
   if (!key) return null;
+  if (key === 'nolife') return unlocked.nolife ? { text: 'No life', tier: 10 } : null;
   const [id, l] = key.split(':'); const m = MEDALS.find(q => q.id === id); const lvl = +l;
   if (!m || !(lvl >= 1 && lvl <= 11) || (acct.medals[id] || 0) < lvl) return null;
   return { text: m.titles[lvl - 1], tier: lvl - 1 };
@@ -2777,7 +2969,7 @@ function medalHTMLv(m, lvl, v, small, extra) {
     <div class="disc tier-fill ${tc}">${pixelSvg(m.icon)}<span class="lv">${lvl === 11 ? '★' : lvl || '–'}</span></div>
     <b>${escapeHtml(m.name)}</b><span class="tier-name">${lvl ? TIERS[lvl - 1] : 'Locked'}</span>
     <div class="mbar"><i style="width:${pct.toFixed(1)}%"></i></div>
-    <small>${next == null ? 'Maxed out' : `${m.unit(v)} / ${m.unit(next)}`}</small>${extra || ''}</div>`;
+    <small>${next == null ? 'Maxed out' : `${m.unit(m.id === 'time' ? v : Math.round(v))} / ${m.unit(next)}`}</small>${extra || ''}</div>`;
 }
 function lvlBadge(lvl, cls) { return `<div class="lvl-badge tier-fill ${tierCls(lvlTier(lvl))} ${cls || ''}"><small>LVL</small><b>${lvl}</b></div>`; }
 
@@ -2793,11 +2985,11 @@ function updateMedals(st) {
 }
 function medalXP(ups) { return ups.reduce((s, u) => s + XP_MEDAL + (u.level === 11 ? XP_RAINBOW : 0), 0); }
 function grantXP(amount) {
-  const before = levelInfo(acct.xp).lvl;
+  const xp0 = acct.xp, before = levelInfo(acct.xp).lvl;
   acct.xp += amount; saveAcct();
   const after = levelInfo(acct.xp).lvl;
   renderMenuStats();
-  return { before, after };
+  return { before, after, pristine: 200 * Math.max(0, after - before), over100: xpOver100Pristine(xp0, acct.xp) };
 }
 function endRewards(completed, st, opts) {
   opts = opts || {};
@@ -2809,10 +3001,24 @@ function endRewards(completed, st, opts) {
   if (fresh.length) { r.parts.push([fresh.length === 1 ? 'Achievement' : fresh.length + ' achievements', fresh.length * XP_ACH]); r.xp += fresh.length * XP_ACH; }
   if (ups.length) { const mx = medalXP(ups); r.parts.push([ups.length === 1 ? 'Medal level' : ups.length + ' medal levels', mx]); r.xp += mx; }
   S.lastFresh = fresh;
+  if (fresh.some(a => a.id === 'nolife')) { markNewColors(['rainbow']); queueToast(() => toastEl('color', swatchHTML('rainbow', 'big'), 'NEW COLOR UNLOCKED', 'Rainbow', 'And the title "No life". Pick them with Edit in your Account.'), 'color'); }
   fresh.forEach(a => queueToast(() => toastEl('ach', emblem(a.icon, true), 'ACHIEVEMENT UNLOCKED · +2,000 XP', a.name, a.desc), 'ach'));
   if (!completed && S.mode === 'standard') ups.forEach(u => queueToast(() => toastEl('medal', medalHTML(u.m, u.level, st, true), `MEDAL UP · +${nf(XP_MEDAL + (u.level === 11 ? XP_RAINBOW : 0))} XP`, `${u.m.name}: ${u.level === 11 ? 'ULTIMATE' : 'Level ' + u.level} (${TIERS[u.level - 1]})`, `New title unlocked: ${u.m.titles[u.level - 1]}`), 'medal'));
   const lv = grantXP(r.xp);
   r.before = lv.before; r.after = lv.after; r.xpAfter = acct.xp;
+  // Pristine for this game
+  const pp = [];
+  if (opts.pristine) opts.pristine.forEach(p => p[1] > 0 && pp.push(p));
+  else if (S.mode === 'standard' && !S.mp) pp.push(completed ? ['Win', 500] : ['Game', 50]);
+  if (fresh.length) pp.push([fresh.length === 1 ? 'Achievement' : fresh.length + ' achievements', fresh.length * 500]);
+  if (lv.pristine) pp.push([lv.after - lv.before === 1 ? 'Level up' : (lv.after - lv.before) + ' level ups', lv.pristine]);
+  if (ups.length) pp.push([ups.length === 1 ? 'Medal level' : ups.length + ' medal levels', ups.length * 500 + ups.filter(u => u.level === 11).length * 2000]);
+  const mins = minutePristine(S.playTime); if (mins) pp.push(['Time played', mins]);
+  if (lv.over100) pp.push(['XP after level 100', lv.over100]);
+  r.prBefore = acct.pristine || 0;
+  r.pr = pp.reduce((n, p) => n + p[1], 0); r.prParts = pp;
+  if (r.pr) addPristine(r.pr);
+  r.prAfter = acct.pristine || 0;
   saveAcct();
   const newRules = [...discovered].filter(id => !(S.discBefore || []).includes(id)).length;
   if (newRules) queueToast(() => toastEl('info', '<span class="bang">!</span>', 'DISCOVERED RULES', `${newRules} new ${newRules === 1 ? 'rule' : 'rules'} discovered`, 'See every accepted answer in Discovered rules.'));
@@ -2823,7 +3029,220 @@ function endRewards(completed, st, opts) {
 function xpLineHTML(r) {
   if (!r || !r.xp) return '';
   const li = levelInfo(acct.xp);
-  return `<div class="xpline">${lvlBadge(li.lvl, 'mini')}<div class="xp-txt"><b>+${nf(r.xp)} XP</b><span>${r.parts.map(p => `${escapeHtml(p[0])} +${nf(p[1])}`).join(' · ')}</span><div class="xpbar"><i style="width:${(li.into / li.need * 100).toFixed(1)}%"></i></div><small>${r.after > r.before ? `Level up! ${r.before} → ${r.after} · ` : ''}${nf(li.into)} / ${nf(li.need)} XP to level ${li.lvl + 1}</small></div></div>`;
+  return `<div class="xpline">${lvlBadge(li.lvl, 'mini')}<div class="xp-txt"><b>+${nf(r.xp)} XP${r.pr ? ` <span class="pr-inline">◆ +${nf(r.pr)} Pristine</span>` : ''}</b><span>${r.parts.map(p => `${escapeHtml(p[0])} +${nf(p[1])}`).join(' · ')}</span><div class="xpbar"><i style="width:${(li.into / li.need * 100).toFixed(1)}%"></i></div><small>${r.after > r.before ? `Level up! ${r.before} → ${r.after} · ` : ''}${nf(li.into)} / ${nf(li.need)} XP to level ${li.lvl + 1}</small></div></div>`;
+}
+
+/* ---------- Pristine & colors ----------
+   Pristine is earned by doing anything in the game. Every 10,000 unlocks new name colors.
+   Your color tints your whole Account page and is how other players see your name. */
+const PRISTINE_CAP = 150000;          // the number keeps going, the rewards stop here
+const COLORS = [
+  // id, name, unlock (pristine or achievement), base color, box behind the name ('dark' | 'lite' | 'mid'), CSS for the name text
+  { id: 'default', name: 'Default', at: 0, base: null, box: 'dark', css: 'color:#f6f0ff' },
+  { id: 'orange', name: 'Orange', at: 0, base: '#ff8a2b', box: 'dark', css: 'color:#ff8a2b' },
+  { id: 'green', name: 'Green', at: 0, base: '#3ddc8f', box: 'dark', css: 'color:#3ddc8f' },
+  { id: 'brown', name: 'Brown', at: 0, base: '#b9814f', box: 'dark', css: 'color:#c48a55' },
+  { id: 'red', name: 'Red', at: 10000, base: '#ff4d5e', box: 'dark', css: 'color:#ff4d5e' },
+  { id: 'blue', name: 'Blue', at: 10000, base: '#3f8fff', box: 'dark', css: 'color:#4f98ff' },
+  { id: 'purple', name: 'Purple', at: 20000, base: '#a35bff', box: 'dark', css: 'color:#b06dff' },
+  { id: 'pink', name: 'Pink', at: 20000, base: '#ff6fb5', box: 'dark', css: 'color:#ff6fb5' },
+  { id: 'yellow', name: 'Yellow', at: 20000, base: '#ffe14a', box: 'dark', css: 'color:#ffe14a' },
+  { id: 'teal', name: 'Teal', at: 30000, base: '#2fd0c0', box: 'dark', css: 'color:#2fd0c0' },
+  { id: 'gray', name: 'Gray', at: 30000, base: '#9aa0b4', box: 'dark', css: 'color:#a3a8bb' },
+  { id: 'black', name: 'Black', at: 40000, base: '#2a2438', box: 'lite', css: 'color:#120f1c' },
+  { id: 'white', name: 'White', at: 40000, base: '#ffffff', box: 'dark', css: 'color:#ffffff;text-shadow:0 0 6px rgba(255,255,255,.35)' },
+  { id: 'bronze', name: 'Bronze', at: 50000, base: '#ce8a4f', box: 'dark', shine: ['#b8733a', '#ffd2a3'] },
+  { id: 'silver', name: 'Silver', at: 50000, base: '#c9d1e0', box: 'dark', shine: ['#9aa6bd', '#ffffff'] },
+  { id: 'gold', name: 'Gold', at: 50000, base: '#ffb83d', box: 'dark', shine: ['#e09a1c', '#fff3b0'] },
+  { id: 'diamond', name: 'Diamond', at: 60000, base: '#8fe3ff', box: 'dark', shine: ['#58c8f0', '#f0fcff'] },
+  { id: 'platinum', name: 'Platinum', at: 60000, base: '#dfe6f0', box: 'dark', shine: ['#b4bfcf', '#ffffff'] },
+  { id: 'ruby', name: 'Ruby', at: 70000, base: '#e0284f', box: 'dark', shine: ['#c01a3e', '#ffadc0'] },
+  { id: 'sapphire', name: 'Sapphire', at: 70000, base: '#2f63e8', box: 'dark', shine: ['#3f6ff0', '#b8ccff'] },
+  { id: 'emerald', name: 'Emerald', at: 70000, base: '#22c27a', box: 'dark', shine: ['#17a866', '#aaffd6'] },
+  { id: 'prismatic', name: 'Prismatic', at: 80000, base: '#e4d2ff', box: 'dark', css: 'background:linear-gradient(90deg,#ffd6f2,#c7f4ff,#e4d2ff,#d2ffe9,#fff3c6,#ffd6f2);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:unmove 7s linear infinite' },
+  { id: 'soul', name: 'Soul Purple', at: 90000, base: '#a35bff', box: 'mid', css: 'animation:unsoul 2.6s ease-in-out infinite alternate' },
+  { id: 'heart', name: 'Heart Pink', at: 90000, base: '#ff6fb5', box: 'dark', css: 'animation:unheart 2.6s ease-in-out infinite alternate' },
+  { id: 'redheat', name: 'Red Heat', at: 100000, base: '#ff6a2b', box: 'dark', css: 'background:linear-gradient(0deg,#ff2d1a,#ff8a2b 45%,#ffe680 80%,#ff8a2b);background-size:100% 260%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:unflame 1.4s ease-in-out infinite alternate' },
+  { id: 'blueheat', name: 'Blue Heat', at: 100000, base: '#4f9bff', box: 'dark', css: 'background:linear-gradient(0deg,#2f4bff,#5ad1ff 45%,#e8fbff 80%,#5ad1ff);background-size:100% 260%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:unflame 1.4s ease-in-out infinite alternate' },
+  { id: 'nuclear', name: 'Nuclear Green', at: 110000, base: '#7dff3a', box: 'dark', css: 'color:#9dff5a;text-shadow:0 0 5px #7dff3a,0 0 12px rgba(125,255,58,.75),0 0 22px rgba(125,255,58,.4)' },
+  { id: 'acid', name: 'Acid Purple', at: 110000, base: '#c04bff', box: 'dark', css: 'color:#d27dff;text-shadow:0 0 5px #c04bff,0 0 12px rgba(192,75,255,.75),0 0 22px rgba(192,75,255,.4)' },
+  { id: 'mono', name: 'Monochrome', at: 120000, base: '#d8d8e8', box: 'mid', css: 'animation:unmono 2.2s ease-in-out infinite alternate' },
+  { id: 'duality', name: 'Duality', at: 120000, base: '#bdbdd0', box: 'mid', css: 'background:linear-gradient(90deg,#fff 0 25%,#111 25% 50%,#fff 50% 75%,#111 75%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:unmove 2.4s linear infinite' },
+  { id: 'dt-ro', name: 'Red/Orange', at: 130000, base: '#ff6a3d', box: 'dark', duo: ['#ff4d5e', '#ff9a2b'] },
+  { id: 'dt-bp', name: 'Blue/Purple', at: 130000, base: '#6b6bff', box: 'dark', duo: ['#3f8fff', '#b06dff'] },
+  { id: 'dt-bw', name: 'Black/White', at: 130000, base: '#d0d0e0', box: 'mid', duo: ['#111', '#fff'] },
+  { id: 'spider', name: 'Spider', at: 140000, base: '#e0283a', box: 'mid', css: 'background:linear-gradient(180deg,#ff2b3d 0 52%,#2448e0 52% 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-stroke:.6px #0b0b12;filter:drop-shadow(0 0 1.5px #fff)' },
+  { id: 'bat', name: 'Bat', at: 140000, base: '#ffd23d', box: 'mid', css: 'color:#15121f;-webkit-text-stroke:.7px #ffd23d;text-shadow:0 0 6px rgba(255,255,255,.45)' },
+  { id: 'pristine', name: 'Pristine', at: 150000, base: '#ff9fd6', box: 'dark', css: 'animation:unfade 9s linear infinite' },
+  { id: 'rainbow', name: 'Rainbow', ach: 'nolife', base: '#ff4d9e', box: 'dark', css: 'background:linear-gradient(90deg,#ff4d5e,#ff9f3d,#ffe85a,#3ddc8f,#2fd0ff,#2f6bff,#a35bff,#ff4d9e,#ff4d5e);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:unmove 2.6s linear infinite' }
+];
+const colorById = id => COLORS.find(c => c.id === id) || COLORS[0];
+(function colorCSS() {
+  let css = `@keyframes unmove { to { background-position: -200% 0; } }
+@keyframes unshine { 0% { background-position: 160% 0; } 60%, 100% { background-position: -60% 0; } }
+@keyframes unsoul { from { color: #1a1026; } to { color: #b06dff; } }
+@keyframes unheart { from { color: #ffffff; } to { color: #ff6fb5; } }
+@keyframes unmono { from { color: #121018; } to { color: #ffffff; } }
+@keyframes unflame { from { background-position: 0 0; filter: brightness(1); } to { background-position: 0 100%; filter: brightness(1.18); } }
+@keyframes unfade { 0% { color: #ff4d5e; } 17% { color: #ffb83d; } 33% { color: #ffe85a; } 50% { color: #3ddc8f; } 67% { color: #2fd0ff; } 83% { color: #b06dff; } 100% { color: #ff4d5e; } }
+@keyframes unduoA { 0%, 49.9% { color: var(--dA); } 50%, 100% { color: var(--dB); } }
+@keyframes unduoB { 0%, 49.9% { color: var(--dB); } 50%, 100% { color: var(--dA); } }
+.uname { display: inline-block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: bottom; }
+.uname .l { animation: unduoA 1.6s steps(1) infinite; } .uname .l:nth-child(even) { animation-name: unduoB; }
+.nchip { display: inline-flex; align-items: center; max-width: 100%; min-width: 0; padding: 1px 7px 2px; border-radius: 6px; background: #0b0918; box-shadow: inset 0 0 0 1px rgba(255,255,255,.14); line-height: 1.2; vertical-align: middle; }
+.nchip.lite { background: #efeaff; box-shadow: inset 0 0 0 1px rgba(0,0,0,.2); } .nchip.mid { background: #6f6888; }
+.sw { display: inline-block; width: 100%; height: 100%; border-radius: 4px; }
+`;
+  for (const c of COLORS) {
+    const text = c.shine ? `background:linear-gradient(110deg,${c.shine[0]} 0%,${c.shine[0]} 38%,${c.shine[1]} 50%,${c.shine[0]} 62%,${c.shine[0]} 100%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:unshine 3.4s ease-in-out infinite`
+      : c.duo ? `--dA:${c.duo[0]};--dB:${c.duo[1]};color:${c.duo[0]}` : c.css;
+    css += `.uname.c-${c.id} { ${text} }\n`;
+    // the swatch: a little square that shows the color
+    const sw = c.shine ? `background:linear-gradient(135deg,${c.shine[0]},${c.shine[1]} 50%,${c.shine[0]});background-size:200% 200%;animation:unshine 3.4s ease-in-out infinite`
+      : c.duo ? `background:linear-gradient(135deg,${c.duo[0]} 50%,${c.duo[1]} 50%)`
+      : c.id === 'default' ? 'background:#f6f0ff' : c.id === 'rainbow' ? 'background:linear-gradient(90deg,#ff4d5e,#ff9f3d,#ffe85a,#3ddc8f,#2fd0ff,#a35bff,#ff4d5e);background-size:200% 100%;animation:unmove 2.6s linear infinite'
+      : c.id === 'pristine' ? 'background:#ff4d5e;animation:unfadebg 9s linear infinite'
+      : c.id === 'prismatic' ? 'background:linear-gradient(135deg,#ffd6f2,#c7f4ff,#e4d2ff,#d2ffe9,#fff3c6)'
+      : c.id === 'soul' ? 'background:linear-gradient(135deg,#1a1026,#b06dff)' : c.id === 'heart' ? 'background:linear-gradient(135deg,#fff,#ff6fb5)'
+      : c.id === 'mono' ? 'background:linear-gradient(135deg,#121018,#fff)' : c.id === 'duality' ? 'background:linear-gradient(90deg,#fff 50%,#111 50%)'
+      : c.id === 'redheat' ? 'background:linear-gradient(0deg,#ff2d1a,#ff8a2b,#ffe680)' : c.id === 'blueheat' ? 'background:linear-gradient(0deg,#2f4bff,#5ad1ff,#e8fbff)'
+      : c.id === 'nuclear' ? 'background:#7dff3a;box-shadow:0 0 10px #7dff3a' : c.id === 'acid' ? 'background:#c04bff;box-shadow:0 0 10px #c04bff'
+      : c.id === 'spider' ? 'background:linear-gradient(180deg,#ff2b3d 50%,#2448e0 50%);box-shadow:inset 0 0 0 2px #0b0b12' : c.id === 'bat' ? 'background:#15121f;box-shadow:inset 0 0 0 3px #ffd23d'
+      : `background:${c.base}`;
+    css += `.sw.c-${c.id} { ${sw} }\n`;
+  }
+  css += '@keyframes unfadebg { 0% { background: #ff4d5e; } 17% { background: #ffb83d; } 33% { background: #ffe85a; } 50% { background: #3ddc8f; } 67% { background: #2fd0ff; } 83% { background: #b06dff; } 100% { background: #ff4d5e; } }\n';
+  const st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
+})();
+
+// players with the same color in one room get one of 7 hidden variants, so you can tell them apart
+const VARIANTS = [[0, 1], [14, 1.08], [-14, .92], [28, 1.14], [-28, .86], [42, 1.2], [-42, .8], [56, 1.25]];
+function variantStyle(k) { if (!k) return ''; const [h, b] = VARIANTS[k % VARIANTS.length]; return `filter:hue-rotate(${h}deg) brightness(${b})`; }
+function nameHTML(name, colorId, variant) {
+  const c = colorById(colorId), safe = cleanName(name);
+  const inner = c.duo ? [...safe].map(ch => `<span class="l">${escapeHtml(ch)}</span>`).join('') : escapeHtml(safe);
+  return `<span class="uname c-${c.id}" style="${variantStyle(variant)}">${inner}</span>`;
+}
+function chipHTML(name, colorId, variant, cls) { const c = colorById(colorId); return `<span class="nchip ${c.box}${cls ? ' ' + cls : ''}">${nameHTML(name, colorId, variant)}</span>`; }
+const swatchHTML = (id, cls) => `<span class="swatch ${cls || ''}"><span class="sw c-${colorById(id).id}"></span></span>`;
+const validColor = id => COLORS.some(c => c.id === id) ? id : 'default';
+
+/* ---------- theme: your color tints the Account page (and your profile, for others) ---------- */
+function hexRgb(h) { h = h.replace('#', ''); if (h.length === 3) h = h.split('').map(x => x + x).join(''); return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16)); }
+function mixHexes(a, b, t) { const A = hexRgb(a), B = hexRgb(b); return '#' + A.map((v, i) => Math.round(v * (1 - t) + B[i] * t).toString(16).padStart(2, '0')).join(''); }
+function lum(h) { const [r, g, b] = hexRgb(h).map(v => { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }); return .2126 * r + .7152 * g + .0722 * b; }
+function themeStyle(colorId) {
+  const c = colorById(colorId); if (!c.base) return '';
+  const base = c.base, dark = lum(base) < .05;
+  const accent = dark ? '#d6d0ea' : base;               // never black text on the dark page
+  return [`--panel:${mixHexes(base, '#1b1638', .8)}`, `--panel-hi:${mixHexes(base, '#2d2762', .62)}`, `--edge:${mixHexes(base, '#06050d', .88)}`,
+    `--gold:${accent}`, `--ink:${mixHexes(dark ? '#ffffff' : base, '#ffffff', .86)}`, `--dim:${mixHexes(dark ? '#9a94b4' : base, '#aca2db', .55)}`].join(';');
+}
+
+/* ---------- earning ---------- */
+const xpAt100 = (() => { let s = 0; for (let l = 0; l < 100; l++) s += xpToNext(l); return s; })();
+// "XP after level 100": XP / 15, rounded down to the nearest 10
+function xpOver100Pristine(xpBefore, xpAfter) { const over = Math.max(0, xpAfter - Math.max(xpBefore, xpAt100)); return Math.floor(over / 15 / 10) * 10; }
+function colorUnlocked(id, pr) {
+  const c = colorById(id); pr = pr == null ? (acct.pristine || 0) : pr;
+  return c.ach ? !!unlocked[c.ach] : pr >= c.at;
+}
+function addPristine(amount, quiet) {
+  amount = Math.max(0, Math.round(amount || 0)); if (!amount) return 0;
+  const before = acct.pristine || 0;
+  acct.pristine = before + amount;
+  saveAcct();
+  if (!quiet) announceColors(before, acct.pristine);
+  if (acct.pristine >= PRISTINE_CAP && !unlocked.spotless && typeof award === 'function') award('spotless');
+  return amount;
+}
+// each new color gets its own notification, with a little square of the color as the emblem
+function announceColors(before, after) {
+  const fresh = COLORS.filter(c => !c.ach && c.at > before && c.at <= after && c.at <= PRISTINE_CAP);
+  fresh.forEach(c => queueToast(() => toastEl('color', swatchHTML(c.id, 'big'), 'NEW COLOR UNLOCKED', c.name, 'Pick it with Edit in your Account.'), 'color'));
+  if (fresh.length) markNewColors(fresh.map(c => c.id));
+}
+function markNewColors(ids) { acct.newColors = [...new Set([...(acct.newColors || []), ...ids])]; saveAcct(); renderMenuStats(); }
+// minutes played add up across games
+function minutePristine(sec) {
+  acct.prMinAcc = (acct.prMinAcc || 0) + Math.max(0, sec || 0);
+  const mins = Math.floor(acct.prMinAcc / 60); acct.prMinAcc -= mins * 60;
+  return mins * 50;
+}
+// the first time someone opens V11, everything they've already done counts
+function initPristine() {
+  if (acct.pristineInit) return;
+  const st = getStats(), std = ensureStd(Object.assign({}, st)), drop = st.drop || {};
+  let p = 0;
+  p += (std.wins || 0) * 500 + Math.max(0, (std.games || 0) - (std.wins || 0)) * 50;
+  p += (drop.rounds || 0) * 80 + Math.max(0, (drop.best || 0) - 21) * 70;
+  p += (st.mpWins || 0) * 600 + ((st.mpLosses || 0) + (st.mpDraws || 0)) * 100;
+  p += Object.keys(unlocked).filter(id => ACH.some(a => a.id === id)).length * 500;
+  p += levelInfo(acct.xp).lvl * 200;
+  p += Object.values(acct.medals).reduce((s, l) => s + l * 500 + (l >= 11 ? 2000 : 0), 0);
+  p += Math.floor((st.time || 0) / 60) * 50;
+  p += xpOver100Pristine(0, acct.xp);
+  acct.pristine = Math.max(acct.pristine || 0, p);
+  acct.pristineInit = true;
+  acct.color = validColor(acct.color);
+  const got = COLORS.filter(c => !c.ach && c.at > 0 && c.at <= acct.pristine && c.at <= PRISTINE_CAP).map(c => c.id);
+  if (got.length) acct.newColors = got;
+  saveAcct();
+  if (acct.pristine > 0) setTimeout(() => toastEl('color', `<span class="pr-gem big">◆</span>`, 'PRISTINE', `${nf(acct.pristine)} Pristine from your past games`, got.length ? `${got.length} colors unlocked. Pick one with Edit in your Account.` : 'Earn more to unlock colors.'), 1500);
+}
+
+/* ---------- the Pristine track and the medal title tracks ---------- */
+function trackHTML(nodes, value, max, fmt, markerText) {
+  // nodes: [{ at, html, label }] along a bar from 0 to max
+  const pct = Math.max(0, Math.min(100, value / max * 100));
+  return `<div class="ptrack"><div class="ptrack-inner" style="--n:${nodes.length}">
+    <div class="ptrack-bar"><i class="ptrack-fill" style="width:${pct.toFixed(2)}%"></i></div>
+    ${nodes.map(n => { const p = n.at / max * 100, got = value >= n.at; return `<div class="pnode${got ? ' got' : ''}" style="left:${p.toFixed(2)}%"><div class="pn-top">${n.html}</div><i class="pn-dot"></i><small class="pn-at">${fmt(n.at)}</small>${n.label ? `<span class="pn-lbl">${n.label}</span>` : ''}</div>`; }).join('')}
+    <div class="pmarker" style="left:${pct.toFixed(2)}%"><b>${markerText != null ? escapeHtml(markerText) : fmt(value)}</b></div>
+  </div></div>`;
+}
+function openPristineTrack() {
+  sfx.click();
+  const pr = acct.pristine || 0;
+  const steps = [];
+  for (let at = 0; at <= PRISTINE_CAP; at += 10000) steps.push({ at, html: COLORS.filter(c => !c.ach && c.at === at).map(c => `<span title="${escapeHtml(c.name)}">${swatchHTML(c.id)}</span>`).join(''), label: at === PRISTINE_CAP ? 'Spotless' : '' });
+  const rows = [['Winning a singleplayer game', '500'], ['Losing a singleplayer game', '50'], ['Winning a 1v1 PvP game', '600'], ['Losing a 1v1 PvP game', '100'], ['Placing in FFA or Battle Royale', '100 × players ÷ place'],
+    ['Each round cleared in Drop Out', '80 (150 after round 20)'], ['Unlocking an achievement', '500'], ['Account level up', '200'], ['Medal level up', '500'], ['Rainbow medal', '2,000'], ['Each minute played', '50'], ['XP after level 100', 'XP ÷ 15']];
+  openModal(`<h2><span class="pr-gem">◆</span> PRISTINE</h2>
+    <p class="progress">You have <b class="pr-num">${nf(pr)}</b> Pristine. Every 10,000 unlocks new colors for your name and Account. Rewards stop at ${nf(PRISTINE_CAP)}, but the number keeps going.</p>
+    ${trackHTML(steps, Math.min(pr, PRISTINE_CAP), PRISTINE_CAP, v => v >= 1000 ? nf(v / 1000) + 'k' : nf(v))}
+    <div class="pr-extra">${swatchHTML('rainbow')}<span><b>Rainbow</b> comes from the <b>No life</b> achievement: get every medal to Rainbow.</span></div>
+    <h3>How to earn it</h3>
+    <div class="tbl-wrap"><table class="tbl"><tbody>${rows.map(r => `<tr><td>${r[0]}</td><td><b>${r[1]}</b></td></tr>`).join('')}</tbody></table></div>
+    <div class="row"><button class="btn dark" data-act="close" type="button">CLOSE</button></div>`);
+  scrollTrack();
+}
+function openMedalTrack(id) {
+  const m = MEDALS.find(x => x.id === id); if (!m) return;
+  sfx.click();
+  const st = getStats(), v = m.value(st), lvl = acct.medals[m.id] || 0;
+  const nodes = m.steps.map((at, i) => ({ at: i, html: `<div class="disc tier-fill ${tierCls(i)} mini-disc">${pixelSvg(m.icon)}</div>`, label: escapeHtml(m.titles[i]) }));
+  // evenly spaced levels; the marker sits between the levels you're between
+  let pos = 0; for (let i = 0; i < m.steps.length; i++) { const prev = i ? m.steps[i - 1] : 0; if (v >= m.steps[i]) pos = i; else { pos = i - 1 + Math.max(0, (v - prev) / (m.steps[i] - prev)); break; } }
+  const shown = m.unit(m.id === 'time' ? v : Math.round(v));
+  const html = trackHTML(nodes, Math.max(0, pos), m.steps.length - 1, x => x === m.steps.length - 1 ? '★' : String(x + 1), shown);
+  openModal(`<h2>${escapeHtml(m.name.toUpperCase())}</h2>
+    <p class="progress">${lvl ? `Level ${lvl === 11 ? 'ULTIMATE' : lvl} (${TIERS[lvl - 1]})` : 'Not unlocked yet'} · ${escapeHtml(shown)}. Every level unlocks a title.</p>
+    ${html}
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>LEVEL</th><th>NEEDS</th><th>TITLE</th></tr></thead><tbody>${m.steps.map((at, i) => `<tr class="${lvl > i ? 'got' : ''}"><td>${i === 10 ? 'ULTIMATE' : i + 1}</td><td>${escapeHtml(m.unit(at))}</td><td>${lvl > i ? '✓ ' : '🔒 '}${escapeHtml(m.titles[i])}</td></tr>`).join('')}</tbody></table></div>
+    <div class="row"><button class="btn dark" data-act="close" type="button">CLOSE</button></div>`);
+  scrollTrack();
+}
+function scrollTrack() { requestAnimationFrame(() => { const t = $('modal').querySelector('.ptrack'), mk = t && t.querySelector('.pmarker'); if (t && mk) t.scrollLeft = Math.max(0, mk.offsetLeft - t.clientWidth / 2); }); }
+
+/* ---------- color picker (Edit in the Account) ---------- */
+function colorPickerHTML(sel) {
+  const pr = acct.pristine || 0, fresh = new Set(acct.newColors || []);
+  return COLORS.map(c => {
+    const ok = colorUnlocked(c.id, pr);
+    const need = c.ach ? 'No life achievement' : nf(c.at) + ' Pristine';
+    return `<button type="button" class="cpick${c.id === sel ? ' on' : ''}${ok ? '' : ' locked'}" data-color="${c.id}" ${ok ? '' : 'disabled'} title="${escapeHtml(c.name)}${ok ? '' : ' · needs ' + need}">${swatchHTML(c.id)}<small>${escapeHtml(c.name)}</small>${ok ? (fresh.has(c.id) ? '<em class="newtag">NEW</em>' : '') : `<em class="lock">🔒 ${c.ach ? 'No life' : (c.at / 1000) + 'k'}</em>`}</button>`;
+  }).join('');
 }
 
 /* ---------- victory sequence ---------- */
@@ -2835,6 +3254,7 @@ function progHTML(r) {
       <div class="prog-txt"><b id="progLvl">Level ${li.lvl}</b><div class="xpbar big"><i id="progBar" style="width:${(li.into / li.need * 100).toFixed(2)}%"></i></div><small id="progXp">${nf(li.into)} / ${nf(li.need)} XP</small></div>
       <div class="prog-gain" id="progGain">+${nf(r.xp)} XP</div></div>
     <div class="prog-medals" id="progMedals">${MEDALS.map((m, i) => medalHTMLv(m, r.medBefore[m.id] || 0, r.valBefore[i])).join('')}</div>
+    ${r.pr ? `<div class="prog-pr" id="progPr"><span class="pr-gem">◆</span><div class="prog-pr-txt"><b id="prVal">${nf(r.prBefore)}</b><small>PRISTINE</small></div><em id="prGain">+${nf(r.pr)}</em><span class="pr-parts">${r.prParts.map(p => `${escapeHtml(p[0])} +${nf(p[1])}`).join(' · ')}</span></div>` : ''}
   </div>`;
 }
 const easeOut3 = p => 1 - Math.pow(1 - p, 3);
@@ -2916,7 +3336,7 @@ async function levelAndMedals(seq, r) {
       const v = v0 + (v1 - v0) * easeOut3(p);
       const nl = medalLevelV(m, v);
       const extra = nl > (r.medBefore[m.id] || 0) ? `<span class="newtitle">New title: ${escapeHtml(m.titles[nl - 1])}</span>` : '';
-      const html = medalHTMLv(m, nl, m.id === 'wins' || m.id === 'pvp' ? Math.round(v) : v, false, extra);
+      const html = medalHTMLv(m, nl, v, false, extra);
       if (html !== lastShown) {
         const fresh = document.createElement('div'); fresh.innerHTML = html;
         const nb = fresh.firstElementChild; nb.classList.add('in');
@@ -2925,6 +3345,20 @@ async function levelAndMedals(seq, r) {
       if (nl > lvl) { lvl = nl; bump(box.querySelector('.disc')); if (!seq.skip) [0, 7, 12].forEach((s, k) => tone(noteHz(s + 7), .18, 'square', .035, 0, k * .05)); }
     });
     if (seq.dead) return;
+  }
+  // 5. Pristine counts up once every medal has ticked
+  const prBox = $('progPr');
+  if (prBox && r.pr) {
+    prBox.classList.add('in'); tone(1046, .08, 'triangle', .04);
+    let lastBlip = 0;
+    await tween(seq, 1300, p => {
+      const v = r.prBefore + r.pr * easeOut3(p);
+      $('prVal').textContent = nf(v);
+      const now = performance.now(); if (!seq.skip && p < 1 && now - lastBlip > 65) { lastBlip = now; tone(1200 + 900 * p, .03, 'triangle', .025); }
+    });
+    if (seq.dead) return;
+    $('prGain').classList.add('on');
+    if (COLORS.some(c => !c.ach && c.at > r.prBefore && c.at <= r.prAfter && c.at <= PRISTINE_CAP)) { prBox.classList.add('unlock'); [784, 988, 1175, 1568].forEach((f, k) => tone(f, .14, 'triangle', .04, 0, k * .07)); }
   }
   seq.done = true;
   const h = $('skipHint'); if (h) h.remove();
@@ -3033,6 +3467,7 @@ function achCardsHTML(fresh) {
 const MEDAL_HOW = { wins: 'by winning games', typed: 'by typing characters in games', points: 'by earning points', time: 'by playing (time spent in rounds)', pvp: 'by playing PvP games' };
 function titleWhy(key) {
   if (!key) return 'No title selected. You unlock titles by leveling up your medals.';
+  if (key === 'nolife') return '<b>No life</b> comes from the <b>No life</b> achievement: every medal at Rainbow.';
   const [id, l] = key.split(':'); const m = MEDALS.find(q => q.id === id); const lvl = +l;
   return `<b>${escapeHtml(m.titles[lvl - 1])}</b> comes from your <b>${escapeHtml(m.name)}</b> medal at ${lvl === 11 ? 'ULTIMATE' : 'level ' + lvl} (${TIERS[lvl - 1]}). That medal levels up ${MEDAL_HOW[id]}.`;
 }
@@ -3046,13 +3481,16 @@ function renderAccount(freshAch) {
   const st = getStats();
   $('accScoresBody').innerHTML = scoresHTML();
   const li = levelInfo(acct.xp);
-  $('accNameText').textContent = acct.name;
+  $('accNameText').innerHTML = nameHTML(acct.name, acct.color);
   requestAnimationFrame(fitName);
+  $('accPrNum').textContent = nf(acct.pristine || 0);
+  $('account').setAttribute('style', themeStyle(acct.color));
+  $('account').classList.toggle('themed', colorById(acct.color).id !== 'default');
   const ti = titleInfo(acct.title);
   $('accTitleText').textContent = ti ? ti.text : 'No title yet';
   $('accTitleText').classList.toggle('none', !ti);
   $('accLvl').innerHTML = `${lvlBadge(li.lvl)}<div class="lvl-txt"><b>Level ${li.lvl}</b><span>${TIERS[lvlTier(li.lvl)]}</span><div class="xpbar"><i style="width:${(li.into / li.need * 100).toFixed(1)}%"></i></div><small>${nf(li.into)} / ${nf(li.need)} XP · ${nf(acct.xp)} XP total</small></div>`;
-  $('accMedals').innerHTML = MEDALS.map(m => medalHTML(m, acct.medals[m.id] || 0, st)).join('');
+  $('accMedals').innerHTML = MEDALS.map(m => medalHTML(m, acct.medals[m.id] || 0, st).replace('<div class="medal"', `<div class="medal" data-medal="${m.id}" role="button" tabindex="0"`)).join('');
   const count = ACH.filter(a => unlocked[a.id]).length;
   $('accAchCount').textContent = `${count}/${ACH.length}`;
   $('accAchList').innerHTML = achCardsHTML(freshAch);
@@ -3066,16 +3504,18 @@ function fitName() {
   while (el.scrollWidth > el.clientWidth + 1 && size > 28) { size -= 2; el.style.fontSize = size + 'px'; }
 }
 addEventListener('resize', () => { if (!$('account').hidden) fitName(); });
-function closeEdit() { $('accEditForm').hidden = true; $('accEdit').hidden = false; }
+function closeEdit() { $('accEditForm').hidden = true; $('accEdit').hidden = false; if (!$('account').hidden) { $('account').setAttribute('style', themeStyle(acct.color)); $('accNameText').innerHTML = nameHTML(acct.name, acct.color); } }
 function openEdit() {
   sfx.click();
   const newT = new Set(unseenTitles());
   let opts = '<option value="">No title</option>';
   for (const m of MEDALS) for (let l = 1; l <= (acct.medals[m.id] || 0); l++) { const k = m.id + ':' + l; opts += `<option value="${k}">${newT.has(k) ? '★ NEW · ' : ''}${escapeHtml(m.titles[l - 1])}</option>`; }
+  if (unlocked.nolife) opts += '<option value="nolife">No life</option>';
   $('accTitle').innerHTML = opts;
   $('accTitle').value = titleInfo(acct.title) ? acct.title : '';
   $('accTitleWhy').innerHTML = titleWhy($('accTitle').value);
   $('accNameInput').value = acct.name;
+  pickColor(acct.color);
   $('accEdit').hidden = true; $('accEditForm').hidden = false;
   $('accNameInput').focus();
   markSeen('titles', [...newT]);
@@ -3103,10 +3543,27 @@ $('accEditForm').addEventListener('submit', e => {
     if (!acct.named) { acct.named = true; saveAcct(); award('hello'); } else award('uncertain');
   }
   if (t !== acct.title) { acct.title = t; saveAcct(); if (t) award('style'); }
+  if (pickedColor !== acct.color && colorUnlocked(pickedColor)) { acct.color = pickedColor; saveAcct(); }
+  if ((acct.newColors || []).length) { acct.newColors = []; saveAcct(); }
   sfx.ok(); renderAccount(); lbPushSoon(); trackMe();
 });
 $('accNameInput').addEventListener('keydown', e => { if (e.key === 'Escape') closeEdit(); });
-$('account').addEventListener('click', e => { const a = e.target.closest('[data-act="reveal"]'); if (a) { sfx.click(); revealAch(a); } });
+$('account').addEventListener('click', e => {
+  const a = e.target.closest('[data-act="reveal"]'); if (a) { sfx.click(); revealAch(a); return; }
+  const md = e.target.closest('#accMedals [data-medal]'); if (md) { openMedalTrack(md.dataset.medal); return; }
+  const cp = e.target.closest('#accColors [data-color]'); if (cp && !cp.disabled) { sfx.click(); pickColor(cp.dataset.color); }
+});
+$('account').addEventListener('keydown', e => { const md = e.target.closest && e.target.closest('#accMedals [data-medal]'); if (md && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openMedalTrack(md.dataset.medal); } });
+$('accPristine').onclick = openPristineTrack;
+let pickedColor = 'default';
+function pickColor(id) {
+  pickedColor = validColor(id);
+  $('accColors').innerHTML = colorPickerHTML(pickedColor);
+  $('accColorPrev').innerHTML = `${chipHTML($('accNameInput').value || acct.name, pickedColor)} <span>${escapeHtml(colorById(pickedColor).name)}</span>`;
+  // preview the theme live while editing
+  $('account').setAttribute('style', themeStyle(pickedColor));
+  $('accNameText').innerHTML = nameHTML(acct.name, pickedColor);
+}
 $('accBtn').onclick = openAccount;
 
 /* ---------- first-time tutorial ---------- */
@@ -3248,7 +3705,7 @@ function myProfile() {
     mpPlayed: st.mpPlayed || 0, mpWins: st.mpWins || 0, mpLosses: st.mpLosses || 0, mpDraws: st.mpDraws || 0, bestStreak: st.bestStreak || 0,
     stdBest: Math.max(0, store.get('pg.best', 0) || 0, ...scores.map(x => x.score || 0)), stdFastest: std.fastest != null ? Math.round(std.fastest * 10) / 10 : null,
     dropBest: dropBest(), dropGames: (st.drop && st.drop.games) || 0 };
-  return { v: 1, title: ti ? ti.text : '', titleTier: ti ? ti.tier : -1, medals: Object.assign({}, acct.medals), ach: Object.keys(unlocked).filter(id => ACH.some(a => a.id === id)), stats };
+  return { v: 1, title: ti ? ti.text : '', titleTier: ti ? ti.tier : -1, color: validColor(acct.color), pristine: acct.pristine || 0, medals: Object.assign({}, acct.medals), ach: Object.keys(unlocked).filter(id => ACH.some(a => a.id === id)), stats };
 }
 async function lbPush() {
   try {
@@ -3314,7 +3771,7 @@ async function loadBoard(cat) {
     lbRows = data || [];
     if (!lbRows.length) { body.innerHTML = (NET.lbErr ? '' : '<p class="progress">No one on this board yet. Play a game to get on it.</p>') + lbWhyHTML(); return; }
     body.innerHTML = `<div class="tbl-wrap"><table class="tbl lb"><thead><tr><th>#</th><th>PLAYER</th><th>${def.label.toUpperCase()}</th></tr></thead><tbody>${lbRows.map((r, i) =>
-      `<tr class="lbrow${r.id === myId ? ' me' : ''}" data-act="lb-player" data-i="${i}" tabindex="0"><td>${i + 1}</td><td><b>${escapeHtml(String(r.name || 'Player').slice(0, 14))}</b>${r.id === myId ? ' <span class="newtag">YOU</span>' : ''}<small> · Lvl ${nf(num(+r.level, 0))}</small></td><td>${def.fmt(r)}</td></tr>`).join('')}</tbody></table></div>
+      `<tr class="lbrow${r.id === myId ? ' me' : ''}" data-act="lb-player" data-i="${i}" tabindex="0"><td>${i + 1}</td><td>${chipHTML(r.name, r.profile && r.profile.color)}${r.id === myId ? ' <span class="newtag">YOU</span>' : ''}<small> · Lvl ${nf(num(+r.level, 0))}</small></td><td>${def.fmt(r)}</td></tr>`).join('')}</tbody></table></div>
       ${lbWhyHTML()}`;
   } catch (e) {
     const msg = (e && e.message) || '';
@@ -3337,7 +3794,7 @@ function openProfile(r, back) {
   const tile = (label, value) => `<div class="stat"><small>${label}</small><b>${value}</b></div>`;
   const titleTier = Math.max(-1, Math.min(10, Math.floor(num(+p.titleTier, -1))));
   openModal(`<div class="profile">
-    <div class="pf-head"><div><small class="acc-label">PLAYER</small><div class="pf-name"></div><div class="acc-titletext pf-title"></div></div>${lvlBadge(lvl)}</div>
+    <div class="pf-head"><div><small class="acc-label pr-inline">◆ ${nf(num(+p.pristine, 0))} PRISTINE</small><div class="pf-name"></div><div class="acc-titletext pf-title"></div></div>${lvlBadge(lvl)}</div>
     <div class="acc-medals pf-medals">${medals}</div>
     <h3>Highscores</h3>
     <div class="stats">${tile('BEST SCORE · STANDARD', n('stdBest') ? nf(n('stdBest')) : '–')}${tile('BEST ROUND · DROP OUT', n('dropBest') || '–')}${tile('FASTEST WIN · STANDARD', st.stdFastest ? fmtRun(n('stdFastest')) : '–')}${tile('PVP RECORD', `${nf(n('mpWins'))}–${nf(n('mpLosses'))}${n('mpDraws') ? '–' + nf(n('mpDraws')) : ''}`)}</div>
@@ -3347,7 +3804,8 @@ function openProfile(r, back) {
     <div class="achs pf-achs">${achs}</div>
   </div>
   <div class="row"><button class="btn" data-act="${back.act}" type="button">${back.label}</button>${back.act === 'lb-back' ? '<button class="btn dark" data-act="close" type="button">CLOSE</button>' : ''}</div>`);
-  const nm = $('modal').querySelector('.pf-name'); nm.textContent = String(r.name || 'Player').slice(0, 14);
+  const nm = $('modal').querySelector('.pf-name'); nm.innerHTML = chipHTML(r.name, p.color, 0, 'big');
+  const pfEl = $('modal').querySelector('.profile'); if (pfEl) { pfEl.setAttribute('style', themeStyle(p.color)); pfEl.classList.toggle('themed', validColor(p.color) !== 'default'); }
   const tt = $('modal').querySelector('.pf-title'); tt.textContent = typeof p.title === 'string' && p.title ? p.title.slice(0, 60) : 'No title';
   if (!p.title) tt.classList.add('none');
   if (titleTier >= 0) tt.dataset.tier = titleTier;
@@ -3358,7 +3816,7 @@ const PEER = Math.random().toString(36).slice(2, 10) + Date.now().toString(36).s
 const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const MAX_PLAYERS = 8;
 let lastBoard = 'std_best';
-const MP = { mode: 'score', ch: null, code: '', host: false, status: 'idle', peers: {}, joinedAt: 0, hb: 0, where: 'lobby', match: null, msg: '', lobbyOpen: false, log: [], seenAt: 0,
+const MP = { requests: {}, myReq: null, lastReqAt: 0, mode: 'score', ch: null, code: '', host: false, status: 'idle', peers: {}, joinedAt: 0, hb: 0, where: 'lobby', match: null, msg: '', lobbyOpen: false, log: [], seenAt: 0,
   chat: [], wins: 0, lastChatAt: 0, lastEmoteAt: 0, profWait: null, presenceSeen: false };
 function mpLog(line) {
   const t = new Date(); const ts = t.toTimeString().slice(0, 8);
@@ -3379,10 +3837,25 @@ const PLAYER_COLORS = ['#ffb83d', '#5ad1ff', '#ff6b8b', '#7dff8a', '#c58bff', '#
 const peerList = () => Object.values(MP.peers).sort((a, b) => a.joinedAt - b.joinedAt || (a.peer < b.peer ? -1 : 1));
 const roomCount = () => 1 + Object.keys(MP.peers).length;
 function modeFits(mode, n) { return MODES[mode] && (MODES[mode].party ? n >= 3 && n <= MAX_PLAYERS : n === 2); }
+function colorIdOf(peer) {
+  if (peer === PEER) return validColor(acct.color);
+  const p = MP.peers[peer] || (MP.match && MP.match.players[peer]); return validColor(p && p.color);
+}
+// players sharing a color get one of 7 hidden variants (the earliest to join keeps the original)
+function variantOf(peer) {
+  const cid = colorIdOf(peer);
+  const same = [{ peer: PEER, joinedAt: MP.joinedAt }, ...Object.values(MP.peers), ...(MP.match ? Object.values(MP.match.players) : [])]
+    .filter((p, i, arr) => arr.findIndex(q => q.peer === p.peer) === i && colorIdOf(p.peer) === cid)
+    .sort((a, b) => num(a.joinedAt, 0) - num(b.joinedAt, 0) || (a.peer < b.peer ? -1 : 1));
+  return Math.max(0, same.findIndex(p => p.peer === peer));
+}
 function colorOf(peer) {
+  const c = colorById(colorIdOf(peer));
+  if (c.base && c.id !== 'white') return c.base;
   const ids = [PEER, ...Object.keys(MP.peers)].sort();
   return PLAYER_COLORS[Math.max(0, ids.indexOf(peer)) % PLAYER_COLORS.length];
 }
+const chipOf = (peer, name, cls) => chipHTML(name, colorIdOf(peer), variantOf(peer), cls);
 // the host is in charge; if the host has left, the earliest remaining player takes over
 function checkHost() {
   if (MP.host || !MP.ch || MP.status !== 'online') return;
@@ -3447,14 +3920,19 @@ function renderLobbyInner(box) {
   const meInfo = Object.assign(myInfo(), { wins: MP.wins });
   const cards = [card(meInfo, true), ...peers.map(p => card(p, false))];
   const empty = n < 2 ? `<div class="pcard empty"><small>WAITING</small><b>…</b><span>Send the code to your friends</span></div>` : '';
+  const info = k => `<span class="info" tabindex="0" aria-label="${escapeHtml(MODES[k].desc)}">i<span class="tip">${MODES[k].desc}</span></span>`;
   const modeBtn = k => {
-    const fits = modeFits(k, n), why = MODES[k].party ? '3-8 players' : '2 players';
-    if (MP.host) return `<button type="button" class="mode-opt${k === MP.mode ? ' on' : ''}${fits ? '' : ' off'}" data-act="mp-mode" data-mode="${k}"${fits ? '' : ' disabled'}><b>${MODES[k].name}</b><small class="mode-n">${why}</small><span>${MODES[k].desc}</span></button>`;
-    return k === MP.mode ? `<div class="mode-opt on static"><small class="acc-label">MODE · PICKED BY THE HOST</small><b>${MODES[k].name}</b><span>${MODES[k].desc}</span></div>` : '';
+    const fits = modeFits(k, n);
+    const reqs = (MP.requests[k] || []).filter(id => MP.peers[id]).map(id => MP.peers[id].name);
+    const tag = k === MP.mode ? '<em class="mode-tag on">SELECTED</em>'
+      : MP.host && reqs.length ? `<em class="mode-tag req">${reqs.length === 1 ? 'REQUESTED' : reqs.length + ' REQUESTS'}</em>`
+      : !MP.host && MP.myReq === k ? '<em class="mode-tag req">REQUESTED</em>' : '';
+    const title = MP.host ? (reqs.length ? `Requested by ${reqs.join(', ')}` : 'Pick this mode') : k === MP.mode ? 'The host picked this mode' : 'Ask the host for this mode';
+    return `<button type="button" class="mode-opt${k === MP.mode ? ' on' : ''}${fits ? '' : ' off'}${MP.host ? '' : ' guest'}" data-act="${MP.host ? 'mp-mode' : 'mp-req'}" data-mode="${k}"${fits ? '' : ' disabled'} title="${escapeHtml(title)}"><b>${MODES[k].name}</b>${info(k)}${tag}</button>`;
   };
-  const modes = MP.host ? `<div class="mode-group"><small class="acc-label">2 PLAYERS</small><div class="modes three">${PVP_MODES.map(modeBtn).join('')}</div></div>
-      <div class="mode-group"><small class="acc-label">3-8 PLAYERS</small><div class="modes two">${PARTY_MODES.map(modeBtn).join('')}</div></div>`
-    : `<div class="modes">${[...PVP_MODES, ...PARTY_MODES].map(modeBtn).join('')}</div>`;
+  const modes = `<div class="mode-group"><small class="acc-label">2 PLAYERS</small><div class="modes three">${PVP_MODES.map(modeBtn).join('')}</div></div>
+      <div class="mode-group"><small class="acc-label">3-8 PLAYERS</small><div class="modes two">${PARTY_MODES.map(modeBtn).join('')}</div></div>
+      ${MP.host ? '' : '<p class="progress tiny">The host picks the mode. Click another mode to ask for it.</p>'}`;
   const last = MP.match && MP.match.result ? (MP.match.party ? `you placed <b>${ordinal(MP.match.myPlace || 0)}</b>` : `<b>${{ win: 'you won', loss: 'you lost', draw: 'draw' }[MP.match.result]}</b>`) : '';
   box.innerHTML = `<div class="room-code"><small class="acc-label">ROOM CODE · ${n}/${MAX_PLAYERS} PLAYERS</small><b>${MP.code}</b><button class="btn small dark" data-act="mp-copy" type="button">COPY</button></div>
     <div class="players${n > 2 ? ' party' : ''}">${cards.join('')}${empty}</div>
@@ -3466,7 +3944,7 @@ function renderLobbyInner(box) {
       <button class="btn dark" data-act="mp-leave" type="button">LEAVE ROOM</button></div>`;
   // names and titles are set as text, never as HTML
   const nodes = box.querySelectorAll('.pcard:not(.empty)');
-  [meInfo, ...peers].forEach((p, i) => { const c = nodes[i]; if (!c) return; c.querySelector('.pname').textContent = cleanName(p.name); const t = c.querySelector('.ptitle'); if (t) t.textContent = String(p.title).slice(0, 40); });
+  [meInfo, ...peers].forEach((p, i) => { const c = nodes[i]; if (!c) return; c.querySelector('.pname').innerHTML = chipOf(p.peer, p.name, 'big'); const t = c.querySelector('.ptitle'); if (t) t.textContent = String(p.title).slice(0, 40); });
 }
 function newCode() { let c = ''; for (let i = 0; i < 4; i++) c += CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)]; return c; }
 function mpCreate() { joinRoom(newCode(), true); }
@@ -3504,7 +3982,7 @@ async function joinRoom(code, asHost) {
 }
 function myInfo() {
   const ti = titleInfo(acct.title);
-  return { peer: PEER, name: cleanName(acct.name), level: levelInfo(acct.xp).lvl, title: ti ? ti.text : '', host: MP.host, joinedAt: MP.joinedAt, where: MP.where, mode: MP.mode, wins: MP.wins };
+  return { peer: PEER, name: cleanName(acct.name), level: levelInfo(acct.xp).lvl, title: ti ? ti.text : '', host: MP.host, joinedAt: MP.joinedAt, where: MP.where, mode: MP.mode, wins: MP.wins, color: validColor(acct.color) };
 }
 function sayHello(reply) { send(Object.assign({ t: 'hello', reply: !!reply }, myInfo())); }
 function setPeer(info, via) {
@@ -3512,8 +3990,8 @@ function setPeer(info, via) {
   const had = MP.peers[info.peer];
   const p = had || (MP.peers[info.peer] = { peer: info.peer });
   Object.assign(p, { name: cleanName(info.name), level: num(info.level, 0), title: String(info.title || '').slice(0, 60), host: !!info.host,
-    joinedAt: num(info.joinedAt, Date.now()), where: info.where === 'game' || info.where === 'result' ? info.where : 'lobby', wins: Math.max(0, Math.min(999, num(info.wins, 0))), seen: Date.now() });
-  if (p.host && MODES[info.mode] && MODES[info.mode].pvp && !MP.host && MP.mode !== info.mode && !matchLive()) MP.mode = info.mode;
+    color: validColor(info.color), joinedAt: num(info.joinedAt, Date.now()), where: info.where === 'game' || info.where === 'result' ? info.where : 'lobby', wins: Math.max(0, Math.min(999, num(info.wins, 0))), seen: Date.now() });
+  if (p.host && MODES[info.mode] && MODES[info.mode].pvp && !MP.host && MP.mode !== info.mode && !matchLive()) { MP.mode = info.mode; if (MP.myReq === info.mode) MP.myReq = null; }
   if (p.host && MP.host && info.peer !== PEER && num(info.joinedAt, 0) < MP.joinedAt) { MP.host = false; mpLog('another host was here first'); }
   // a full room: the latest arrivals beyond 8 are turned away
   if (!had) {
@@ -3567,6 +4045,13 @@ function onMsg(p) {
   const peer = MP.peers[p.from];
   if (peer) peer.seen = Date.now();
   if (p.t === 'chat') { gotChat(p); return; }
+  if (p.t === 'modeReq') {
+    if (!MP.host || !MODES[p.mode] || !MODES[p.mode].pvp || !peer) return;
+    Object.values(MP.requests).forEach(list => { const i = list.indexOf(p.from); if (i >= 0) list.splice(i, 1); });
+    (MP.requests[p.mode] = MP.requests[p.mode] || []).push(p.from);
+    sysChat(`${peer.name} wants to play ${MODES[p.mode].name}.`); tone(990, .08, 'triangle', .04); tone(1320, .1, 'triangle', .035, 0, .08);
+    renderLobby(); return;
+  }
   if (p.t === 'emote') { gotEmote(p); return; }
   if (p.t === 'profReq' && p.to === PEER) { send({ t: 'prof', to: p.from, row: { name: acct.name, level: levelInfo(acct.xp).lvl, profile: myProfile() } }); return; }
   if (p.t === 'prof' && p.to === PEER) { gotProfile(p.from, p.row); return; }
@@ -3618,37 +4103,40 @@ function heartbeat() {
 function sysChat(text) { MP.chat.push({ sys: true, text }); if (MP.chat.length > 60) MP.chat.shift(); renderChatLog(); }
 function chatHTML() {
   return `<div class="chat"><div class="chat-log" id="chatLog" aria-live="polite"></div>
-    <form class="chat-form" id="chatForm" autocomplete="off"><input id="chatIn" maxlength="140" placeholder="Say something…" aria-label="Chat message"><button class="btn small" type="submit">SEND</button></form></div>`;
+    <form class="chat-form" id="chatForm" autocomplete="off"><input id="chatIn" maxlength="140" placeholder="Say something…" aria-label="Chat message"><button class="btn small" type="submit">SEND</button></form>
+    <div class="chat-emotes">${EMOTES.map((e, i) => `<button type="button" class="emo" data-cemote="${i}" aria-label="Send ${e}">${e}</button>`).join('')}</div></div>`;
 }
 function mountChat(box) {
   if (!box) return;
   if (!box.querySelector('.chat')) {
     box.innerHTML = chatHTML();
     box.querySelector('#chatForm').addEventListener('submit', e => { e.preventDefault(); sendChat(); });
+    box.querySelector('.chat-emotes').addEventListener('click', e => { const b = e.target.closest('[data-cemote]'); if (b) sendChat(EMOTES[+b.dataset.cemote]); });
   }
   renderChatLog();
 }
 function renderChatLog() {
   const log = $('chatLog'); if (!log) return;
-  log.innerHTML = MP.chat.slice(-50).map(c => c.sys ? `<div class="cm sys"></div>` : `<div class="cm"><b style="color:${c.color}"></b><span></span></div>`).join('') || '<div class="cm sys">No messages yet. Say hi!</div>';
+  log.innerHTML = MP.chat.slice(-50).map(c => c.sys ? `<div class="cm sys"></div>` : `<div class="cm${EMOTES.includes(c.text) ? ' big' : ''}">${chipHTML(c.name, c.color, c.v)}<span></span></div>`).join('') || '<div class="cm sys">No messages yet. Say hi!</div>';
   const nodes = log.querySelectorAll('.cm');
-  MP.chat.slice(-50).forEach((c, i) => { const n = nodes[i]; if (!n) return; if (c.sys) n.textContent = c.text; else { n.querySelector('b').textContent = c.name + ':'; n.querySelector('span').textContent = ' ' + c.text; } });
+  MP.chat.slice(-50).forEach((c, i) => { const n = nodes[i]; if (!n) return; if (c.sys) n.textContent = c.text; else n.querySelector(':scope > span:last-child').textContent = ' ' + c.text; });
   log.scrollTop = log.scrollHeight;
 }
-function sendChat() {
+function sendChat(emote) {
   const inp = $('chatIn'); if (!inp) return;
-  const text = inp.value.replace(/\s+/g, ' ').trim().slice(0, 140);
+  const text = emote || inp.value.replace(/\s+/g, ' ').trim().slice(0, 140);
   if (!text || !MP.ch) return;
   if (Date.now() - MP.lastChatAt < 600) return;
   MP.lastChatAt = Date.now();
-  inp.value = '';
-  MP.chat.push({ name: cleanName(acct.name), text, color: colorOf(PEER) }); if (MP.chat.length > 60) MP.chat.shift();
-  send({ t: 'chat', name: cleanName(acct.name), text });
+  if (!emote) inp.value = '';
+  MP.chat.push({ name: cleanName(acct.name), text, color: colorIdOf(PEER), v: variantOf(PEER) }); if (MP.chat.length > 60) MP.chat.shift();
+  send({ t: 'chat', name: cleanName(acct.name), text, color: validColor(acct.color) });
   renderChatLog(); sfx.click();
 }
 function gotChat(p) {
   const text = String(p.text || '').replace(/\s+/g, ' ').trim().slice(0, 140); if (!text) return;
-  MP.chat.push({ name: cleanName(p.name), text, color: colorOf(p.from) }); if (MP.chat.length > 60) MP.chat.shift();
+  if (MP.peers[p.from] && p.color) MP.peers[p.from].color = validColor(p.color);
+  MP.chat.push({ name: cleanName(p.name), text, color: colorIdOf(p.from), v: variantOf(p.from) }); if (MP.chat.length > 60) MP.chat.shift();
   renderChatLog();
   if ($('chatLog')) tone(1320, .05, 'triangle', .03);
 }
@@ -3677,7 +4165,7 @@ function popEmote(peer, name, e) {
   el.style.setProperty('--pc', colorOf(peer));
   el.style.left = (12 + Math.random() * 70) + '%';
   el.innerHTML = '<big></big><small></small>';
-  el.querySelector('big').textContent = e; el.querySelector('small').textContent = peer === PEER ? 'You' : name;
+  el.querySelector('big').textContent = e; el.querySelector('small').outerHTML = chipOf(peer, peer === PEER ? acct.name : name, 'tiny');
   layer.appendChild(el);
   setTimeout(() => el.remove(), 2800);
 }
@@ -3703,6 +4191,7 @@ function gotProfile(from, row) {
 /* ----- match flow ----- */
 function mpStart() {
   if (!MP.host) return;
+  MP.requests = {};
   const peers = peerList();
   if (peers.some(p => p.where !== 'lobby') || !modeFits(MP.mode, roomCount())) return;
   const seed = (Math.random() * 4294967296) >>> 0;
@@ -3711,13 +4200,14 @@ function mpStart() {
   send({ t: 'start', seed, mode: MP.mode, roster });
   beginMatch(seed, MP.mode, roster);
 }
-const KO_HP = 1000, KO_MULT = [1, 1.5, 2, 3, 4];
+const KO_HP = 2500, KO_MULT = [1, 1.5, 2, 3, 4];
+const koMult = n => n <= 5 ? KO_MULT[n - 1] : 4 + (n - 5);   // ×1, ×1.5, ×2, ×3, ×4, ×5, ×6 …
 function beginMatch(seed, mode, roster) {
   mode = MODES[mode] && MODES[mode].pvp ? mode : 'score';
   const players = {};
   roster.forEach(id => {
     const info = id === PEER ? myInfo() : MP.peers[id];
-    players[id] = { peer: id, name: info ? cleanName(info.name) : 'Player', level: info ? num(info.level, 0) : 0, host: !!(info && info.host), joinedAt: info ? num(info.joinedAt, 0) : 0,
+    players[id] = { peer: id, color: validColor(info && info.color), name: info ? cleanName(info.name) : 'Player', level: info ? num(info.level, 0) : 0, host: !!(info && info.host), joinedAt: info ? num(info.joinedAt, 0) : 0,
       round: 1, ok: 0, total: 2, score: 0, status: 'playing', hist: [], pw: null, time: null, len: 0, seen: Date.now(), goneAt: 0 };
   });
   MP.match = { seed, mode, party: !!MODES[mode].party, roster, players, over: false, result: null, recorded: false, capRound: 0, myPlace: 0,
@@ -3782,7 +4272,7 @@ function renderWait() {
   if (slow.length === 1) card.querySelector('.wait-who b').textContent = slow[0].name;
   const rows = MP.match.roster.map(id => MP.match.players[id]).sort((a, b) => b.score - a.score);
   card.querySelector('.wait-list').innerHTML = rows.map(p => `<div class="wl${p.peer === PEER ? ' me' : ''}"><span class="dot" style="background:${colorOf(p.peer)}"></span><b></b><em>${readyFor(p, S.round) ? (END(p.status) ? stLabel(p.status) : '✓ cleared') : `${p.ok}/${p.total} rules`}${p.goneAt ? ' · connection lost' : ''}</em><span class="sc">${nf(p.score)}</span></div>`).join('');
-  card.querySelectorAll('.wl b').forEach((n, i) => { n.textContent = rows[i].peer === PEER ? 'You' : rows[i].name; });
+  card.querySelectorAll('.wl b').forEach((n, i) => { n.innerHTML = chipOf(rows[i].peer, rows[i].peer === PEER ? acct.name : rows[i].name); });
 }
 
 /* ----- Knockout: GeoGuessr-style damage ----- */
@@ -3862,16 +4352,18 @@ function applyKoRes(n, snap) {
   S.score += Math.max(0, num(a.pts, 0));
   S.phase = 'waiting'; $('pw').readOnly = true; clearNote(); renderLockBtn();
   const pa = Math.max(0, num(a.pts, 0)), pb = Math.max(0, num(b.pts, 0));
-  const mult = KO_MULT[n - 1] || 4;
-  const dmg = b.s === 'g' ? 0 : Math.round(Math.abs(pa - pb) * mult);
-  const loser = pa > pb ? o && o.peer : pa < pb ? PEER : null;
+  const mult = koMult(n);
+  let dmg = b.s === 'g' ? 0 : Math.round(Math.abs(pa - pb) * mult);
+  let loser = pa > pb ? o && o.peer : pa < pb ? PEER : null;
+  // from round 6, if you both fail, you both get hurt, so a match can't stall forever
+  if (n >= 6 && a.s === 'f' && b.s === 'f') { loser = 'both'; dmg = Math.round(150 * mult); }
   m.ko.anim = true;
   koAnimate(n, a, b, mult, dmg, loser).then(() => {
     if (MP.match !== m) return;
     m.ko.anim = false;
     renderHp();
     const myHp = m.ko.hp[PEER], oHp = o ? m.ko.hp[o.peer] : 0;
-    const over = myHp <= 0 || oHp <= 0 || n >= 5 || !o || GONE(o.status);
+    const over = myHp <= 0 || oHp <= 0 || !o || GONE(o.status);
     $('burst').hidden = true;
     if (over) { m.ko.done = true; pvpRunEnd(myHp <= 0 ? 'ko' : 'finished'); }
     else { $('pw').readOnly = false; nextRound(); if ($('modal').hidden) $('pw').focus(); }
@@ -3905,6 +4397,13 @@ function koAnimate(n, a, b, mult, dmg, loser) {
     // 2. the difference, then the multiplier
     const diffEl = bEl.querySelector('.kr-diff'), dmgEl = bEl.querySelector('.kr-dmg');
     if (!dmg) { diffEl.textContent = '='; dmgEl.innerHTML = '<b class="none">NO DAMAGE</b>'; tone(440, .15, 'triangle', .04); await wait(1600); return; }
+    if (loser === 'both') {
+      dmgEl.innerHTML = `<span>BOTH FAILED</span> · <b>${nf(dmg)} EACH</b>`; dmgEl.classList.add('slam'); tone(160, .3, 'sawtooth', .05, .6);
+      await wait(900);
+      for (const id of MP.match.roster) MP.match.ko.hp[id] = Math.max(0, MP.match.ko.hp[id] - dmg);
+      renderHp(PEER); renderHp(o && o.peer); renderPlayersBar(); crunch(true);
+      await wait(1500); return;
+    }
     diffEl.textContent = '−' + nf(Math.abs(pa - pb)); diffEl.classList.add('slam'); tone(330, .08, 'square', .05);
     await wait(500);
     dmgEl.innerHTML = `<span>×${mult}</span> = <b>${nf(dmg)} DAMAGE</b>`; dmgEl.classList.add('slam'); tone(220, .1, 'square', .05);
@@ -3953,7 +4452,7 @@ function renderHp(hitPeer) {
   wrap.querySelector('.me i').style.width = (mine / KO_HP * 100) + '%'; wrap.querySelector('.me b').textContent = nf(mine);
   wrap.querySelector('.opp i').style.width = (theirs / KO_HP * 100) + '%'; wrap.querySelector('.opp b').textContent = nf(theirs);
   wrap.hidden = false;
-  if (hitPeer) { const el = wrap.querySelector(hitPeer === PEER ? '.hp.me' : '.hp.opp'); el.classList.remove('crunch'); void el.offsetWidth; el.classList.add('crunch'); }
+  if (hitPeer) { const el = wrap.querySelector(hitPeer === PEER ? '.hp.me' : '.hp.opp'); if (el) { el.classList.remove('crunch'); void el.offsetWidth; el.classList.add('crunch'); } }
 }
 
 /* ----- Battle Royale ----- */
@@ -4035,6 +4534,8 @@ function afterPeerUpdate(peer, justEnded) {
     setNote(`<b class="nm"></b> submitted! ${S.dispLeft > 15 ? 'You have <b>15 seconds</b> left this round.' : 'Hurry up!'}`, 'warn');
     $('hudNote').querySelector('.nm').textContent = o.name;
   }
+  // Score: if your opponent runs out of time, the match is over and you win
+  if (live && S.mode === 'score' && o.status === 'out') { m.oppOut = o.name; pvpRunEnd('won'); return; }
   // Race: someone finishing first ends the race
   if (live && S.mode === 'race' && o.status === 'finished' && !S.finalSubmitted) { pvpRunEnd('beaten'); return; }
   if (S.mode === 'ko' || S.mode === 'br') { authorityTick(); if (S.phase === 'waiting') renderLockNote(); }
@@ -4107,7 +4608,7 @@ function pvpRunEnd(status) {
   renderEmoteBar(); renderLockBtn();
   const pwLen = [...$('pw').value].length;
   const md = m ? MODES[m.mode] : null;
-  const label = { finished: S.mode === 'ko' ? 'You survived' : 'You finished all 5 rounds', out: 'You ran out of time', beaten: 'Someone finished first', ko: 'You got knocked out', eliminated: 'You were knocked out', won: 'Last one standing!' }[status] || '';
+  const label = status === 'won' && m && m.oppOut ? `${escapeHtml(m.oppOut)} ran out of time` : { finished: S.mode === 'ko' ? 'You survived' : 'You finished all 5 rounds', out: 'You ran out of time', beaten: 'Someone finished first', ko: 'You got knocked out', eliminated: 'You were knocked out', won: 'Last one standing!' }[status] || '';
   const roundsTxt = md && md.rounds === Infinity ? String(S.round) : Math.min(S.round, 5) + '/5';
   openModal(`<h2 class="result">${escapeHtml((md ? md.name : 'PvP').toUpperCase())}</h2>
     <p class="progress">${label}</p>
@@ -4152,14 +4653,16 @@ function mpRecord(res) {
   store.set('pg.stats', st); statsMem = st;
   const op = oppP();
   if (res === 'win') {
-    const id = { score: 'mpfirst', race: 'racewin', ko: 'kowin' }[m.mode]; if (id) S.pending.add(id);
+    const id = { score: 'mpfirst', race: 'racewin', ko: 'kowin', br: 'royale', ffa: 'ffabest' }[m.mode]; if (id) S.pending.add(id);
     if (m.mode === 'score' && op && meP().score - op.score > 5000 && !GONE(op.status)) S.pending.add('mpcrush');
     if (st.mpStreak >= 3) S.pending.add('undefeated');
     [523, 659, 784, 1046].forEach((f, k) => tone(f, .14, 'square', .045, 0, k * .09));
   }
+  if (m.party) S.pending.add('fortnite');
   let base = res === 'win' ? 800 : res === 'draw' ? 400 : 200, label = 'PvP ' + res;
-  if (m.party) { const n = m.roster.length, pl = Math.max(1, m.myPlace || n); base = pl === 1 ? 800 : Math.round(200 + 400 * (n - pl) / Math.max(1, n - 1)); label = `${MODES[m.mode].name} · ${ordinal(pl)} of ${n}`; }
-  S.rewards = endRewards(res === 'win', st, { base, baseLabel: label });
+  let pr = [[label, res === 'win' ? 600 : 100]];
+  if (m.party) { const n = m.roster.length, pl = Math.max(1, m.myPlace || n); base = pl === 1 ? 800 : Math.round(200 + 400 * (n - pl) / Math.max(1, n - 1)); label = `${MODES[m.mode].name} · ${ordinal(pl)} of ${n}`; pr = [[label, Math.round(100 * n / pl)]]; }
+  S.rewards = endRewards(res === 'win', st, { base, baseLabel: label, pristine: pr });
   lbPushSoon();
   const box = $('pvpRewards');
   if (box) { box.innerHTML = progHTML(S.rewards); runProgress(S.rewards).then(() => releaseToasts()); }
@@ -4180,9 +4683,17 @@ function renderMpResult() {
     : stLabel(p.status) + (m.mode !== 'score' ? ' · ' + nf(p.score) + ' pts' : '');
   const won = mine => m.result && m.result !== 'draw' && ((m.result === 'win') === mine);
   const col = (who, p, mine) => `<div class="mp-p${mine ? ' me' : ''}${won(mine) ? ' won' : ''}"><small>${who}</small><b class="nm"></b><span class="sc">${big(p)}</span><em>${sub(p)}</em>${p.pw != null && END(p.status) ? `<code></code>` : ''}</div>`;
+  if (m.mode === 'race' && m.result && m.result !== 'draw' && op) {
+    const winMine = m.result === 'win', w = winMine ? me : op, l = winMine ? op : me;
+    box.innerHTML = `<div class="mp-head">${head}</div><div class="mp-cols solo">${col(winMine ? 'WINNER · YOU' : 'WINNER', w, winMine)}</div><p class="progress race-loser"><b></b> didn't finish.</p>`;
+    box.querySelector('.mp-p .nm').innerHTML = winMine ? chipOf(PEER, acct.name) : chipOf(op.peer, op.name);
+    const cd = box.querySelector('.mp-p code'); if (cd) cd.textContent = w.pw || '';
+    box.querySelector('.race-loser b').innerHTML = winMine ? chipOf(op.peer, op.name) : 'You';
+    return;
+  }
   box.innerHTML = `<div class="mp-head">${head}</div><div class="mp-cols">${col('YOU', me, true)}<div class="vs">VS</div>${op ? col('OPPONENT', op, false) : ''}</div>`;
   const cols = box.querySelectorAll('.mp-p');
-  cols[0].querySelector('.nm').textContent = acct.name; if (cols[1] && op) cols[1].querySelector('.nm').textContent = op.name;
+  cols[0].querySelector('.nm').innerHTML = chipOf(PEER, acct.name); if (cols[1] && op) cols[1].querySelector('.nm').innerHTML = chipOf(op.peer, op.name);
   const c0 = cols[0].querySelector('code'), c1 = cols[1] && cols[1].querySelector('code');
   if (c0) c0.textContent = me.pw || ''; if (c1 && op) c1.textContent = op.pw || '';
 }
@@ -4201,7 +4712,7 @@ function renderPartyResult(box, m) {
     return `<div class="pl-row${p.peer === PEER ? ' me' : ''}${stillIn ? ' live' : ''}" style="--pc:${colorOf(p.peer)}"><span class="pl-place${stillIn || place > 3 ? ' txt' : ''}">${stillIn ? '…' : medal(place)}</span><b class="pl-name"></b><em>${detail}</em><span class="pl-sc">${m.mode === 'br' ? '' : nf(p.score)}</span></div>`;
   }).join('');
   box.innerHTML = `<div class="mp-head">${head}</div><div class="placings">${rows}</div>`;
-  box.querySelectorAll('.pl-name').forEach((n, i) => { n.textContent = places[i].p.peer === PEER ? 'You' : places[i].p.name; });
+  box.querySelectorAll('.pl-name').forEach((n, i) => { const p = places[i].p; n.innerHTML = chipOf(p.peer, p.peer === PEER ? acct.name : p.name) + (p.peer === PEER ? ' <small class="you">YOU</small>' : ''); });
 }
 function resultButtons(retry) {
   if (S.mp && MP.ch) return `<div class="row"><button class="btn red" data-act="mp-room" type="button">BACK TO ROOM</button><button class="btn" data-act="mp-menu" type="button">LEAVE ROOM</button></div>`;
@@ -4242,7 +4753,7 @@ function renderPlayersBar() {
   const os = others();
   bar.className = 'oppbar' + (m.party ? ' party' : '');
   bar.innerHTML = (m.party ? '' : '<span class="opp-tag">VS</span>') + os.map(row).join('');
-  bar.querySelectorAll('.opp-name').forEach((n, i) => { n.textContent = os[i].name; });
+  bar.querySelectorAll('.opp-name').forEach((n, i) => { n.innerHTML = chipOf(os[i].peer, os[i].name); });
   bar.hidden = false;
 }
 const renderOppBar = renderPlayersBar;
@@ -4259,8 +4770,26 @@ function mpStanding() {
 function myKoHp() { const m = MP.match; return m && m.ko && m.ko.hp ? m.ko.hp[PEER] : KO_HP; }
 
 /* ---------- version + patch notes ---------- */
-const VERSION = 'V10';
+const VERSION = 'V11';
+// how long each update took to build (V1-V8 are reconstructed estimates, marked with ~)
+const DEV_TIME = { V11: '38 min', V10: '35 min', 'V9.2': '4 min', 'V9.1': '7 min', V9: '17 min', V8: '~1 h', 'V7.1': '~25 min', V7: '~50 min', V6: '~35 min', V5: '~45 min', V4: '~25 min', V3: '~20 min', V2: '~20 min', V1: '~45 min' };
 const PATCH_NOTES = [
+  ['V11', 'Pristine', ['New: Pristine. You earn it for everything you do: wins, achievements, levels, medals, minutes played, PvP and party placements. Click the number above your name to see what it unlocks. Your past games already count.',
+    'New: 37 name colors, unlocked with Pristine (plus Rainbow from the No life achievement). Your color tints your whole Account and is how other players see your name. Players with the same color in a room get slightly different shades.',
+    'Every name now sits in a little box, so every color stays readable.',
+    'New achievements: Gotta get \'em all!, Victory Royale, I\'m the Best!, Fortnite, No life (with the title "No life") and Spotless.',
+    '"Topping the leaderboards" is now called "Point Hoarder".',
+    'Account: your name and level sit on top; medals moved next to the statistics. Click a medal to see every title it unlocks and when.',
+    'Fixed the crackling sound: everything goes through a limiter, notes fade in instead of clicking, the music uses far fewer audio nodes and Firefox renders lighter. New SMOOTH AUDIO option in the sound panel.',
+    'PvP splits into Host and Join, just like Play. Both stay open while you hover and fold back after 3 seconds alone. Play floats like the other buttons.',
+    'Every button now presses like Play: squishy sound, a squash and a two-tone color flash.',
+    'Hover a completed rule to see which part of your password does it.',
+    'The password box stops growing at about 4 lines and scrolls, so the rules stay visible.', 'Soft typing sounds.',
+    'Progress bars glide instead of snapping. Medals on the results screen tilt too (gently).',
+    'Knockout: 2,500 HP and no round limit. The multiplier keeps growing until someone is knocked out (from round 6, if you both fail you both get hurt).',
+    'Score: if your opponent runs out of time, the match ends right away.', 'Race: only the winner\'s stats are shown.',
+    'Guests can ask the host for a mode. Mode descriptions moved into ⓘ info icons.', 'Emotes in the room chat.',
+    'Notifications with the red ! show their text again.', 'Discovered rules are sorted alphabetically.', 'Patch notes show how long each update took.']],
   ['V10', 'Party Time', ['PvP rooms now hold up to 8 players.',
     'New: Battle Royale (3-8 players). Rules pile up every round; the last to submit, or anyone who fails, is knocked out. Last one standing wins.',
     'New: FFA (3-8 players). Everyone plays the same 5 rounds; most points wins. Both party modes end with a placement board.',
@@ -4311,8 +4840,8 @@ const PATCH_NOTES = [
 ];
 function openNotes() {
   sfx.click();
-  openModal(`<h2>PATCH NOTES</h2><p class="progress">You're playing ${VERSION}.</p><div class="notes">${PATCH_NOTES.map(([v, name, items]) =>
-    `<section class="note-v"><h3>${v} · ${escapeHtml(name)}${v === VERSION ? '<small>CURRENT</small>' : ''}</h3><ul>${items.map(i => `<li>${escapeHtml(i)}</li>`).join('')}</ul></section>`).join('')}</div>
+  openModal(`<h2>PATCH NOTES</h2><p class="progress">You're playing ${VERSION}. ⏱ is how long each update took to build.</p><div class="notes">${PATCH_NOTES.map(([v, name, items]) =>
+    `<section class="note-v"><h3>${v} · ${escapeHtml(name)}${v === VERSION ? '<small>CURRENT</small>' : ''}${DEV_TIME[v] ? `<span class="devtime">⏱ ${DEV_TIME[v]}</span>` : ''}</h3><ul>${items.map(i => `<li>${escapeHtml(i)}</li>`).join('')}</ul></section>`).join('')}</div>
     <div class="row"><button class="btn dark" data-act="close" type="button">CLOSE</button></div>`);
 }
 
@@ -4331,36 +4860,56 @@ function renderMenuStats() {
   if (seen) {
     $('dotDisc').hidden = !unseenRules().length;
     $('dotAcc').hidden = !(unseenTitles().length || unseenAch().length);
-    $('dotEdit').hidden = !unseenTitles().length;
+    $('dotEdit').hidden = !unseenTitles().length && !(acct.newColors || []).length;
+    $('dotAcc').hidden = $('dotAcc').hidden && !(acct.newColors || []).length;
   }
   if (typeof acct !== 'undefined') {
     const lv = levelInfo(acct.xp).lvl, ti = titleInfo(acct.title);
     $('accSmall').textContent = 'LVL ' + lv;
-    $('menuPlayer').innerHTML = `<b>${escapeHtml(acct.name)}</b>${ti ? ' · ' + escapeHtml(ti.text) : ''} · Level ${lv}`;
+    $('menuPlayer').innerHTML = `${chipHTML(acct.name, acct.color)}${ti ? ' · ' + escapeHtml(ti.text) : ''} · Level ${lv} · <span class="pr-inline">◆ ${nf(acct.pristine || 0)}</span>`;
   }
   $('discCount').textContent = discovered.size + '/' + RULES.length;
 }
 
-let splitTimer = 0;
-const isSplit = () => $('playWrap').classList.contains('split');
-function collapsePlay() {
-  clearTimeout(splitTimer);
-  const w = $('playWrap'); if (!w || !isSplit()) return;
-  w.classList.remove('split'); w.classList.add('joining'); setTimeout(() => w.classList.remove('joining'), 650);
-  $('playSplit').inert = true; $('play').inert = false;
-  if (document.activeElement && document.activeElement.closest('#playSplit')) $('play').focus({ preventScroll: true });
-  if (!$('menu').hidden) squish(false);
+// Play and PvP split in two. They stay open while the pointer is over them, and fold back
+// together after 3 seconds left alone.
+const SPLITS = [];
+function makeSplit(wrapId, open1, open2) {
+  const w = $(wrapId), join = w.querySelector('.pjoin'), split = w.querySelector('.playsplit'), [b1, b2] = split.querySelectorAll('.pbtn');
+  const sp = { w, timer: 0, inside: false };
+  sp.isOpen = () => w.classList.contains('split');
+  sp.arm = () => { clearTimeout(sp.timer); sp.timer = setTimeout(() => { if (!sp.inside) sp.close(); }, 3000); };
+  sp.close = (silent) => {
+    clearTimeout(sp.timer); if (!sp.isOpen()) return;
+    w.classList.remove('split'); w.classList.add('joining'); setTimeout(() => w.classList.remove('joining'), 650);
+    split.inert = true; join.inert = false;
+    if (document.activeElement && split.contains(document.activeElement)) join.focus({ preventScroll: true });
+    if (!silent && !$('menu').hidden) squish(false);
+  };
+  sp.open = () => {
+    SPLITS.forEach(o => { if (o !== sp) o.close(); });
+    w.classList.remove('joining'); w.classList.add('split'); split.inert = false; join.inert = true;
+    squish(true); setTimeout(() => b1.focus({ preventScroll: true }), 120);
+    if (!sp.inside) sp.arm();
+  };
+  w.addEventListener('pointerenter', () => { sp.inside = true; clearTimeout(sp.timer); });
+  w.addEventListener('pointerleave', () => { sp.inside = false; if (sp.isOpen()) sp.arm(); });
+  w.addEventListener('keydown', () => { if (sp.isOpen() && !sp.inside) sp.arm(); });
+  join.onclick = sp.open; b1.onclick = open1; b2.onclick = open2;
+  SPLITS.push(sp);
+  return sp;
 }
-function armSplit(ms) { clearTimeout(splitTimer); splitTimer = setTimeout(() => { if ($('playWrap').matches(':hover')) return armSplit(1500); collapsePlay(); }, ms); }
+const isSplit = () => SPLITS.some(sp => sp.isOpen());
+function collapsePlay() { SPLITS.forEach(sp => sp.close(curScreen !== 'menu')); }
 // a stretchy, gooey sound for the split and the join
-function squish(open) { const a = audio(); if (!a || muted) return; const t = a.currentTime; const o = a.createOscillator(), g = a.createGain(), f = a.createBiquadFilter(); o.type = 'triangle'; f.type = 'lowpass'; f.frequency.value = 900;
+function squish(open) { const a = audio(); if (!a || muted) return; const t = a.currentTime + .005; const o = a.createOscillator(), g = a.createGain(), f = a.createBiquadFilter(); o.type = 'triangle'; f.type = 'lowpass'; f.frequency.value = 900;
   o.frequency.setValueAtTime(open ? 140 : 320, t); o.frequency.exponentialRampToValueAtTime(open ? 340 : 120, t + .32);
   g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.09, t + .05); g.gain.exponentialRampToValueAtTime(.0001, t + .4);
   o.connect(f); f.connect(g); g.connect(sfxBus || a.destination); o.start(t); o.stop(t + .45); if (open) tone(880, .05, 'square', .03, 0, .34); }
-$('play').onclick = () => { const w = $('playWrap'); w.classList.remove('joining'); w.classList.add('split'); $('playSplit').inert = false; $('play').inert = true; squish(true); setTimeout(() => $('playStd').focus({ preventScroll: true }), 120); armSplit(4000); };
-$('playStd').onclick = () => startGame({ mode: 'standard' });
-$('playDrop').onclick = () => startGame({ mode: 'dropout' });
-document.addEventListener('click', e => { if (isSplit() && !e.target.closest('#playWrap')) collapsePlay(); });
+makeSplit('playWrap', () => startGame({ mode: 'standard' }), () => startGame({ mode: 'dropout' }));
+const pvpSplit = makeSplit('pvpWrap', () => { MP.msg = ''; openLobby(); mpCreate(); }, () => { MP.msg = ''; if (MP.ch) leaveRoom(); openLobby(); setTimeout(() => { const i = $('mpCodeIn'); if (i) i.focus(); }, 80); });
+$('mpBtn').onclick = () => { if (MP.ch) { sfx.click(); openLobby(); } else pvpSplit.open(); };   // already in a room: go straight back to it
+document.addEventListener('click', e => { if (isSplit() && !e.target.closest('.playwrap')) collapsePlay(); });
 $('howBtn').onclick = () => { sfx.click(); openModal(`
   <h2>HOW TO PLAY</h2>
   <ol>
@@ -4372,6 +4921,7 @@ $('howBtn').onclick = () => { sfx.click(); openModal(`
   </ol>
   <h3>Game modes</h3>
   <p><b>Standard</b> is the game described above. <b>Drop Out</b> is endless: every round gives 3 brand-new rules and a fresh password, starting with 1 minute and getting 5 seconds shorter every 2 rounds (down to 10 seconds). Your score is the round you reach. <b>PvP</b> rooms hold up to 8 players: 1v1 in <b>Score</b>, <b>Race</b> or <b>Knockout</b>, or 3-8 players in <b>Battle Royale</b> or <b>FFA</b>.</p>
+  <p><b>Pristine</b> ◆ is earned for everything you do. Every 10,000 unlocks new colors for your name and Account. Click the number above your name in your Account to see the full list.</p>
   <h3>Spelling is forgiving</h3>
   <p>Case, spaces, hyphens and accents don't matter: <i>Under the Dome</i>, <i>UnderTheDome</i> and <i>under-the-dome</i> all count. Numbers hidden inside longer numbers count too (1942 contains 42). A few rules ask for a specific format, and their card tells you how.</p>
   <h3>Scoring</h3>
@@ -4385,7 +4935,7 @@ $('howBtn').onclick = () => { sfx.click(); openModal(`
 $('discBtn').onclick = () => {
   sfx.click();
   const fresh = new Set(unseenRules());
-  const items = RULES.map(r => {
+  const items = RULES.slice().sort((a, b) => (discovered.has(b.id) - discovered.has(a.id)) || a.name.localeCompare(b.name)).map(r => {
     if (!discovered.has(r.id)) return `<div class="disc-item locked"><header><span>? ? ? ? ? ?</span></header></div>`;
     let ans = [];
     try { ans = r.answers(); } catch (e) {}
@@ -4396,7 +4946,6 @@ $('discBtn').onclick = () => {
   markSeen('rules', [...fresh]);
 };
 
-$('mpBtn').onclick = () => openLobby();
 $('lbBtn').onclick = () => openBoards(lastBoard);
 $('verBtn').onclick = openNotes;
 
@@ -4409,6 +4958,7 @@ pwEl.addEventListener('input', () => {
 });
 pwEl.addEventListener('beforeinput', e => {
   if (S.phase !== 'playing' && S.phase !== 'between') return;
+  if (!pwEl.readOnly) sfx.key(/^delete/.test(e.inputType));
   if ((e.inputType === 'insertText' || e.inputType === 'insertReplacementText') && e.data) S.chars += [...e.data].length;
 });
 pwEl.addEventListener('compositionend', e => { if ((S.phase === 'playing' || S.phase === 'between') && e.data) S.chars += [...e.data].length; });
@@ -4435,16 +4985,18 @@ function beatFlash(now) {
 
 /* ---------- medals you can turn in your hand ---------- */
 let tiltEl = null, haloEl = null;
-const medalAt = t => t && t.closest ? t.closest('.acc-medals .medal, .pf-medals .medal') : null;
+const medalAt = t => t && t.closest ? t.closest('.acc-medals .medal, .pf-medals .medal, .prog-medals .medal.in') : null;
 document.addEventListener('pointermove', e => {
   if (e.pointerType === 'touch') return;
   const md = medalAt(e.target);
-  if (md !== tiltEl) { if (tiltEl) untilt(tiltEl); tiltEl = md; if (md) { md.classList.add('tilting'); if (md.querySelector('.disc.t-rainbow')) haloOn(md); } }
+  const soft = md && !!md.closest('.prog-medals');      // results screen: same idea, toned down
+  if (md !== tiltEl) { if (tiltEl) untilt(tiltEl); tiltEl = md; if (md) { md.classList.add('tilting'); if (!soft && md.querySelector('.disc.t-rainbow')) haloOn(md); } }
   if (!md) return;
   const d = md.querySelector('.disc'), r = d.getBoundingClientRect();
   const x = Math.max(-1.3, Math.min(1.3, (e.clientX - r.left - r.width / 2) / (r.width / 2))), y = Math.max(-1.3, Math.min(1.3, (e.clientY - r.top - r.height / 2) / (r.height / 2)));
-  const rot = `rotateY(${(x * 26).toFixed(1)}deg) rotateX(${(-y * 26).toFixed(1)}deg)`;
-  d.style.transform = `perspective(380px) ${rot} scale(1.25)`;
+  const k = soft ? 12 : 26;
+  const rot = `rotateY(${(x * k).toFixed(1)}deg) rotateX(${(-y * k).toFixed(1)}deg)`;
+  d.style.transform = `perspective(380px) ${rot} scale(${soft ? 1.1 : 1.25})`;
   d.style.setProperty('--mx', (50 + x * 38).toFixed(0) + '%'); d.style.setProperty('--my', (50 + y * 38).toFixed(0) + '%');
   if (haloEl) { const hd = haloEl.querySelector('.disc'); hd.style.transform = `perspective(380px) ${rot} scale(1.7)`; hd.style.setProperty('--mx', d.style.getPropertyValue('--mx')); hd.style.setProperty('--my', d.style.getPropertyValue('--my')); }
 }, { passive: true });
@@ -4469,6 +5021,41 @@ function haloOff() {
   setTimeout(() => { h.remove(); h._dim.remove(); }, 600);
   music.duck(false); choir.stop();
 }
+
+
+/* ---------- hover a completed rule: show which part of the password does it ---------- */
+const hlCache = { key: '', span: null };
+function ruleSpan(entry, raw) {
+  const key = entry.n + '|' + raw; if (hlCache.key === key) return hlCache.span;
+  const ok = str => { try { return !!entry.inst.check(ctx(str)); } catch (e) { return false; } };
+  let span = null;
+  const ch = [...raw];
+  if (ch.length && ok(raw)) {
+    let a = 0, b = ch.length, guard = 0;
+    while (a < b - 1 && guard++ < 400 && ok(ch.slice(a + 1, b).join(''))) a++;
+    while (b > a + 1 && guard++ < 800 && ok(ch.slice(a, b - 1).join(''))) b--;
+    span = [a, b];
+  }
+  hlCache.key = key; hlCache.span = span;
+  return span;
+}
+let hlEntry = null;
+function syncHl() {
+  const box = $('pwHl'); if (!box) return;
+  const pw = $('pw');
+  if (!hlEntry || !hlEntry.ok || S.phase !== 'playing' && S.phase !== 'between') { if (box.firstChild) box.innerHTML = ''; return; }
+  const span = ruleSpan(hlEntry, pw.value);
+  if (!span) { box.innerHTML = ''; return; }
+  const ch = [...pw.value];
+  box.innerHTML = escapeHtml(ch.slice(0, span[0]).join('')) + '<mark>' + escapeHtml(ch.slice(span[0], span[1]).join('')) + '</mark>' + escapeHtml(ch.slice(span[1]).join('')) + '​';
+  box.style.height = pw.style.height; box.scrollTop = pw.scrollTop;
+}
+$('rules').addEventListener('mouseover', e => {
+  const li = e.target.closest('li.rule'); const ent = li ? S.active.find(x => x.el === li) : null;
+  if (ent !== hlEntry) { hlEntry = ent && ent.ok ? ent : null; syncHl(); }
+});
+$('rules').addEventListener('mouseleave', () => { hlEntry = null; syncHl(); });
+$('pw').addEventListener('scroll', () => { const b = $('pwHl'); if (b) b.scrollTop = $('pw').scrollTop; });
 
 /* ---------- main loop ---------- */
 let bgSpeed = 0.1;
@@ -4523,6 +5110,7 @@ function frame() {
 }
 requestAnimationFrame(frame);
 migrateAcct();
+initPristine();
 initSeen();
 renderMenuStats();
 if (getStats().games) setTimeout(lbPushSoon, 4000);
