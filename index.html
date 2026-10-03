@@ -470,7 +470,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .playwrap.split .strand { animation: strand .75s cubic-bezier(.4,0,.3,1); }
 .playwrap.joining .strand { animation: strand .6s cubic-bezier(.4,0,.3,1) reverse; }
 @keyframes strand { 0% { opacity: 1; transform: scaleX(.3) scaleY(1.6); } 35% { opacity: 1; transform: scaleX(1.6) scaleY(.7); } 70% { opacity: 1; transform: scaleX(2.2) scaleY(.22); } 100% { opacity: 0; transform: scaleX(2.4) scaleY(0); } }
-.playwrap.split .br { left: calc(50% + 6px); animation: tosecond .62s ease-out forwards; }
+.playwrap.split .br { left: calc(50% + 6px); background: var(--c2); animation: tosecond .62s ease-out; }
 .playwrap.joining .br { animation: tofirst .62s ease-in forwards; }
 @keyframes tosecond { 0% { background: var(--c1); } 45% { background: var(--cm); } 100% { background: var(--c2); } }
 @keyframes tofirst { 0% { background: var(--c2); } 55% { background: var(--cm); } 100% { background: var(--c1); } }
@@ -486,7 +486,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .playwrap:not(.split):hover .goo, .playwrap:not(.split):hover .pjoin { animation: btnfloat 1.8s ease-in-out infinite; }
 .playwrap:not(.split):hover .blob { filter: brightness(1.1); }
 .playwrap:not(.split):active .goo, .playwrap:not(.split):active .pjoin { animation: none; transform: translateY(4px) scale(1.02, .95); }
-.playwrap.split:has(.pbtn:first-child:hover) .bl, .playwrap.split:has(.pbtn:last-child:hover) .br { animation: btnfloat 1.8s ease-in-out infinite; filter: brightness(1.1); }
+.playwrap.split:has(.pbtn:first-child:hover) .bl, .playwrap.split:has(.pbtn:last-child:hover) .br { animation: btnfloat 1.8s ease-in-out infinite; filter: brightness(1.12) saturate(1.08); }
 .playwrap.split .playsplit .pbtn:hover { animation: btnfloat 1.8s ease-in-out infinite; transition-delay: 0s; }
 .playwrap.split:has(.pbtn:first-child:active) .bl, .playwrap.split:has(.pbtn:last-child:active) .br { animation: none; transform: translateY(4px) scale(1.02, .94); filter: brightness(.9); }
 @keyframes splitin { 0% { transform: scaleX(.6); opacity: 0; } 100% { transform: none; opacity: 1; } }
@@ -610,11 +610,11 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .mode-opt.guest:not(.on) { opacity: .75; } .mode-opt.guest:not(.on):hover { opacity: 1; }
 .mode-tag { font-style: normal; font-size: 10px; letter-spacing: .14em; border-radius: 5px; padding: 2px 6px; margin-left: auto; }
 .mode-tag.on { background: var(--gold); color: var(--edge); } .mode-tag.req { background: var(--red); color: #fff; animation: blink 1.4s steps(2) infinite; }
-.info { position: relative; display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--panel-hi); color: var(--dim); font-family: var(--body); font-size: 12px; font-weight: 700; font-style: italic; cursor: help; flex: none; }
-.info:hover, .info:focus-visible { background: var(--gold); color: var(--edge); outline: none; }
-.info .tip { position: absolute; z-index: 20; bottom: calc(100% + 10px); left: 50%; transform: translate(-50%, 6px); width: 240px; padding: 10px 12px; border-radius: 10px; background: var(--edge); border: 2px solid var(--panel-hi); box-shadow: 0 6px 0 rgba(0,0,0,.4);
+.minfo { position: relative; display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--panel-hi); color: var(--dim); font-family: var(--body); font-size: 12px; font-weight: 700; font-style: italic; cursor: help; flex: none; }
+.minfo:hover, .minfo:focus-visible { background: var(--gold); color: var(--edge); outline: none; }
+.minfo .tip { position: absolute; z-index: 20; bottom: calc(100% + 10px); left: 50%; transform: translate(-50%, 6px); width: 240px; padding: 10px 12px; border-radius: 10px; background: var(--edge); border: 2px solid var(--panel-hi); box-shadow: 0 6px 0 rgba(0,0,0,.4);
   font-family: var(--body); font-style: normal; font-weight: 400; font-size: 12.5px; line-height: 1.45; color: var(--ink); text-align: left; letter-spacing: 0; pointer-events: none; opacity: 0; transition: opacity .18s, transform .18s; }
-.info:hover .tip, .info:focus .tip { opacity: 1; transform: translate(-50%, 0); }
+.minfo:hover .tip, .minfo:focus .tip { opacity: 1; transform: translate(-50%, 0); }
 .chat-emotes { display: flex; gap: 2px; flex-wrap: wrap; }
 .chat-emotes .emo { width: 32px; height: 30px; font-size: 18px; }
 .cm.big > span:last-child { font-size: 26px; line-height: 1; vertical-align: middle; }
@@ -750,8 +750,11 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 #rules li.rule.ok { cursor: help; }
 
 /* ---------- V11: account layout, Pristine, colors ---------- */
-.acc-head { grid-template-columns: minmax(0, 1fr) minmax(0, 420px); align-items: center; }
-.acc-right { align-self: center; }
+.acc-head { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); align-items: stretch; gap: 18px; background: none; border: 0; box-shadow: none; padding: 0; }
+.acc-head > .acc-left, .acc-head > .acc-right { background: var(--panel); border: 4px solid var(--edge); border-radius: 14px; box-shadow: 0 8px 0 var(--edge); padding: 18px 20px; box-sizing: border-box; }
+.acc-head > .acc-left { align-content: start; }
+.acc-right { gap: 14px; }
+.acc-hint { font-size: 11px; color: var(--dim); text-align: right; margin-top: -6px; }
 .acc-rightcol { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
 #accMedalsBox h3 small { font-family: var(--body); font-size: 12px; }
 #accMedals .medal { cursor: pointer; }
@@ -819,6 +822,34 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 #account.themed { --good: color-mix(in srgb, var(--gold) 55%, #3ddc8f); }
 .profile.themed { background: var(--panel); border-radius: 12px; padding: 10px; color: var(--ink); }
 @media (max-width: 640px) { .pf-name .nchip { font-size: 34px; } .pcard b.pname .nchip { font-size: 24px; } }
+
+/* ---------- V12 ---------- */
+.sheet.settings { max-width: 620px; }
+.set-sec { background: var(--edge); border-radius: 12px; padding: 12px 14px 14px; margin-top: 12px; display: grid; gap: 10px; }
+.set-sec h3 { margin: 0 0 2px; font-size: 22px; letter-spacing: .1em; }
+.set-row { display: grid; grid-template-columns: 110px 1fr; align-items: center; gap: 10px; font-size: 12px; letter-spacing: .1em; color: var(--dim); }
+.set-row.top { align-items: start; }
+.set-sec .ap-row { grid-template-columns: 110px 1fr 46px; }
+.seg { display: inline-flex; background: var(--panel); border-radius: 10px; padding: 3px; gap: 3px; flex-wrap: wrap; }
+.seg-b { font: inherit; font-size: 13px; letter-spacing: .08em; background: none; border: 0; color: var(--dim); padding: 6px 12px; border-radius: 7px; cursor: pointer; transition: background .2s, color .2s; }
+.seg-b:hover { color: var(--ink); } .seg-b.on { background: var(--gold); color: var(--edge); }
+.row.tight { margin-top: 4px; gap: 8px; }
+.set-refresh { margin: 0; }
+.blocked { display: grid; gap: 6px; }
+.blk-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--panel); border-radius: 8px; padding: 6px 8px 6px 12px; }
+.blk-row b { display: block; font-size: 14px; color: var(--ink); letter-spacing: 0; } .blk-row small { font-size: 11px; color: var(--dim); letter-spacing: 0; }
+.cens { filter: blur(4px); background: rgba(255,255,255,.08); border-radius: 4px; transition: filter .2s; cursor: help; } .cens:hover { filter: blur(0); }
+.filtered { color: var(--dim); font-size: 10px; }
+.pcard .kick { position: absolute; top: 6px; right: 6px; width: 26px; height: 26px; border-radius: 50%; border: 0; background: var(--panel-hi); color: var(--dim); font-size: 13px; cursor: pointer; transition: background .15s, color .15s, transform .15s; }
+.pcard .kick:hover { background: var(--red); color: #fff; transform: scale(1.1); }
+.join-only { max-width: 420px; }
+.disc-tools { display: flex; gap: 8px; margin: 4px 0 10px; flex-wrap: wrap; }
+.disc-tools input, .disc-tools select { font: inherit; font-size: 14px; color: var(--ink); background: var(--edge); border: 2px solid var(--panel-hi); border-radius: 8px; padding: 8px 10px; }
+.disc-tools input { flex: 1; min-width: 180px; } .disc-tools input:focus, .disc-tools select:focus { outline: none; border-color: var(--gold); }
+.disc-hit { display: block; font-size: 11px; color: var(--gold); }
+.ptrack { cursor: grab; scrollbar-width: thin; scrollbar-color: var(--gold) var(--edge); }
+.ptrack.dragging { cursor: grabbing; user-select: none; }
+.ptrack::-webkit-scrollbar { height: 8px; } .ptrack::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 4px; } .ptrack::-webkit-scrollbar-track { background: var(--edge); border-radius: 4px; }
 </style>
 
 <canvas id="bg" class="layer" aria-hidden="true"></canvas>
@@ -826,14 +857,6 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 <canvas id="fx" class="layer" aria-hidden="true"></canvas>
 <div class="vig"></div>
 <div class="scan"></div>
-<div class="corners"><button class="corner" id="fxBtn" type="button">FX: HIGH</button><button class="corner" id="mute" type="button" aria-expanded="false" aria-controls="audioPop">SOUND</button></div>
-<div id="audioPop" class="audiopop" hidden>
-  <b class="ap-title">AUDIO</b>
-  <label class="ap-row"><span>MUSIC</span><input type="range" id="volMusic" min="0" max="100" step="5"><output id="volMusicOut">60%</output></label>
-  <label class="ap-row"><span>EFFECTS</span><input type="range" id="volSfx" min="0" max="100" step="5"><output id="volSfxOut">100%</output></label>
-  <label class="ap-check"><input type="checkbox" id="smoothAudio"><span><b>SMOOTH AUDIO</b><small>Fixes crackling on some computers. Applies after a reload.</small></span></label>
-  <button class="btn dark" id="muteAll" type="button" aria-pressed="false">MUTE ALL</button>
-</div>
 
 <div id="app">
   <section id="menu" class="screen">
@@ -859,8 +882,9 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
       <button class="btn" id="discBtn" type="button">DISCOVERED RULES <small id="discCount">0/67</small><span class="dot" id="dotDisc" hidden>!</span></button>
       <button class="btn" id="accBtn" type="button">ACCOUNT <small id="accSmall">LVL 0</small><span class="dot" id="dotAcc" hidden>!</span></button>
       <button class="btn dark" id="howBtn" type="button">HOW TO PLAY</button>
+      <button class="btn dark" id="setBtn" type="button">SETTINGS</button>
     </div>
-    <button class="version" id="verBtn" type="button">V11 · PRISTINE · <u>PATCH NOTES</u></button>
+    <button class="version" id="verBtn" type="button">V12 · SETTINGS & SAFETY · <u>PATCH NOTES</u></button>
   </section>
 
   <section id="account" class="screen account" hidden>
@@ -880,6 +904,8 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
       </div>
       <div class="acc-right">
         <div class="acc-lvl" id="accLvl"></div>
+        <div class="acc-medals" id="accMedals"></div>
+        <small class="acc-hint">Click a medal to see its titles.</small>
       </div>
     </header>
     <div class="acc-body">
@@ -888,7 +914,6 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
         <section class="acc-col acc-achcol" id="accAch"><h3>ACHIEVEMENTS <small id="accAchCount">0/30</small></h3><div class="ach-scroll"><div class="achs one" id="accAchList"></div></div></section>
       </div>
       <div class="acc-rightcol">
-        <section class="acc-col" id="accMedalsBox"><h3>MEDALS <small>Click one for its titles</small></h3><div class="acc-medals" id="accMedals"></div></section>
         <section class="acc-col" id="accStats"><h3>STATISTICS</h3><div id="accStatsBody"></div></section>
       </div>
     </div>
@@ -1583,7 +1608,8 @@ let muted = store.get('pg.muted', false);
 
 /* ---------- sound ---------- */
 let ac = null, sfxBus = null, musicBus = null;
-let vol = Object.assign({ music: .6, sfx: 1 }, store.get('pg.vol', {}) || {});
+let vol = Object.assign({ music: .6, sfx: 1, fire: .8, typing: .8 }, store.get('pg.vol', {}) || {});
+const VOL_KEYS = ['music', 'sfx', 'fire', 'typing'];
 const IS_FIREFOX = /firefox/i.test(navigator.userAgent);
 // "Smooth audio" asks the browser for a bigger audio buffer. That stops the crackling some
 // computers get (Firefox especially) when the game is busy drawing, at the cost of ~0.1 s delay.
@@ -1634,12 +1660,12 @@ const sfx = {
   add: () => { tone(330, .08, 'triangle', .07); tone(440, .08, 'triangle', .07, 0, .08); },
   tick: () => tone(1200, .03, 'square', .025),
   key: (del) => {
-    if (muted || vol.sfx <= 0) return; const a = audio(); if (!a || !sfxBus) return;
+    if (muted || vol.sfx <= 0 || vol.typing <= 0) return; const a = audio(); if (!a || !sfxBus) return;
     const now = performance.now(); if (now - (sfx._k || 0) < 28) return; sfx._k = now;
     if (!sfx._kb) { const n = Math.floor(a.sampleRate * .03); sfx._kb = a.createBuffer(1, n, a.sampleRate); const d = sfx._kb.getChannelData(0); for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 3); }
     const t = a.currentTime + .004, src = a.createBufferSource(), f = a.createBiquadFilter(), g = a.createGain();
     src.buffer = sfx._kb; src.playbackRate.value = (del ? .7 : 1) * (.85 + Math.random() * .3);
-    f.type = 'bandpass'; f.frequency.value = (del ? 1800 : 2600) + Math.random() * 1200; f.Q.value = 1.4; g.gain.value = .11;
+    f.type = 'bandpass'; f.frequency.value = (del ? 1800 : 2600) + Math.random() * 1200; f.Q.value = 1.4; g.gain.value = .11 * (vol.typing == null ? 1 : vol.typing);
     src.connect(f); f.connect(g); g.connect(sfxBus); src.start(t);
   },
   no: () => tone(140, .18, 'sawtooth', .05, .8),
@@ -1692,12 +1718,13 @@ const music = (() => {
       kick: [0, 4, 8, 12], snare: [4, 12], tKick: [0, 4, 6, 8, 12, 14]
     }
   };
-  const LAYERS = ['keys', 'bass', 'hats', 'drums', 'lead', 'arp', 'pulse', 'solo', 'tick'];
+  const LAYERS = ['keys', 'bass', 'hats', 'drums', 'lead', 'arp', 'pulse', 'solo', 'tick', 'pad'];
+  let haloOn = false;
   const SOLO_SCALE = { lounge: [57, 60, 62, 64, 67], pvp: [62, 65, 67, 69, 72], drop: [64, 67, 69, 71, 74] };
   let a = null, out = null, filt = null, jbus = null, wob = null, vib = null, noise = null;
   const L = {};
   let started = false, timer = 0, nextT = 0, step = 0, bar = 0, track = 'lounge', tempo = 1;
-  let ducked = false;
+  let ducked = false, xfAt = 0;
   let lastLead = 72, jingleUntil = 0, want = null, hiddenAt = 0, soloIdx = 7, lastSolo = 72;
   const held = {}; let heldTense = 0, lastTickAt = 0;
   const away = () => hiddenAt ? performance.now() - hiddenAt : 0;   // ms the tab has been in the background
@@ -1811,6 +1838,8 @@ const music = (() => {
     const w = { track: 'lounge', keys: 0, bass: 0, hats: 0, drums: 0, lead: 0, arp: 0, pulse: 0, solo: 0, tick: 0,
                 tempo: 1, comp: false, hats16: false, pulse16: false, four: false, fill: false, sparse: false, tense: 0, cut: 2600 };
     if (performance.now() < jingleUntil) return Object.assign(w, { duck: true });
+    // hovering a rainbow medal: warm pads in the same key, slow kicks and quiet snares
+    if (haloOn) return Object.assign(w, { track, pad: 1, drums: .6, halo: true, cut: 3600, tempo: .92 });
     const inGame = !$('game').hidden;
     const pvp = inGame ? !!S.mp : !!(MP.ch || MP.lobbyOpen);
     if (pvp) w.track = 'pvp'; else if (inGame && S.mode === 'dropout') w.track = 'drop';
@@ -1829,9 +1858,10 @@ const music = (() => {
         w.hats = !playing || frac > 0 ? .75 : .35;
         w.drums = !playing || frac >= .5 || pvp ? .9 : .5; w.sparse = playing && !pvp && frac < .5;
         if (done) { w.lead = .9; w.arp = .55; }
-        if (pvp && playing) {                   // PvP: the band follows the standings
+        if (pvp && playing) {                   // PvP: the band follows the standings, and it never sits still
           const sd = typeof mpStanding === 'function' ? mpStanding() : 0;
-          w.drums = .95; w.hats = Math.max(w.hats, .8);
+          w.drums = .95; w.hats = Math.max(w.hats, .8); w.hats16 = true; w.pulse = Math.max(w.pulse, .45); w.arp = Math.max(w.arp, .35);
+          w.tempo *= 1.08; w.cut = Math.max(w.cut, 3600); w.four = true;
           if (sd > .15) w.lead = Math.max(w.lead, .6 + .3 * sd);
           else if (sd < -.15) { w.pulse = Math.max(w.pulse, .3 + .5 * -sd); w.keys = .45; w.cut = 1700; w.lead = Math.min(w.lead, .4); }
         }
@@ -1882,7 +1912,7 @@ const music = (() => {
       if (Math.abs(v - L[k].tgt) > .001) {
         L[k].tgt = v; L[k].at = t0;
         L[k].g.gain.cancelScheduledValues(t0);
-        L[k].g.gain.setTargetAtTime(v, t0, quick ? .08 : v > L[k].g.gain.value ? .15 : .5);
+        L[k].g.gain.setTargetAtTime(v, t0, quick ? .08 : k === 'pad' ? (v > L[k].g.gain.value ? 1.4 : .4) : v > L[k].g.gain.value ? .15 : .5);
       }
     });
     filt.frequency.setTargetAtTime(w.cut, t0, .4);
@@ -1890,8 +1920,24 @@ const music = (() => {
   const live = k => L[k].tgt > .01 || a.currentTime - L[k].at < 2;
 
   /* ----- sequencer ----- */
+  // a lush pad: the vibrato starts small and swells right before the chord changes
+  function padChord(t, notes, dur) {
+    const end = t + dur, g = a.createGain();
+    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.05, t + .5); g.gain.setValueAtTime(.05, end - .25); g.gain.exponentialRampToValueAtTime(.0001, end + .4);
+    const lp = a.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.setValueAtTime(900, t); lp.frequency.exponentialRampToValueAtTime(2200, end); lp.Q.value = 1.5;
+    g.connect(lp); lp.connect(L.pad.g);
+    const lfo = a.createOscillator(), depth = a.createGain(); lfo.frequency.setValueAtTime(4.2, t); lfo.frequency.linearRampToValueAtTime(6.8, end);
+    depth.gain.setValueAtTime(3, t); depth.gain.exponentialRampToValueAtTime(8, t + dur * .5); depth.gain.exponentialRampToValueAtTime(70, end);
+    lfo.connect(depth); lfo.start(t); lfo.stop(end + .5);
+    notes.forEach(m => [-11, 11].forEach(det => { const o = osc('sawtooth', hz(m), t, end + .4, g, det); depth.connect(o.detune); }));
+  }
   function playStep(t, sd, w) {
     const tr = TRACKS[track], s = step, ch = tr.chords[bar % 8], nx = tr.chords[(bar + 1) % 8];
+    if (w.halo) {
+      if (live('pad') && s === 0) padChord(t, [ch[0] + 12, ...ch[1]], sd * 16);
+      if (live('drums')) { if (s === 0 || s === 8) kick(t, .85, L.drums.g); if (s === 4 || s === 12) snare(t, .28, L.drums.g); }
+      return;
+    }
     const swing = track === 'drop' || w.tense > .3 ? 0 : (s % 4 === 2 ? sd * .3 : 0), ts = t + swing;
     if (live('keys')) {
       if (!w.comp) { if (s === 0) keys(t, ch[1], sd * 16 * .98, .8, L.keys.g); }
@@ -1930,7 +1976,8 @@ const music = (() => {
     if (!a) return;
     const gone = away() > 30000;                 // background tab: quieter, silent after 30 s
     const on = !muted && vol.music > 0 && !gone;
-    out.gain.setTargetAtTime(on ? vol.music * .6 * (hiddenAt ? .45 : 1) * (ducked ? .18 : 1) : 0, a.currentTime, hiddenAt ? 1.2 : ducked ? .4 : .6);
+    const xf = xfAt ? .12 : 1;
+    out.gain.setTargetAtTime(on ? vol.music * .6 * (hiddenAt ? .45 : 1) * (ducked ? .18 : 1) * xf : 0, a.currentTime, hiddenAt ? 1.2 : xfAt ? .55 : ducked ? .4 : .8);
     if (!on) { nextT = 0; return; }
     const nowMs = performance.now(), dt = lastTickAt ? Math.min(2, (nowMs - lastTickAt) / 1000) : .04; lastTickAt = nowMs;
     want = decide();
@@ -1942,7 +1989,11 @@ const music = (() => {
     tempo += (want.tempo - tempo) * (want.tempo < tempo ? .008 : .1);
     const ahead = hiddenAt ? 1.6 : smoothAudio ? .3 : .18;           // background tabs only wake up about once a second
     while (nextT < a.currentTime + ahead) {
-      if (step === 0 && want.track !== track) { track = want.track; bar = 0; }
+      // switching tracks: fade the old one out for a couple of seconds, swap on a bar line, fade the new one in
+      if (want.track !== track) {
+        if (!xfAt) xfAt = performance.now();
+        else if (step === 0 && performance.now() - xfAt > 1800) { track = want.track; bar = 0; xfAt = 0; }
+      } else xfAt = 0;
       const sd = 60 / (TRACKS[track].bpm * tempo) / 4;
       playStep(nextT, sd, want);
       nextT += sd;
@@ -1983,8 +2034,9 @@ const music = (() => {
   }
   const playing = () => started && !muted && vol.music > 0 && !hiddenAt;
   const duck = v => { ducked = !!v; };
+  const halo = v => { haloOn = !!v; if (a) apply(decide(), a.currentTime); };
   const beat = () => { if (!a || !started || !want || want.silent || want.duck) return null; const sd = 60 / (TRACKS[track].bpm * tempo) / 4; return { next: nextT + ((4 - step % 4) % 4) * sd, len: sd * 4, now: a.currentTime }; };
-  return { start, jingle, playing, duck, beat, tracks: TRACKS, state: () => ({ started, track, tempo, want, bar, step }) };
+  return { start, jingle, playing, duck, halo, beat, tracks: TRACKS, state: () => ({ started, track, tempo, want, bar, step }) };
 })();
 
 
@@ -1994,7 +2046,7 @@ const music = (() => {
 const crackle = { t: 0, g: null, buf: null };
 function crackleTick(amt, dt) {
   const a = ac; if (!a || !sfxBus) return;
-  if (muted || vol.sfx <= 0 || quality === 'off' || document.visibilityState === 'hidden') amt = 0;
+  if (muted || vol.sfx <= 0 || vol.fire <= 0 || quality === 'off' || fireAmt <= 0 || document.visibilityState === 'hidden') amt = 0;
   if (!crackle.buf) {
     const n = a.sampleRate; crackle.buf = a.createBuffer(1, n, a.sampleRate);
     const d = crackle.buf.getChannelData(0); for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
@@ -2048,75 +2100,104 @@ const choir = (() => {
   return { start, stop, on: () => !!n };
 })();
 
-function renderMute() {
-  const silent = muted || (vol.music <= 0 && vol.sfx <= 0);
-  $('mute').textContent = silent ? 'SOUND OFF' : 'SOUND';
-  $('muteAll').textContent = silent ? 'UNMUTE' : 'MUTE ALL';
-  $('muteAll').setAttribute('aria-pressed', String(silent));
-  [['volMusic', 'music'], ['volSfx', 'sfx']].forEach(([id, k]) => { $(id).value = Math.round(vol[k] * 100); $(id + 'Out').textContent = Math.round(vol[k] * 100) + '%'; });
-}
-function toggleAudioPop(show) {
-  const p = $('audioPop'); show = show == null ? p.hidden : show;
-  p.hidden = !show; $('mute').setAttribute('aria-expanded', String(show));
-}
-$('mute').onclick = () => { sfx.click(); toggleAudioPop(); };
-let lastVol = Object.assign({ music: .6, sfx: 1 }, store.get('pg.volLast', {}) || {});
-if (vol.music > 0) lastVol.music = vol.music; if (vol.sfx > 0) lastVol.sfx = vol.sfx;
-if (muted && (vol.music > 0 || vol.sfx > 0)) { vol.music = 0; vol.sfx = 0; store.set('pg.vol', vol); }   // older saves: muted with sliders up
+/* ---------- settings: audio, visual, multiplayer ---------- */
+let fireAmt = Math.max(0, Math.min(1, +store.get('pg.fireAmt', 1) || 0));
+let chatFilter = ['none', 'censor', 'replace'].includes(store.get('pg.chatFilter', 'censor')) ? store.get('pg.chatFilter', 'censor') : 'censor';
+let lastVol = Object.assign({ music: .6, sfx: 1, fire: .8, typing: .8 }, store.get('pg.volLast', {}) || {});
+VOL_KEYS.forEach(k => { if (vol[k] > 0) lastVol[k] = vol[k]; });
+if (muted && VOL_KEYS.some(k => vol[k] > 0)) { VOL_KEYS.forEach(k => { vol[k] = 0; }); store.set('pg.vol', vol); }   // older saves: muted with sliders up
 function saveLast() { store.set('pg.volLast', lastVol); }
 function setVol(k, v) { vol[k] = Math.max(0, Math.min(1, v)); store.set('pg.vol', vol); if (k === 'sfx' && sfxBus) sfxBus.gain.value = vol.sfx; }
+const allSilent = () => muted || VOL_KEYS.every(k => vol[k] <= 0);
+function renderMute() {
+  const b = $('setMute'); if (!b) return;
+  b.textContent = allSilent() ? 'UNMUTE' : 'MUTE ALL'; b.setAttribute('aria-pressed', String(allSilent()));
+  VOL_KEYS.forEach(k => { const el = $('vol-' + k); if (el) { el.value = Math.round(vol[k] * 100); $('vol-' + k + '-out').textContent = Math.round(vol[k] * 100) + '%'; } });
+}
 let volAnim = 0;
 // sliders glide down when muting, and spring back (with a little overshoot) when unmuting
 function animateVols(to, spring, done) {
   cancelAnimationFrame(volAnim);
-  const from = { music: vol.music, sfx: vol.sfx }, t0 = performance.now(), dur = spring ? 800 : 340;
+  const from = Object.fromEntries(VOL_KEYS.map(k => [k, vol[k]])), t0 = performance.now(), dur = spring ? 800 : 340;
   const ease = spring ? p => 1 - Math.cos(p * Math.PI * 2.5) * Math.exp(-5 * p) : p => p * p * (3 - 2 * p);
   const step = () => {
     const p = Math.min(1, (performance.now() - t0) / dur), e = p >= 1 ? 1 : ease(p);
-    ['music', 'sfx'].forEach(k => setVol(k, from[k] + (to[k] - from[k]) * e));
+    VOL_KEYS.forEach(k => setVol(k, from[k] + (to[k] - from[k]) * e));
     renderMute();
-    ['volMusic', 'volSfx'].forEach(id => $(id).classList.toggle('springing', p < 1));
     if (p < 1) volAnim = requestAnimationFrame(step);
-    else { ['music', 'sfx'].forEach(k => setVol(k, to[k])); renderMute(); if (done) done(); }
+    else { VOL_KEYS.forEach(k => setVol(k, to[k])); renderMute(); if (done) done(); }
   };
   step();
 }
-$('muteAll').onclick = () => {
-  const silent = muted || (vol.music <= 0 && vol.sfx <= 0);
-  if (silent) {
+function toggleMuteAll() {
+  if (allSilent()) {
     muted = false; store.set('pg.muted', false);
-    animateVols({ music: lastVol.music || .6, sfx: lastVol.sfx || 1 }, true);
+    animateVols(Object.fromEntries(VOL_KEYS.map(k => [k, lastVol[k] || .6])), true);
     setTimeout(() => sfx.ok(), 220);
   } else {
-    if (vol.music > 0) lastVol.music = vol.music; if (vol.sfx > 0) lastVol.sfx = vol.sfx; saveLast();
+    VOL_KEYS.forEach(k => { if (vol[k] > 0) lastVol[k] = vol[k]; }); saveLast();
     sfx.click();
-    animateVols({ music: 0, sfx: 0 }, false, () => { muted = true; store.set('pg.muted', true); renderMute(); if (typeof award === 'function') award('muted'); });
+    animateVols(Object.fromEntries(VOL_KEYS.map(k => [k, 0])), false, () => { muted = true; store.set('pg.muted', true); renderMute(); if (typeof award === 'function') award('muted'); });
   }
-};
-$('smoothAudio').checked = !!smoothAudio;
-$('smoothAudio').addEventListener('change', e => {
-  store.set('pg.smoothAudio', e.target.checked);
-  const sm = e.target.parentElement.querySelector('small');
-  sm.innerHTML = e.target.checked === !!smoothAudio ? 'Fixes crackling on some computers. Applies after a reload.' : '<b class="reload-link" role="button" tabindex="0">Reload now</b> to apply.';
-  const rl = sm.querySelector('.reload-link'); if (rl) rl.onclick = () => location.reload();
-});
-const dragFrom = {};
-[['music', 'volMusic'], ['sfx', 'volSfx']].forEach(([k, id]) => {
-  const el = $(id);
-  const begin = () => { if (dragFrom[k] == null) dragFrom[k] = vol[k]; };
-  el.addEventListener('pointerdown', begin); el.addEventListener('keydown', begin);
-  el.addEventListener('input', e => {
-    cancelAnimationFrame(volAnim); begin();
-    if (muted) { muted = false; store.set('pg.muted', false); }
-    const was = vol.music <= 0 && vol.sfx <= 0;
-    setVol(k, +e.target.value / 100); renderMute();
-    if (!was && vol.music <= 0 && vol.sfx <= 0 && typeof award === 'function') award('muted');
+}
+const SET_LABELS = { music: 'MUSIC', sfx: 'EFFECTS', fire: 'FIRE', typing: 'TYPING' };
+const FILTER_INFO = { none: 'Show every chat message as it is.', censor: 'Blur out bad words.', replace: 'Replace any message with a bad word by a nice one.' };
+function openSettings() {
+  sfx.click();
+  const seg = (name, cur, opts) => `<div class="seg" role="radiogroup">${opts.map(([v, l]) => `<button type="button" class="seg-b${v === cur ? ' on' : ''}" data-seg="${name}" data-v="${v}" role="radio" aria-checked="${v === cur}">${l}</button>`).join('')}</div>`;
+  openModal(`<h2>SETTINGS</h2>
+    <section class="set-sec"><h3>AUDIO</h3>
+      ${VOL_KEYS.map(k => `<label class="ap-row"><span>${SET_LABELS[k]}</span><input type="range" id="vol-${k}" min="0" max="100" step="5"><output id="vol-${k}-out"></output></label>`).join('')}
+      <div class="row tight"><button class="btn small dark" id="setMute" type="button">MUTE ALL</button></div>
+      <label class="ap-check"><input type="checkbox" id="setSmooth"${store.get('pg.smoothAudio', IS_FIREFOX) ? ' checked' : ''}><span><b>AUDIO FIX</b><small>A bigger audio buffer. Fixes crackling on some computers (Firefox especially).</small></span></label>
+      <div class="warn set-refresh" id="setRefresh" hidden><b>Refresh the page to apply the audio fix.</b><div class="row tight"><button class="btn small red" id="setReload" type="button">REFRESH NOW</button><button class="btn small dark" id="setLater" type="button">LATER</button></div></div>
+    </section>
+    <section class="set-sec"><h3>VISUAL</h3>
+      <div class="set-row"><span>BACKGROUND</span>${seg('quality', quality, [['high', 'HIGH'], ['low', 'LOW'], ['off', 'OFF']])}</div>
+      <label class="ap-row"><span>FIRE</span><input type="range" id="setFire" min="0" max="100" step="10" value="${Math.round(fireAmt * 100)}"><output id="setFireOut">${fireAmt ? Math.round(fireAmt * 100) + '%' : 'OFF'}</output></label>
+    </section>
+    <section class="set-sec"><h3>MULTIPLAYER</h3>
+      <div class="set-row"><span>CHAT FILTER</span>${seg('filter', chatFilter, [['none', 'NONE'], ['censor', 'CENSOR'], ['replace', 'REPLACE']])}</div>
+      <p class="progress tiny" id="setFilterInfo">${FILTER_INFO[chatFilter]}</p>
+      <div class="set-row top"><span>BLOCKED</span><div class="blocked" id="setBlocked"></div></div>
+    </section>
+    <div class="row"><button class="btn dark" data-act="close" type="button">CLOSE</button></div>`, 'settings');
+  renderMute(); renderBlocked();
+  const dragFrom = {};
+  VOL_KEYS.forEach(k => {
+    const el = $('vol-' + k);
+    const begin = () => { if (dragFrom[k] == null) dragFrom[k] = vol[k]; };
+    el.addEventListener('pointerdown', begin); el.addEventListener('keydown', begin);
+    el.addEventListener('input', e => {
+      cancelAnimationFrame(volAnim); begin();
+      if (muted) { muted = false; store.set('pg.muted', false); }
+      const was = allSilent();
+      setVol(k, +e.target.value / 100); renderMute();
+      if (!was && allSilent() && typeof award === 'function') award('muted');
+    });
+    // remember where the slider was before it was dragged down to 0
+    el.addEventListener('change', () => { if (vol[k] > 0) lastVol[k] = vol[k]; else if (dragFrom[k] > 0) lastVol[k] = dragFrom[k]; dragFrom[k] = null; saveLast(); if (k === 'sfx') sfx.ok(); if (k === 'typing') sfx.key(); });
   });
-  // remember where the slider was before it was dragged down to 0
-  el.addEventListener('change', () => { if (vol[k] > 0) lastVol[k] = vol[k]; else if (dragFrom[k] > 0) lastVol[k] = dragFrom[k]; dragFrom[k] = null; saveLast(); if (k === 'sfx') sfx.ok(); });
-});
-addEventListener('pointerdown', e => { if (!$('audioPop').hidden && !e.target.closest('#audioPop, #mute')) toggleAudioPop(false); });
-renderMute();
+  $('setMute').onclick = toggleMuteAll;
+  $('setSmooth').onchange = e => { store.set('pg.smoothAudio', e.target.checked); $('setRefresh').hidden = e.target.checked === !!smoothAudio; };
+  $('setReload').onclick = () => location.reload();
+  $('setLater').onclick = () => { $('setRefresh').hidden = true; };
+  $('setFire').addEventListener('input', e => { fireAmt = +e.target.value / 100; store.set('pg.fireAmt', fireAmt); $('setFireOut').textContent = fireAmt ? Math.round(fireAmt * 100) + '%' : 'OFF'; });
+  $('modal').querySelectorAll('[data-seg]').forEach(b => b.addEventListener('click', () => {
+    sfx.click();
+    const name = b.dataset.seg, v = b.dataset.v;
+    b.parentElement.querySelectorAll('.seg-b').forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-checked', String(x === b)); });
+    if (name === 'quality') setQuality(v);
+    if (name === 'filter') { chatFilter = v; store.set('pg.chatFilter', v); $('setFilterInfo').textContent = FILTER_INFO[v]; renderChatLog(); }
+  }));
+}
+function renderBlocked() {
+  const box = $('setBlocked'); if (!box) return;
+  const list = blockedList();
+  box.innerHTML = list.length ? list.map((b, i) => `<div class="blk-row"><span><b></b><small>blocked ${escapeHtml(b.at || '')}</small></span><button type="button" class="btn small dark" data-unblock="${i}">UNBLOCK</button></div>`).join('') : '<p class="progress tiny">No one. Block players from their profile in a PvP room.</p>';
+  box.querySelectorAll('.blk-row b').forEach((n, i) => { n.textContent = list[i].name; });
+  box.querySelectorAll('[data-unblock]').forEach(b => b.onclick = () => { const l = blockedList(); const it = l[+b.dataset.unblock]; if (it) unblock(it.id); sfx.click(); renderBlocked(); });
+}
 
 /* ---------- visual quality ---------- */
 const QUAL = {
@@ -2126,9 +2207,7 @@ const QUAL = {
 };
 let quality = store.get('pg.quality', 'high');
 if (!QUAL[quality]) quality = 'high';
-function renderFx() { $('fxBtn').textContent = 'FX: ' + QUAL[quality].label; $('fxBtn').setAttribute('aria-label', 'Visual effects: ' + QUAL[quality].label.toLowerCase() + '. Click to change.'); }
-function setQuality(q) { quality = q; store.set('pg.quality', q); renderFx(); resize(); }
-renderFx();
+function setQuality(q) { quality = q; store.set('pg.quality', q); resize(); }
 
 /* ---------- background (WebGL swirl, low-res) ---------- */
 const bg = $('bg');
@@ -2189,9 +2268,9 @@ const pS = new Uint8Array(MAXP), pC = new Uint8Array(MAXP);
 var pCount = 0, fxCleared = true;
 let flameLevel = 0, fireI = 0, spawnAcc = 0;
 function spawnFlame(n, burst) {
-  const Q = QUAL[quality]; if (!Q.flames) return;
+  const Q = QUAL[quality]; if (!Q.flames || fireAmt <= 0) return;
   const W = fx.width, H = fx.height;
-  n = Math.floor(n * Q.mult + Math.random());
+  n = Math.floor(n * Q.mult * fireAmt + Math.random());
   for (let i = 0; i < n && pCount < Q.maxP; i++) {
     const k = pCount++;
     const life = 30 + Math.random() * (burst ? 70 : 50);
@@ -2676,10 +2755,13 @@ $('modal').addEventListener('click', e => {
     if (act === 'reveal') { revealAch(a); return; }
     if (act === 'quit-yes') { quitGame(); return; }
     if (act === 'tutorial') { tutStart(); return; }
+    if (act === 'tour-menu') { tutStart(true); return; }
     if (act === 'quit-no') { closeModal(); $('pw').focus(); return; }
     if (act === 'mp-create') { mpCreate(); return; }
     if (act === 'mp-join') { mpJoin(); return; }
-    if (act === 'mp-leave') { leaveRoom(); MP.msg = ''; renderLobby(); return; }
+    if (act === 'mp-leave') { leaveRoom(); MP.msg = ''; MP.lobbyOpen = false; closeModal(); return; }
+    if (act === 'mp-kick') { kickPeer(a.dataset.peer); return; }
+    if (act === 'mp-block') { const pp = MP.peers[a.dataset.peer]; if (pp) { if (isBlocked(pp.dev)) unblock(pp.dev); else block(pp.dev, pp.name); requestProfile(pp.peer, true); } return; }
     if (act === 'mp-close') { leaveRoom(); MP.lobbyOpen = false; closeModal(); return; }
     if (act === 'mp-start') { mpStart(); return; }
     if (act === 'mp-copy') { const t = MP.code; try { navigator.clipboard.writeText(t).then(() => { a.textContent = 'COPIED'; }, () => {}); } catch (err) {} return; }
@@ -2696,16 +2778,35 @@ $('modal').addEventListener('click', e => {
 });
 // after a press the button springs back through its second colour
 document.addEventListener('pointerup', e => { const b = e.target.closest && e.target.closest('.btn'); if (!b || b.disabled) return; b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop'); setTimeout(() => b.classList.remove('pop'), 520); }, true);
+// buttons float while hovered; when the pointer leaves they glide back instead of snapping
+const floatLast = new Map(); let floatEls = [], floatRaf = 0;
+function floatersOf(t) {
+  const btn = t.closest && t.closest('.btn'); if (btn) return [btn];
+  const w = t.closest && t.closest('.playwrap'); if (w) return [...w.querySelectorAll('.goo, .pjoin, .blob, .pbtn')];
+  return [];
+}
+function trackFloat() { floatEls.forEach(el => floatLast.set(el, getComputedStyle(el).transform)); floatRaf = requestAnimationFrame(trackFloat); }
+document.addEventListener('pointerover', e => {
+  const els = floatersOf(e.target); if (els.length && els[0] === floatEls[0]) return;
+  if (floatEls.length) glideBack(floatEls);
+  floatEls = els; cancelAnimationFrame(floatRaf); if (els.length) trackFloat();
+});
+function glideBack(els) {
+  els.forEach(el => {
+    const from = floatLast.get(el); floatLast.delete(el);
+    if (!from || from === 'none' || !el.animate || el.matches(':active')) return;
+    el.animate([{ transform: from }, { transform: 'none' }], { duration: 420, easing: 'cubic-bezier(.3,1.5,.5,1)' });
+  });
+}
 /* Esc: close what's open, or quit the game (press it twice in a game) */
 addEventListener('keydown', e => {
   if (e.key !== 'Escape' || e.defaultPrevented) return;
-  if (!$('audioPop').hidden) { toggleAudioPop(false); $('mute').focus(); return; }
   if (TUT.on || !$('countdown').hidden) return;
   const modalOpen = !$('modal').hidden;
   if (modalOpen) {
     if ($('modal').querySelector('[data-act="quit-yes"]')) { e.preventDefault(); quitGame(); return; }
     if (S.seq && !S.seq.done && !S.seq.dead) { S.seq.skip = true; return; }
-    if ($('modal').querySelector('.no-dismiss')) { if (MP.ch && !matchLive()) { leaveRoom(); MP.msg = ''; renderLobby(); } else if (!MP.ch) { MP.lobbyOpen = false; closeModal(); } return; }
+    if ($('modal').querySelector('.no-dismiss')) { if (!matchLive()) { if (MP.ch) leaveRoom(); MP.msg = ''; MP.lobbyOpen = false; closeModal(); } return; }
     if (S.phase === 'over') { if (S.mp && MP.ch) mpBackToRoom(); else { closeModal(); toMenu(); } return; }
     closeModal(); return;
   }
@@ -2739,7 +2840,7 @@ function quitGame() {
   toMenu();
 }
 $('quitBtn').onclick = askQuit;
-$('fxBtn').onclick = () => { sfx.click(); setQuality(quality === 'high' ? 'low' : quality === 'low' ? 'off' : 'high'); };
+$('setBtn').onclick = openSettings;
 
 /* ---------- achievements ---------- */
 const PX = {
@@ -2782,6 +2883,10 @@ const PX = {
   umbrella: ['.....##.....', '...######...', '..########..', '.##########.', '############', '#..#..#..#..', '.....##.....', '.....##.....', '.....##.....', '.....##.....', '..#..##.....', '...###......'],
   pad: ['............', '............', '..########..', '.##########.', '##.##..#.###', '#...#.#.#..#', '##.##..#.###', '############', '####....####', '.##......##.', '............', '............'],
   sparkle: ['.....##.....', '.....##.....', '....####....', '....####....', '..########..', '############', '############', '..########..', '....####....', '....####....', '.....##.....', '.....##.....'],
+  lvl100: ['............', '.##..##..##.', '###.#..##..#', '.##.#..##..#', '.##.#..##..#', '.##.#..##..#', '.##.#..##..#', '.##.#..##..#', '####.##..##.', '............', '############', '............'],
+  palette: ['...######...', '.##......##.', '#..##.......', '#..##..##..#', '#.......##.#', '#.##........', '#.##...####.', '#......#..#.', '.#.....####.', '.##........#', '...########.', '............'],
+  drop: ['.....##.....', '.....##.....', '....####....', '....####....', '...######...', '..########..', '.###.######.', '.##.#######.', '.##.#######.', '.##########.', '..########..', '....####....'],
+  heart: ['............', '.###....###.', '#####..#####', '############', '############', '############', '.##########.', '..########..', '...######...', '....####....', '.....##.....', '............'],
   q: ['....####....','...##..##...','..##....##..','.......##...','......##....','.....##.....','.....##.....','............','.....##.....','.....##.....','............','............']
 };
 const ACH = [
@@ -2814,7 +2919,7 @@ const ACH = [
   { id: 'mprival', name: 'Rivals', desc: 'Play 10 PvP games', icon: 'versus', passive: true, test: x => (x.st.mpPlayed || 0) >= 10, prog: x => [x.st.mpPlayed || 0, 10] },
   { id: 'undefeated', name: 'Undefeated', desc: 'Win 3 PvP games in a row', icon: 'shield', test: () => false, prog: x => [x.st.mpStreak || 0, 3] },
   { id: 'racewin', name: "I'm fast as flop", desc: 'Win a game of Race', icon: 'flag', test: () => false, prog: x => [Math.min(1, ((x.st.pvp || {}).race || {}).w || 0), 1] },
-  { id: 'kowin', name: 'KO', desc: 'Win a game of Knockout', icon: 'glove', test: () => false, prog: x => [Math.min(1, ((x.st.pvp || {}).ko || {}).w || 0), 1] },
+  { id: 'kowin', name: 'K.O.', desc: 'Win a game of Knockout', icon: 'glove', test: () => false, prog: x => [Math.min(1, ((x.st.pvp || {}).ko || {}).w || 0), 1] },
   { id: 'dropout', name: 'College Drop Out', desc: 'Play a game of Drop Out', icon: 'door', test: () => false, prog: x => [Math.min(1, (x.st.drop || {}).games || 0), 1] },
   { id: 'hurry', name: 'I need to hurry up!', desc: 'Reach round 20 in Drop Out', icon: 'alarm', test: () => false, prog: x => [(x.st.drop || {}).best || 0, 20, 'rounds'] },
   { id: 'gotemall', passive: true, name: "Gotta get 'em all!", desc: 'Unlock every other achievement', icon: 'star', test: () => ACH.every(a => a.id === 'gotemall' || unlocked[a.id]), prog: () => [ACH.filter(a => a.id !== 'gotemall' && unlocked[a.id]).length, ACH.length - 1] },
@@ -2823,15 +2928,20 @@ const ACH = [
   { id: 'fortnite', name: 'Fortnite', desc: 'Play a game of FFA or Battle Royale', icon: 'umbrella', test: () => false, prog: x => [Math.min(1, (((x.st.pvp || {}).ffa || {}).w || 0) + (((x.st.pvp || {}).ffa || {}).l || 0) + (((x.st.pvp || {}).br || {}).w || 0) + (((x.st.pvp || {}).br || {}).l || 0)), 1] },
   { id: 'nolife', passive: true, name: 'No life', desc: 'Get every medal to Rainbow. Unlocks the title "No life" and the Rainbow color', icon: 'pad', test: () => MEDALS.every(m => (acct.medals[m.id] || 0) >= 11), prog: () => [MEDALS.filter(m => (acct.medals[m.id] || 0) >= 11).length, MEDALS.length, 'medals'] },
   { id: 'spotless', passive: true, name: 'Spotless', desc: 'Reach 150,000 Pristine', icon: 'sparkle', test: () => (acct.pristine || 0) >= 150000, prog: () => [Math.min(acct.pristine || 0, 150000), 150000] },
+  { id: 'maxed', passive: true, name: 'Maxed out', desc: 'Reach level 100', icon: 'lvl100', test: () => levelInfo(acct.xp).lvl >= 100, prog: () => [levelInfo(acct.xp).lvl, 100, 'lvl'] },
+  { id: 'coolcolors', name: 'Cool Colors', desc: 'Change your account color', icon: 'palette', test: () => false },
+  { id: 'drip', passive: true, name: 'He got drip!', desc: 'Unlock every color', icon: 'drop', test: () => COLORS.every(c => colorUnlocked(c.id)), prog: () => [COLORS.filter(c => colorUnlocked(c.id)).length, COLORS.length, 'colors'] },
+  { id: 'pride', name: 'Pride month', desc: 'Wear the Rainbow color', icon: 'heart', test: () => acct.color === 'rainbow', prog: () => [acct.color === 'rainbow' ? 1 : 0, 1] },
   { id: 'stillthere', name: 'Are you still there?', desc: 'Look at the menu for 5 minutes straight', icon: 'zzz', test: () => false, prog: () => [Math.floor(S.menuIdle / 60), 5, 'min'] }
 ];
 const achKey = a => a.name.toLowerCase().replace(/[^a-z0-9]/g, '');
 function sortedAch() { return ACH.slice().sort((a, b) => achKey(a).localeCompare(achKey(b))); }
 const ACH_GROUPS = [
-  ['Getting started', ['beginning', 'buddy', 'robot', 'hello', 'uncertain', 'style', 'muted', 'stillthere']],
+  ['Getting started', ['beginning', 'buddy', 'robot', 'muted', 'stillthere']],
+  ['Customization', ['hello', 'uncertain', 'style', 'coolcolors', 'pride', 'drip']],
   ['Speed', ['quickster', 'justintime', 'quick', 'holy', 'there']],
   ['Passwords', ['short', 'long', 'explorer']],
-  ['Grinding', ['office', 'addicted', 'hard', 'chicken', 'leader', 'maxxer', 'millionaire']],
+  ['Grinding', ['office', 'addicted', 'hard', 'chicken', 'leader', 'maxxer', 'millionaire', 'maxed']],
   ['Collection', ['champion', 'rainbow', 'nolife', 'spotless', 'gotemall']],
   ['Drop Out', ['dropout', 'hurry']],
   ['PvP', ['mpfirst', 'mpcrush', 'racewin', 'kowin', 'undefeated', 'mprival', 'fortnite', 'royale', 'ffabest']]
@@ -3147,6 +3257,10 @@ function colorUnlocked(id, pr) {
   const c = colorById(id); pr = pr == null ? (acct.pristine || 0) : pr;
   return c.ach ? !!unlocked[c.ach] : pr >= c.at;
 }
+function checkPassive() {
+  if (S.phase === 'playing' || S.phase === 'between') return;
+  ['maxed', 'drip', 'nolife', 'spotless', 'gotemall'].forEach(id => { const a = ACH.find(q => q.id === id); if (a && !unlocked[id]) { let ok = false; try { ok = a.test({ st: getStats() }); } catch (e) {} if (ok) award(id); } });
+}
 function addPristine(amount, quiet) {
   amount = Math.max(0, Math.round(amount || 0)); if (!amount) return 0;
   const before = acct.pristine || 0;
@@ -3154,6 +3268,7 @@ function addPristine(amount, quiet) {
   saveAcct();
   if (!quiet) announceColors(before, acct.pristine);
   if (acct.pristine >= PRISTINE_CAP && !unlocked.spotless && typeof award === 'function') award('spotless');
+  setTimeout(checkPassive, 0);
   return amount;
 }
 // each new color gets its own notification, with a little square of the color as the emblem
@@ -3233,7 +3348,16 @@ function openMedalTrack(id) {
     <div class="row"><button class="btn dark" data-act="close" type="button">CLOSE</button></div>`);
   scrollTrack();
 }
-function scrollTrack() { requestAnimationFrame(() => { const t = $('modal').querySelector('.ptrack'), mk = t && t.querySelector('.pmarker'); if (t && mk) t.scrollLeft = Math.max(0, mk.offsetLeft - t.clientWidth / 2); }); }
+function wireTrack(t) {
+  if (!t || t.dataset.wired) return; t.dataset.wired = '1';
+  t.addEventListener('wheel', e => { if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && t.scrollWidth > t.clientWidth) { t.scrollLeft += e.deltaY; e.preventDefault(); } }, { passive: false });
+  let down = null;
+  t.addEventListener('pointerdown', e => { if (e.pointerType === 'touch') return; down = { x: e.clientX, l: t.scrollLeft }; t.setPointerCapture(e.pointerId); t.classList.add('dragging'); });
+  t.addEventListener('pointermove', e => { if (down) t.scrollLeft = down.l - (e.clientX - down.x); });
+  const up = () => { down = null; t.classList.remove('dragging'); };
+  t.addEventListener('pointerup', up); t.addEventListener('pointercancel', up);
+}
+function scrollTrack() { const tr = $('modal').querySelector('.ptrack'); wireTrack(tr); requestAnimationFrame(() => { const t = $('modal').querySelector('.ptrack'), mk = t && t.querySelector('.pmarker'); if (t && mk) t.scrollLeft = Math.max(0, mk.offsetLeft - t.clientWidth / 2); }); }
 
 /* ---------- color picker (Edit in the Account) ---------- */
 function colorPickerHTML(sel) {
@@ -3455,8 +3579,7 @@ function statsHTML(st) {
       ${tile('SLOWEST RUN', st.slow ? fmtRun(st.slow.time) : '–', st.slow ? `${nf(st.slow.score)} points · ${st.slow.date}` : none)}
       ${tile('SHORTEST PASSWORD', st.short ? st.short.len + ' chars' : '–', st.short ? '' : none, st.short ? st.short.pw : null)}
       ${tile('LONGEST PASSWORD', st.long ? st.long.len + ' chars' : '–', st.long ? '' : none, st.long ? st.long.pw : null)}
-    </div>
-    <p class="progress note">Quickest, slowest, shortest and longest count only finished 5-round runs. Quit games don't count. Saved in this browser only.</p>`;
+    </div>`;
 }
 function achCardsHTML(fresh) {
   return groupedAchHTML(a => {
@@ -3543,7 +3666,7 @@ $('accEditForm').addEventListener('submit', e => {
     if (!acct.named) { acct.named = true; saveAcct(); award('hello'); } else award('uncertain');
   }
   if (t !== acct.title) { acct.title = t; saveAcct(); if (t) award('style'); }
-  if (pickedColor !== acct.color && colorUnlocked(pickedColor)) { acct.color = pickedColor; saveAcct(); }
+  if (pickedColor !== acct.color && colorUnlocked(pickedColor)) { acct.color = pickedColor; saveAcct(); award('coolcolors'); if (pickedColor === 'rainbow') award('pride'); }
   if ((acct.newColors || []).length) { acct.newColors = []; saveAcct(); }
   sfx.ok(); renderAccount(); lbPushSoon(); trackMe();
 });
@@ -3590,27 +3713,44 @@ const STEPS = {
   newrules: { target: '#rules', pause: true, html: () => 'Every round adds <b>2 new rules</b>. The old rules still count, so keep your password working for all of them.', btn: 'NEXT', next: () => tutGo('rounds') },
   rounds: { target: '.hud-round', pause: true, html: () => 'There are <b>5 rounds</b>. Clear all 5 to win. The clock resets to 2:00 every round.', btn: 'NEXT', next: () => tutGo('fun') },
   fun: { pause: true, html: () => '<b>Have fun!</b> The clock starts again when you close this.', btn: "LET'S PLAY", next: () => tutWait(END_WAITS(), true) },
-  win: { target: '#resultInfo', html: () => '<b>You won, congratulations!</b> At the top is your <b>score</b>. Below it you see your <b>run time</b> and how <b>long</b> your password was. The <b>XP</b> you earned filled up your account level, and your medals ticked up.', btn: 'NEXT', next: () => tutGo('winmenu') },
-  winmenu: { target: '#modal [data-act="menu"]', html: () => 'Click <b>Menu</b> to head back.', wait: { menu: () => tutGo('firstach'), gameStart: () => tutWait(END_WAITS(), true) } },
-  lose: { target: '#modal [data-act="play"]', html: () => "Out of time. Don't worry, it happens to everyone. Click <b>Try again</b>.", wait: { gameStart: () => tutWait(END_WAITS(), true), menu: () => tutGo('firstach') } },
-  firstach: { target: '#accBtn', html: () => {
+  win: { target: '#resultInfo', html: () => '<b>You won, congratulations!</b> At the top is your <b>score</b>. Below it you see your <b>run time</b> and how <b>long</b> your password was. The <b>XP</b> you earned filled up your <b>level</b>, your <b>medals</b> ticked up and you earned <b>Pristine</b> ◆ (more on that soon).', btn: 'NEXT', next: () => tutGo('winmenu') },
+  winmenu: { target: '#modal [data-act="menu"]', html: () => 'Click <b>Menu</b> to head back. There\'s more to show you.', wait: { menu: () => tutGo('menuIntro'), gameStart: () => tutWait(END_WAITS(), true) } },
+  lose: { target: '#modal [data-act="play"]', html: () => "Out of time. Don't worry, it happens to everyone. Click <b>Try again</b>, or <b>Menu</b> to continue the tour.", wait: { gameStart: () => tutWait(END_WAITS(), true), menu: () => tutGo('menuIntro') } },
+  // the menu, button by button
+  menuIntro: { html: () => {
       const fr = S.lastFresh || [];
       const a = fr.find(q => q.id === 'buddy' || q.id === 'robot') || fr[0];
-      return (a ? `Congratulations on your first achievement: <b>${escapeHtml(a.name)}</b>! ` : 'Achievements you unlock are saved too. ') + 'Achievements, stats, medals and more live in your <b>Account</b>. Open it.';
-    }, wait: { accountOpen: () => tutGo('accname') } },
-  accname: { target: '#accNameText', html: () => 'This is your <b>username</b>. Your <b>title</b> shows right below it once you pick one.', btn: 'NEXT', next: () => tutGo('acctitle') },
-  acctitle: { target: '#accEdit', html: () => 'Click <b>Edit</b> to change your username or pick a title. You unlock new titles when your medals level up.', btn: 'NEXT', next: () => tutGo('acclvl') },
-  acclvl: { target: '#accLvl', html: () => 'Your <b>account level</b>. You earn XP by winning games, unlocking achievements and leveling up medals. The badge changes color every 10 levels.', btn: 'NEXT', next: () => tutGo('accmedals') },
-  accmedals: { target: '#accMedals', html: () => 'Your five <b>medals</b>: wins, characters typed, points, time played and PvP games. Each one goes from level 1 to 10 and then <b>ULTIMATE</b>, changing color as it climbs.', btn: 'NEXT', next: () => tutGo('accach') },
-  accach: { target: '#accAch', html: () => 'All your <b>achievements</b>. Locked ones show ??? until you unlock them. Click one if you want to peek.', btn: 'NEXT', next: () => tutGo('accstats') },
-  accstats: { target: '#accStats', html: () => 'And your <b>statistics</b>.', btn: 'NEXT', next: () => tutGo('bye') },
-  bye: { html: () => "That's everything! Now go beat your <b>highscore</b> and unlock every <b>achievement</b>. Good luck!", btn: 'FINISH', next: () => tutEnd() }
+      return (a ? `You also unlocked your first achievement: <b>${escapeHtml(a.name)}</b>! ` : '') + "Let's walk through the menu.";
+    }, btn: 'NEXT', next: () => tutGo('menuDrop') },
+  menuDrop: { target: '#playWrap', html: () => `<b>Play</b> has two modes. <b>Standard</b> is ${TUT.menuOnly ? 'the classic: 5 rounds, 2 new rules each' : 'what you just played'}. <b>Drop Out</b> is endless: every round brings 3 brand-new rules and a fresh password, and the clock shrinks from 1 minute down to 10 seconds. Your score is the round you reach.`, btn: 'NEXT', next: () => tutGo('menuPvp') },
+  menuPvp: { target: '#pvpWrap', html: () => '<b>PvP</b>: press <b>Host</b> to get a room code for your friends, or <b>Join</b> to type theirs. With 2 players you can play <b>Score</b>, <b>Race</b> or <b>Knockout</b>; with 3-8 it\'s <b>Battle Royale</b> or <b>FFA</b>. Rooms have chat and emotes, and you can block or (as host) kick players.', btn: 'NEXT', next: () => tutGo('menuLb') },
+  menuLb: { target: '#lbBtn', html: () => '<b>Leaderboards</b>: nine boards, from best score to time played. Click any player to see their account.', btn: 'NEXT', next: () => tutGo('menuDisc') },
+  menuDisc: { target: '#discBtn', html: () => 'Every rule you meet is saved in <b>Discovered rules</b>, with every answer that works. You can search them and sort them.', btn: 'NEXT', next: () => tutGo('menuSet') },
+  menuSet: { target: '#setBtn', html: () => '<b>Settings</b>: volume for music, effects, fire and typing, the audio fix, background quality, how much fire you want, the chat filter and your blocked players.', btn: 'NEXT', next: () => tutGo('menuNotes') },
+  menuNotes: { target: '#verBtn', html: () => 'The <b>patch notes</b> list everything that changed in each update.', btn: 'NEXT', next: () => tutGo('firstach') },
+  firstach: { target: '#accBtn', html: () => 'Your <b>Account</b> holds your progress: Pristine, colors, titles, level, medals, achievements and stats. Open it.', wait: { accountOpen: () => tutGo('accname') } },
+  // the account
+  accname: { target: '#accNameText', html: () => 'This is your <b>username</b>. Your <b>title</b> shows right below it once you pick one.', btn: 'NEXT', next: () => tutGo('accpr') },
+  accpr: { target: '#accPristine', html: () => '<b>Pristine</b> ◆ is earned for everything you do: wins, achievements, levels, medals, PvP, minutes played. Every 10,000 unlocks new <b>colors</b>. Click it any time to see what\'s next.', btn: 'NEXT', next: () => tutGo('acctitle') },
+  acctitle: { target: '#accEdit', html: () => 'Click <b>Edit</b> to change your username, pick a <b>title</b> (medals unlock those) and a <b>color</b> (Pristine unlocks those). Your color tints this whole page and is how other players see your name.', btn: 'NEXT', next: () => tutGo('acclvl') },
+  acclvl: { target: '#accLvl', html: () => 'Your <b>level</b>. You earn XP by winning, unlocking achievements and leveling up medals. The badge changes color every 10 levels.', btn: 'NEXT', next: () => tutGo('accmedals') },
+  accmedals: { target: '#accMedals', html: () => 'Your five <b>medals</b>: wins, characters typed, points, time played and PvP games. Each goes from level 1 to 10 and then <b>ULTIMATE</b> (rainbow). Every level unlocks a title. Click a medal to see them all.', btn: 'NEXT', next: () => tutGo('accach') },
+  accach: { target: '#accAch', html: () => 'Your <b>achievements</b>, grouped by theme. Locked ones show ??? until you unlock them. Click one to flip it and peek.', btn: 'NEXT', next: () => tutGo('accstats') },
+  accstats: { target: '#accStats', html: () => 'Your <b>statistics</b>, with your best runs in <b>Highscores</b> next to the achievements.', btn: 'NEXT', next: () => tutGo('bye') },
+  bye: { html: () => "That's everything! You can replay this tour from <b>How to play</b>. Now go beat your <b>highscore</b>, earn <b>Pristine</b> and unlock every <b>achievement</b>. Good luck!", btn: 'FINISH', next: () => tutEnd() }
 };
-function tutStart() {
+function tutStart(menuOnly) {
   closeModal();
-  TUT.on = true; store.set('pg.tut', 'running');
+  TUT.on = true; TUT.menuOnly = !!menuOnly; store.set('pg.tut', 'running'); store.set('pg.tour12', true);
   if (!$('account').hidden || !$('game').hidden) toMenu();
-  tutGo('welcome');
+  setTimeout(() => tutGo(menuOnly ? 'menuDrop' : 'welcome'), curScreen === 'menu' ? 0 : 650);
+}
+// players from before V12 get offered the new tour once
+function offerTour() {
+  if (store.get('pg.tour12', false) || TUT.on || !$('modal').hidden) return;
+  store.set('pg.tour12', true);
+  openModal(`<h2>NEW: THE FULL TOUR</h2><p>There's a lot of new stuff: Drop Out, PvP rooms, Pristine and colors, titles, leaderboards, settings… Want a quick tour of the menu and your Account?</p>
+    <div class="row"><button class="btn red" data-act="tour-menu" type="button">TAKE THE TOUR</button><button class="btn dark" data-act="close" type="button">NO THANKS</button></div>`);
 }
 function tutEnd() {
   TUT.on = false; TUT.id = null; TUT.waits = null;
@@ -3803,7 +3943,7 @@ function openProfile(r, back) {
     <h3>Achievements <small>${[...have].filter(id => ACH.some(a => a.id === id)).length}/${ACH.length}</small></h3>
     <div class="achs pf-achs">${achs}</div>
   </div>
-  <div class="row"><button class="btn" data-act="${back.act}" type="button">${back.label}</button>${back.act === 'lb-back' ? '<button class="btn dark" data-act="close" type="button">CLOSE</button>' : ''}</div>`);
+  <div class="row"><button class="btn" data-act="${back.act}" type="button">${back.label}</button>${back.extra || ''}${back.act === 'lb-back' ? '<button class="btn dark" data-act="close" type="button">CLOSE</button>' : ''}</div>`);
   const nm = $('modal').querySelector('.pf-name'); nm.innerHTML = chipHTML(r.name, p.color, 0, 'big');
   const pfEl = $('modal').querySelector('.profile'); if (pfEl) { pfEl.setAttribute('style', themeStyle(p.color)); pfEl.classList.toggle('themed', validColor(p.color) !== 'default'); }
   const tt = $('modal').querySelector('.pf-title'); tt.textContent = typeof p.title === 'string' && p.title ? p.title.slice(0, 60) : 'No title';
@@ -3813,6 +3953,28 @@ function openProfile(r, back) {
 
 /* ---------- PvP rooms (2-8 players) ---------- */
 const PEER = Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
+// a stable id for this browser, so blocks and kicks still apply after a reload
+const DEV_ID = (() => { let d = store.get('pg.devId', ''); if (typeof d !== 'string' || d.length < 8) { d = 'd' + Math.random().toString(36).slice(2, 12) + Date.now().toString(36); store.set('pg.devId', d); } return d; })();
+function blockedList() { const l = store.get('pg.blocked', []); return Array.isArray(l) ? l.filter(b => b && typeof b.id === 'string') : []; }
+const isBlocked = dev => !!dev && blockedList().some(b => b.id === dev);
+const peerBlocked = peer => { const p = MP.peers[peer] || (MP.match && MP.match.players[peer]); return !!p && isBlocked(p.dev); };
+function block(dev, name) {
+  if (!dev || isBlocked(dev)) return;
+  store.set('pg.blocked', [...blockedList(), { id: dev, name: cleanName(name), at: new Date().toISOString().slice(0, 10) }]);
+  sysChat(`You blocked ${cleanName(name)}. You won't see their messages.`);
+  renderLobby(); renderChatLog(); renderPlayersBar();
+}
+function unblock(dev) { store.set('pg.blocked', blockedList().filter(b => b.id !== dev)); renderLobby(); renderChatLog(); renderPlayersBar(); }
+// kicked players can come back after 30 seconds
+function kickedWait(code) { const k = store.get('pg.kicked', null); if (!k || (code && k.code !== code)) return 0; return Math.max(0, Math.ceil((k.until - Date.now()) / 1000)); }
+function kickPeer(peer) {
+  const p = MP.peers[peer]; if (!MP.host || !p || matchLive()) return;
+  sfx.click();
+  MP.kicked = MP.kicked || {}; MP.kicked[p.dev || peer] = Date.now() + 30000;
+  send({ t: 'kick', to: peer, dev: p.dev });
+  dropPeer(peer, 'was removed by the host');
+  if (MP.lobbyOpen) openLobby(); else renderLobby();
+}
 const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const MAX_PLAYERS = 8;
 let lastBoard = 'std_best';
@@ -3839,7 +4001,7 @@ const roomCount = () => 1 + Object.keys(MP.peers).length;
 function modeFits(mode, n) { return MODES[mode] && (MODES[mode].party ? n >= 3 && n <= MAX_PLAYERS : n === 2); }
 function colorIdOf(peer) {
   if (peer === PEER) return validColor(acct.color);
-  const p = MP.peers[peer] || (MP.match && MP.match.players[peer]); return validColor(p && p.color);
+  const p = MP.peers[peer] || (MP.match && MP.match.players[peer]); return p && isBlocked(p.dev) ? 'default' : validColor(p && p.color);
 }
 // players sharing a color get one of 7 hidden variants (the earliest to join keeps the original)
 function variantOf(peer) {
@@ -3855,7 +4017,7 @@ function colorOf(peer) {
   const ids = [PEER, ...Object.keys(MP.peers)].sort();
   return PLAYER_COLORS[Math.max(0, ids.indexOf(peer)) % PLAYER_COLORS.length];
 }
-const chipOf = (peer, name, cls) => chipHTML(name, colorIdOf(peer), variantOf(peer), cls);
+const chipOf = (peer, name, cls) => peer !== PEER && peerBlocked(peer) ? chipHTML('Blocked player', 'default', 0, cls) : chipHTML(name, colorIdOf(peer), variantOf(peer), cls);
 // the host is in charge; if the host has left, the earliest remaining player takes over
 function checkHost() {
   if (MP.host || !MP.ch || MP.status !== 'online') return;
@@ -3887,13 +4049,11 @@ function renderLobby() {
 function renderLobbyInner(box) {
   if (!MP.ch) {
     const ok = !!sbClient();
-    box.innerHTML = `<p>Play with friends. <b>2 players:</b> Score, Race or Knockout. <b>3-8 players:</b> Battle Royale or FFA. Everyone gets the same rules at the same time.</p>
-      ${MP.msg ? `<p class="warn"><b>${escapeHtml(MP.msg)}</b></p>` : ''}
-      ${ok ? `<div class="lobby-grid">
-        <div class="lobby-card"><h3>Create a room</h3><p class="progress">You get a code to send to your friends.</p><button class="btn red" data-act="mp-create" type="button">CREATE ROOM</button></div>
-        <div class="lobby-card"><h3>Join a room</h3><label class="acc-field"><small class="acc-label">ROOM CODE</small><input id="mpCodeIn" maxlength="4" autocomplete="off" spellcheck="false" placeholder="K7QX" class="code-in"></label><button class="btn" data-act="mp-join" type="button">JOIN</button></div>
-      </div>` : `<p class="warn"><b>Multiplayer couldn't load.</b> Check your internet connection. Multiplayer only works on the hosted version of the game.</p>`}
-      <div class="row"><button class="btn dark" data-act="mp-close" type="button">BACK</button></div>`;
+    const kicked = kickedWait(null);
+    box.innerHTML = `${MP.msg ? `<p class="warn"><b>${escapeHtml(MP.msg)}</b></p>` : ''}
+      ${ok ? `<div class="lobby-card join-only"><h3>Join a room</h3><p class="progress">Type the 4-letter code your friend got when they pressed Host.</p><label class="acc-field"><small class="acc-label">ROOM CODE</small><input id="mpCodeIn" maxlength="4" autocomplete="off" spellcheck="false" placeholder="K7QX" class="code-in"></label>
+        <div class="row tight"><button class="btn" data-act="mp-join" type="button">JOIN</button><button class="btn dark" data-act="mp-close" type="button">BACK</button></div></div>`
+      : `<p class="warn"><b>Multiplayer couldn't load.</b> Check your internet connection. Multiplayer only works on the hosted version of the game.</p><div class="row"><button class="btn dark" data-act="mp-close" type="button">BACK</button></div>`}`;
     const inp = $('mpCodeIn');
     if (inp) { inp.addEventListener('input', () => { inp.value = inp.value.toUpperCase().replace(/[^A-Z0-9]/g, ''); }); inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); mpJoin(); } }); }
     return;
@@ -3913,14 +4073,14 @@ function renderLobbyInner(box) {
   const canStart = MP.host && modeFits(MP.mode, n) && !busy.length;
   const card = (p, me) => {
     const tag = [p.host ? '👑 HOST' : '', me ? 'YOU' : '', !me && p.where === 'game' ? 'IN A MATCH' : !me && p.where === 'result' ? 'ON RESULTS' : ''].filter(Boolean).join(' · ') || 'PLAYER';
-    return `<div class="pcard${me ? ' me' : ' click'}" ${me ? '' : `data-act="mp-prof" data-peer="${escapeHtml(p.peer)}" tabindex="0" title="View profile"`} style="--pc:${colorOf(p.peer)}">
+    return `<div class="pcard${me ? ' me' : ' click'}" ${me ? '' : `data-act="mp-prof" data-peer="${escapeHtml(p.peer)}" tabindex="0" title="View profile"`} style="--pc:${colorOf(p.peer)}">${!me && MP.host && !matchLive() ? `<button type="button" class="kick" data-act="mp-kick" data-peer="${escapeHtml(p.peer)}" title="Kick from the room" aria-label="Kick">✕</button>` : ''}
       <small>${tag}</small><b class="pname"></b><span>Level ${num(p.level, 0)}${p.title ? ' · <i class="ptitle"></i>' : ''}</span>
       <em class="pwins">${num(p.wins, 0)} ${num(p.wins, 0) === 1 ? 'WIN' : 'WINS'}</em></div>`;
   };
   const meInfo = Object.assign(myInfo(), { wins: MP.wins });
   const cards = [card(meInfo, true), ...peers.map(p => card(p, false))];
   const empty = n < 2 ? `<div class="pcard empty"><small>WAITING</small><b>…</b><span>Send the code to your friends</span></div>` : '';
-  const info = k => `<span class="info" tabindex="0" aria-label="${escapeHtml(MODES[k].desc)}">i<span class="tip">${MODES[k].desc}</span></span>`;
+  const info = k => `<span class="minfo" tabindex="0" aria-label="${escapeHtml(MODES[k].desc)}">i<span class="tip">${MODES[k].desc}</span></span>`;
   const modeBtn = k => {
     const fits = modeFits(k, n);
     const reqs = (MP.requests[k] || []).filter(id => MP.peers[id]).map(id => MP.peers[id].name);
@@ -3944,13 +4104,14 @@ function renderLobbyInner(box) {
       <button class="btn dark" data-act="mp-leave" type="button">LEAVE ROOM</button></div>`;
   // names and titles are set as text, never as HTML
   const nodes = box.querySelectorAll('.pcard:not(.empty)');
-  [meInfo, ...peers].forEach((p, i) => { const c = nodes[i]; if (!c) return; c.querySelector('.pname').innerHTML = chipOf(p.peer, p.name, 'big'); const t = c.querySelector('.ptitle'); if (t) t.textContent = String(p.title).slice(0, 40); });
+  [meInfo, ...peers].forEach((p, i) => { const c = nodes[i]; if (!c) return; c.querySelector('.pname').innerHTML = chipOf(p.peer, p.name, 'big'); const t = c.querySelector('.ptitle'); if (t) t.textContent = p.peer !== PEER && peerBlocked(p.peer) ? '' : String(p.title).slice(0, 40); });
 }
 function newCode() { let c = ''; for (let i = 0; i < 4; i++) c += CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)]; return c; }
 function mpCreate() { joinRoom(newCode(), true); }
 function mpJoin() {
   const v = ($('mpCodeIn') && $('mpCodeIn').value || '').toUpperCase();
   if (!/^[A-Z0-9]{4}$/.test(v)) { MP.msg = 'Room codes are 4 letters or numbers.'; renderLobby(); return; }
+  const w = kickedWait(v); if (w) { MP.msg = `You were removed from room ${v}. You can rejoin in ${w} seconds.`; renderLobby(); return; }
   joinRoom(v, false);
 }
 async function joinRoom(code, asHost) {
@@ -3982,7 +4143,7 @@ async function joinRoom(code, asHost) {
 }
 function myInfo() {
   const ti = titleInfo(acct.title);
-  return { peer: PEER, name: cleanName(acct.name), level: levelInfo(acct.xp).lvl, title: ti ? ti.text : '', host: MP.host, joinedAt: MP.joinedAt, where: MP.where, mode: MP.mode, wins: MP.wins, color: validColor(acct.color) };
+  return { peer: PEER, dev: DEV_ID, name: cleanName(acct.name), level: levelInfo(acct.xp).lvl, title: ti ? ti.text : '', host: MP.host, joinedAt: MP.joinedAt, where: MP.where, mode: MP.mode, wins: MP.wins, color: validColor(acct.color) };
 }
 function sayHello(reply) { send(Object.assign({ t: 'hello', reply: !!reply }, myInfo())); }
 function setPeer(info, via) {
@@ -3990,7 +4151,7 @@ function setPeer(info, via) {
   const had = MP.peers[info.peer];
   const p = had || (MP.peers[info.peer] = { peer: info.peer });
   Object.assign(p, { name: cleanName(info.name), level: num(info.level, 0), title: String(info.title || '').slice(0, 60), host: !!info.host,
-    color: validColor(info.color), joinedAt: num(info.joinedAt, Date.now()), where: info.where === 'game' || info.where === 'result' ? info.where : 'lobby', wins: Math.max(0, Math.min(999, num(info.wins, 0))), seen: Date.now() });
+    dev: typeof info.dev === 'string' ? info.dev.slice(0, 40) : '', color: validColor(info.color), joinedAt: num(info.joinedAt, Date.now()), where: info.where === 'game' || info.where === 'result' ? info.where : 'lobby', wins: Math.max(0, Math.min(999, num(info.wins, 0))), seen: Date.now() });
   if (p.host && MODES[info.mode] && MODES[info.mode].pvp && !MP.host && MP.mode !== info.mode && !matchLive()) { MP.mode = info.mode; if (MP.myReq === info.mode) MP.myReq = null; }
   if (p.host && MP.host && info.peer !== PEER && num(info.joinedAt, 0) < MP.joinedAt) { MP.host = false; mpLog('another host was here first'); }
   // a full room: the latest arrivals beyond 8 are turned away
@@ -4044,6 +4205,16 @@ function onMsg(p) {
   if (p.t === 'full') return;
   const peer = MP.peers[p.from];
   if (peer) peer.seen = Date.now();
+  if (p.t === 'kick') {
+    if (p.to === PEER || (p.dev && p.dev === DEV_ID)) {
+      const code = MP.code; mpLog('removed from the room by the host');
+      store.set('pg.kicked', { code, until: Date.now() + 30000 });
+      leaveRoom(); MP.msg = `The host removed you from room ${code}. You can rejoin in 30 seconds.`; renderLobby();
+    } else if (MP.peers[p.to]) dropPeer(p.to, 'was removed by the host');
+    return;
+  }
+  // a kicked player who comes straight back gets removed again
+  if (MP.host && MP.kicked && peer && MP.kicked[peer.dev || p.from] > Date.now() && !matchLive()) { send({ t: 'kick', to: p.from, dev: peer.dev }); dropPeer(p.from, 'was removed by the host'); return; }
   if (p.t === 'chat') { gotChat(p); return; }
   if (p.t === 'modeReq') {
     if (!MP.host || !MODES[p.mode] || !MODES[p.mode].pvp || !peer) return;
@@ -4115,11 +4286,29 @@ function mountChat(box) {
   }
   renderChatLog();
 }
+/* chat filter: English + Danish. Censor blurs the bad word, Replace swaps the whole message for a nice one. */
+const BAD_ANY = ['fuck', 'shit', 'bitch', 'cunt', 'motherf', 'nigg', 'n1gg', 'faggot', 'whore', 'asshole', 'arsehole', 'wanker', 'dickhead', 'bullshit', 'retard', 'kælling', 'kaelling', 'røvhul', 'roevhul', 'røvbanan', 'fisse', 'kusse', 'kneppe', 'luder', 'perker', 'spasser', 'fuckhoved', 'pikhoved', 'lortefyr'];
+const BAD_WORD = ['fck', 'fuk', 'ass', 'arse', 'dick', 'cock', 'pussy', 'slut', 'twat', 'fag', 'bastard', 'piss', 'crap', 'damn', 'pik', 'lort', 'pis', 'pisse', 'røv', 'roev', 'neger', 'bøsse', 'boesse', 'mongol', 'satan', 'helvede', 'idiot', 'nar', 'skid'];
+const NICE_MSGS = ['You all are amazing!', 'GG, everyone is doing great!', 'I love this game ❤', 'Good luck, have fun!', 'What a lovely day for passwords.', 'Sending good vibes your way ✨', 'You guys are the best!', 'High five! ✋'];
+const deLeet = w => w.toLowerCase().replace(/[0]/g, 'o').replace(/[1!|]/g, 'i').replace(/3/g, 'e').replace(/[4@]/g, 'a').replace(/[5$]/g, 's').replace(/7/g, 't').replace(/(.)\1{2,}/g, '$1$1');
+function isBadWord(word) {
+  const w = deLeet(word).replace(/[^a-zæøåäöü]/g, ''); if (!w) return false;
+  if (BAD_ANY.some(b => w.includes(b))) return true;
+  return BAD_WORD.some(b => w === b || w === b + 's' || w === b + 'es' || w === b + 'e' || w === b + 'er' || w === b + 'en' || w === b + 'y' || w === b + 'ing' || w === b + 'ed' || w === b + 'hoved' || w === b + 'head');
+}
+function filterChatHTML(text) {
+  if (chatFilter === 'none') return escapeHtml(text);
+  const parts = text.split(/(\s+)/);
+  const bad = parts.some(p => /\S/.test(p) && isBadWord(p));
+  if (!bad) return escapeHtml(text);
+  if (chatFilter === 'replace') { let h = 0; for (const ch of text) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return escapeHtml(NICE_MSGS[h % NICE_MSGS.length]) + ' <small class="filtered">(filtered)</small>'; }
+  return parts.map(p => /\S/.test(p) && isBadWord(p) ? `<span class="cens" title="Hidden by the chat filter">${escapeHtml(p)}</span>` : escapeHtml(p)).join('');
+}
 function renderChatLog() {
   const log = $('chatLog'); if (!log) return;
   log.innerHTML = MP.chat.slice(-50).map(c => c.sys ? `<div class="cm sys"></div>` : `<div class="cm${EMOTES.includes(c.text) ? ' big' : ''}">${chipHTML(c.name, c.color, c.v)}<span></span></div>`).join('') || '<div class="cm sys">No messages yet. Say hi!</div>';
   const nodes = log.querySelectorAll('.cm');
-  MP.chat.slice(-50).forEach((c, i) => { const n = nodes[i]; if (!n) return; if (c.sys) n.textContent = c.text; else n.querySelector(':scope > span:last-child').textContent = ' ' + c.text; });
+  MP.chat.slice(-50).forEach((c, i) => { const n = nodes[i]; if (!n) return; if (c.sys) n.textContent = c.text; else n.querySelector(':scope > span:last-child').innerHTML = ' ' + filterChatHTML(c.text); });
   log.scrollTop = log.scrollHeight;
 }
 function sendChat(emote) {
@@ -4134,6 +4323,7 @@ function sendChat(emote) {
   renderChatLog(); sfx.click();
 }
 function gotChat(p) {
+  if (peerBlocked(p.from)) return;
   const text = String(p.text || '').replace(/\s+/g, ' ').trim().slice(0, 140); if (!text) return;
   if (MP.peers[p.from] && p.color) MP.peers[p.from].color = validColor(p.color);
   MP.chat.push({ name: cleanName(p.name), text, color: colorIdOf(p.from), v: variantOf(p.from) }); if (MP.chat.length > 60) MP.chat.shift();
@@ -4154,6 +4344,7 @@ function sendEmote(i) {
   popEmote(PEER, cleanName(acct.name), EMOTES[i]);
 }
 function gotEmote(p) {
+  if (peerBlocked(p.from)) return;
   const e = EMOTES[num(p.e, -1)]; if (!e) return;
   if (MP.lobbyOpen && !$('lobbyBox')) return;
   popEmote(p.from, cleanName(p.name), e);
@@ -4171,10 +4362,10 @@ function popEmote(peer, name, e) {
 }
 
 /* ----- someone else's profile ----- */
-function requestProfile(peer) {
+function requestProfile(peer, quiet) {
   const p = MP.peers[peer]; if (!p) return;
   MP.profWait = peer;
-  openModal(`<h2>${escapeHtml(p.name)}</h2><p class="progress wait-dots">Loading their account</p><div class="row"><button class="btn dark" data-act="mp-lobby" type="button">BACK TO ROOM</button></div>`);
+  openModal(`<h2>${peerBlocked(peer) ? 'Blocked player' : escapeHtml(p.name)}</h2><p class="progress wait-dots">Loading their account</p><div class="row"><button class="btn dark" data-act="mp-lobby" type="button">BACK TO ROOM</button></div>`);
   send({ t: 'profReq', to: peer });
   setTimeout(() => {
     if (MP.profWait !== peer || !$('modal').querySelector('.wait-dots')) return;
@@ -4185,7 +4376,12 @@ function requestProfile(peer) {
 function gotProfile(from, row) {
   if (MP.profWait !== from || !row || typeof row !== 'object') return;
   MP.profWait = null;
-  openProfile({ name: cleanName(row.name), level: num(row.level, 0), profile: row.profile && typeof row.profile === 'object' ? row.profile : {} }, { act: 'mp-lobby', label: 'BACK TO ROOM' });
+  const pp = MP.peers[from], blocked = peerBlocked(from);
+  const prof = row.profile && typeof row.profile === 'object' ? Object.assign({}, row.profile) : {};
+  if (blocked) { prof.color = 'default'; prof.title = ''; prof.titleTier = -1; }
+  const extra = (pp ? `<button class="btn dark" data-act="mp-block" data-peer="${escapeHtml(from)}" type="button">${blocked ? 'UNBLOCK' : 'BLOCK'}</button>` : '')
+    + (pp && MP.host && !matchLive() ? `<button class="btn red" data-act="mp-kick" data-peer="${escapeHtml(from)}" type="button">KICK</button>` : '');
+  openProfile({ name: blocked ? 'Blocked player' : cleanName(row.name), level: num(row.level, 0), profile: prof }, { act: 'mp-lobby', label: 'BACK TO ROOM', extra });
 }
 
 /* ----- match flow ----- */
@@ -4770,10 +4966,26 @@ function mpStanding() {
 function myKoHp() { const m = MP.match; return m && m.ko && m.ko.hp ? m.ko.hp[PEER] : KO_HP; }
 
 /* ---------- version + patch notes ---------- */
-const VERSION = 'V11';
+const VERSION = 'V12';
 // how long each update took to build (V1-V8 are reconstructed estimates, marked with ~)
-const DEV_TIME = { V11: '38 min', V10: '35 min', 'V9.2': '4 min', 'V9.1': '7 min', V9: '17 min', V8: '~1 h', 'V7.1': '~25 min', V7: '~50 min', V6: '~35 min', V5: '~45 min', V4: '~25 min', V3: '~20 min', V2: '~20 min', V1: '~45 min' };
+const DEV_DATE = { V12: '2026-10-04', V11: '2026-10-03', V10: '2026-10-03', 'V9.2': '2026-10-03', 'V9.1': '2026-10-03', V9: '2026-10-03', V8: '2026-10-03', 'V7.1': '2026-10-03', V7: '2026-10-03', V6: '2026-10-02', V5: '2026-10-02', V4: '2026-10-02', V3: '2026-10-01', V2: '2026-10-01', V1: '2026-10-01' };
+const DEV_TIME = { V12: '20 min', V11: '28 min', V10: '35 min', 'V9.2': '4 min', 'V9.1': '7 min', V9: '17 min', V8: '~1 h', 'V7.1': '~25 min', V7: '~50 min', V6: '~35 min', V5: '~45 min', V4: '~25 min', V3: '~20 min', V2: '~20 min', V1: '~45 min' };
 const PATCH_NOTES = [
+  ['V12', 'Settings & Safety', ['New Settings menu (under How to play): volume for music, effects, fire crackle and typing, the audio fix (it offers to refresh), background quality, how much fire you want, the chat filter and your blocked players. The corner buttons are gone.',
+    'Chat filter (English + Danish): None, Censor (blurs bad words; hover to peek) or Replace (swaps the message for a nice one). Censor is on by default.',
+    'Block players from their profile in a room: you won\'t see their chat or emotes, and their name, color and title are hidden. They still show on the leaderboards.',
+    'Hosts can kick players. A kicked player can rejoin after 30 seconds.',
+    'A brand-new tutorial covering everything: Standard, Drop Out, PvP, leaderboards, discovered rules, settings, patch notes, Pristine, colors, titles, levels, medals, achievements and stats. Older players get offered it once.',
+    'Rainbow medals now play warm pads in the music\'s key, with a vibrato that swells before each chord change, slow kicks and quiet snares.',
+    'PvP music has more drive during matches, and fades smoothly between the room and the match.',
+    'Discovered rules can be searched (names and answers) and sorted A–Z, Z–A, newest or oldest found.',
+    'Account: your name, title and Pristine in one panel; level and medals in the other. The note under the statistics is gone.',
+    'The Pristine and medal timelines scroll with the mouse wheel or by dragging.',
+    'Buttons glide back down when you stop hovering. The split buttons now react the same on both halves.',
+    'The old PvP start screen is gone for good: Esc or Leave takes you back to the menu.',
+    'Fixed the red "!" notifications for real (a new info icon was squashing them).',
+    'New Customization achievement group, plus Maxed out, Cool Colors, He got drip! and Pride month. "KO" is now "K.O.".',
+    'Patch notes show the date of each update.']],
   ['V11', 'Pristine', ['New: Pristine. You earn it for everything you do: wins, achievements, levels, medals, minutes played, PvP and party placements. Click the number above your name to see what it unlocks. Your past games already count.',
     'New: 37 name colors, unlocked with Pristine (plus Rainbow from the No life achievement). Your color tints your whole Account and is how other players see your name. Players with the same color in a room get slightly different shades.',
     'Every name now sits in a little box, so every color stays readable.',
@@ -4841,7 +5053,7 @@ const PATCH_NOTES = [
 function openNotes() {
   sfx.click();
   openModal(`<h2>PATCH NOTES</h2><p class="progress">You're playing ${VERSION}. ⏱ is how long each update took to build.</p><div class="notes">${PATCH_NOTES.map(([v, name, items]) =>
-    `<section class="note-v"><h3>${v} · ${escapeHtml(name)}${v === VERSION ? '<small>CURRENT</small>' : ''}${DEV_TIME[v] ? `<span class="devtime">⏱ ${DEV_TIME[v]}</span>` : ''}</h3><ul>${items.map(i => `<li>${escapeHtml(i)}</li>`).join('')}</ul></section>`).join('')}</div>
+    `<section class="note-v"><h3>${v} · ${escapeHtml(name)}${v === VERSION ? '<small>CURRENT</small>' : ''}<span class="devtime">${DEV_DATE[v] ? '📅 ' + DEV_DATE[v] + ' · ' : ''}${DEV_TIME[v] ? '⏱ ' + DEV_TIME[v] : ''}</span></h3><ul>${items.map(i => `<li>${escapeHtml(i)}</li>`).join('')}</ul></section>`).join('')}</div>
     <div class="row"><button class="btn dark" data-act="close" type="button">CLOSE</button></div>`);
 }
 
@@ -4932,17 +5144,37 @@ $('howBtn').onclick = () => { sfx.click(); openModal(`
   <p>Wins give XP (more for fast runs with short passwords). Achievements give 2,000 XP, medal levels 5,000 XP and rainbow medals another 10,000 XP. Medal levels unlock titles you can show in your Account.</p>
   <div class="row"><button class="btn red" data-act="play" type="button">PLAY STANDARD</button><button class="btn" data-act="tutorial" type="button">REPLAY TUTORIAL</button><button class="btn dark" data-act="close" type="button">CLOSE</button></div>`); };
 
+let discSort = store.get('pg.discSort', 'az');
 $('discBtn').onclick = () => {
   sfx.click();
   const fresh = new Set(unseenRules());
-  const items = RULES.slice().sort((a, b) => (discovered.has(b.id) - discovered.has(a.id)) || a.name.localeCompare(b.name)).map(r => {
-    if (!discovered.has(r.id)) return `<div class="disc-item locked"><header><span>? ? ? ? ? ?</span></header></div>`;
-    let ans = [];
-    try { ans = r.answers(); } catch (e) {}
-    const body = ans.length > 60 ? `<p>${ans.map(escapeHtml).join(', ')}</p>` : ans.map(a => `<p>${escapeHtml(a)}</p>`).join('');
-    return `<div class="disc-item"><header><span>${escapeHtml(r.name)}${fresh.has(r.id) ? '<span class="newtag">NEW</span>' : ''}</span><button type="button" data-act="answers">Show answers</button></header><div class="answers" hidden>${body}</div></div>`;
-  }).join('');
-  openModal(`<h2>DISCOVERED RULES</h2><p class="progress">${discovered.size} of ${RULES.length} rules found. Rules with variants show every variant's answer.</p><div class="disc">${items}</div><div class="row"><button class="btn dark" data-act="close" type="button">CLOSE</button></div>`);
+  const order = [...discovered];                       // the order you found them in
+  const answersOf = r => { try { return r.answers(); } catch (e) { return []; } };
+  openModal(`<h2>DISCOVERED RULES</h2><p class="progress">${discovered.size} of ${RULES.length} rules found. Rules with variants show every variant's answer.</p>
+    <div class="disc-tools"><input id="discSearch" type="search" placeholder="Search rules and answers…" autocomplete="off" spellcheck="false" aria-label="Search">
+      <select id="discSortSel" aria-label="Sort"><option value="az">A → Z</option><option value="za">Z → A</option><option value="new">Newest found</option><option value="old">Oldest found</option></select></div>
+    <div class="disc" id="discList"></div><div class="row"><button class="btn dark" data-act="close" type="button">CLOSE</button></div>`);
+  const draw = () => {
+    const q = deLeet($('discSearch').value.trim());
+    let list = RULES.filter(r => discovered.has(r.id));
+    if (discSort === 'az') list.sort((a, b) => a.name.localeCompare(b.name));
+    if (discSort === 'za') list.sort((a, b) => b.name.localeCompare(a.name));
+    if (discSort === 'new') list.sort((a, b) => order.indexOf(b.id) - order.indexOf(a.id));
+    if (discSort === 'old') list.sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
+    if (q) list = list.filter(r => deLeet(r.name).includes(q) || answersOf(r).some(x => deLeet(String(x)).includes(q)));
+    const items = list.map(r => {
+      const ans = answersOf(r);
+      const hit = q && !deLeet(r.name).includes(q);
+      const body = ans.length > 60 ? `<p>${ans.map(escapeHtml).join(', ')}</p>` : ans.map(a => `<p>${escapeHtml(a)}</p>`).join('');
+      return `<div class="disc-item"><header><span>${escapeHtml(r.name)}${fresh.has(r.id) ? '<span class="newtag">NEW</span>' : ''}${hit ? '<small class="disc-hit">matches an answer</small>' : ''}</span><button type="button" data-act="answers">${hit ? 'Hide answers' : 'Show answers'}</button></header><div class="answers"${hit ? '' : ' hidden'}>${body}</div></div>`;
+    }).join('');
+    const locked = q ? 0 : RULES.length - discovered.size;
+    $('discList').innerHTML = (items || `<p class="progress">${q ? 'No rules match that.' : 'No rules found yet. Play a game!'}</p>`) + Array.from({ length: locked }, () => `<div class="disc-item locked"><header><span>? ? ? ? ? ?</span></header></div>`).join('');
+  };
+  $('discSortSel').value = discSort;
+  $('discSortSel').onchange = e => { discSort = e.target.value; store.set('pg.discSort', discSort); sfx.click(); draw(); };
+  $('discSearch').addEventListener('input', draw);
+  draw();
   markSeen('rules', [...fresh]);
 };
 
@@ -5013,13 +5245,13 @@ function haloOn(md) {
   document.body.append(dim, h);
   requestAnimationFrame(() => { dim.classList.add('on'); h.classList.add('on'); });
   h._dim = dim; haloEl = h;
-  music.duck(true); choir.start();
+  music.halo(true);
 }
 function haloOff() {
   const h = haloEl; if (!h) return; haloEl = null;
   h.classList.remove('on'); h._dim.classList.remove('on');
   setTimeout(() => { h.remove(); h._dim.remove(); }, 600);
-  music.duck(false); choir.stop();
+  music.halo(false);
 }
 
 
@@ -5098,13 +5330,13 @@ function frame() {
   // slow devices: drop to LOW once if HIGH can't keep ~28 fps during play
   if (quality === 'high' && !autoLowered && S.phase === 'playing') {
     slowAcc = Math.max(0, slowAcc + (dt > 1 / 28 ? dt : -dt * .5));
-    if (slowAcc > 4) { autoLowered = true; setQuality('low'); toastInfo('EFFECTS LOWERED', 'Effects set to LOW to keep the game smooth. Change it with the FX button.'); }
+    if (slowAcc > 4) { autoLowered = true; setQuality('low'); toastInfo('EFFECTS LOWERED', 'Background set to LOW to keep the game smooth. Change it in Settings.'); }
   }
   if (now - lastBg < 1000 / Q.bgFps - 2) { /* skip background this frame */ }
   else if (gl) { lastBg = now; gl.uniform2f(uRes, bg.width, bg.height); gl.uniform1f(uT, bgT); gl.uniform1f(uHeat, h); gl.drawArrays(gl.TRIANGLES, 0, 6); }
   else if (bg2d) { lastBg = now; const g = bg2d.createLinearGradient(0, 0, bg.width, bg.height); g.addColorStop(0, mixHex('241e66', '7a2410', h)); g.addColorStop(1, mixHex('3a6fd8', 'f29a35', h)); bg2d.fillStyle = g; bg2d.fillRect(0, 0, bg.width, bg.height); }
   drawFlames(h, dt);
-  crackleTick(pCount > 0 ? Math.min(1, fireI / 2) : 0, dt);
+  crackleTick(pCount > 0 ? Math.min(1, fireI / 2) * (vol.fire == null ? 1 : vol.fire) : 0, dt);
   if (TUT.on) tutLayout();
   requestAnimationFrame(frame);
 }
@@ -5114,6 +5346,6 @@ initPristine();
 initSeen();
 renderMenuStats();
 if (getStats().games) setTimeout(lbPushSoon, 4000);
-{ const tut = store.get('pg.tut', null); if (tut === 'running' || (tut !== 'done' && !getStats().games)) setTimeout(tutStart, 700); }
+{ const tut = store.get('pg.tut', null); if (tut === 'running' || (tut !== 'done' && !getStats().games)) setTimeout(tutStart, 700); else if (getStats().games) setTimeout(offerTour, 2600); }
 })();
 </script>
