@@ -446,6 +446,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .note-v ul { margin: 0; padding-left: 1.1em; }
 .note-v li { font-size: 13px; line-height: 1.5; }
 .modechip { display: inline-block; font-family: var(--display); font-size: 16px; color: var(--edge); background: var(--gold); border-radius: 6px; padding: 1px 8px 2px; vertical-align: 4px; letter-spacing: .04em; }
+.mini-title .modechip { color: #1b1230; text-shadow: none; font-weight: 400; }
 .modechip.m-dropout { background: #ff8a2b; } .modechip.m-score, .modechip.m-race, .modechip.m-ko { background: var(--good); }
 #timeOut.capped { color: var(--bad) !important; }
 .hpwrap { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 2px 0 6px; }
@@ -564,7 +565,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
       <button class="btn" id="accBtn" type="button">ACCOUNT <small id="accSmall">LVL 0</small><span class="dot" id="dotAcc" hidden>!</span></button>
       <button class="btn dark" id="howBtn" type="button">HOW TO PLAY</button>
     </div>
-    <button class="version" id="verBtn" type="button">V9.1 · ENCORE · <u>PATCH NOTES</u></button>
+    <button class="version" id="verBtn" type="button">V9.2 · FINE TUNING · <u>PATCH NOTES</u></button>
   </section>
 
   <section id="account" class="screen account" hidden>
@@ -1359,11 +1360,13 @@ const music = (() => {
       kick: [0, 4, 8, 12], snare: [4, 12], tKick: [0, 4, 6, 8, 12, 14]
     }
   };
-  const LAYERS = ['keys', 'bass', 'hats', 'drums', 'lead', 'arp', 'pulse', 'siren', 'tick'];
+  const LAYERS = ['keys', 'bass', 'hats', 'drums', 'lead', 'arp', 'pulse', 'solo', 'tick'];
+  const SOLO_SCALE = { lounge: [57, 60, 62, 64, 67], pvp: [62, 65, 67, 69, 72], drop: [64, 67, 69, 71, 74] };
   let a = null, out = null, filt = null, jbus = null, wob = null, vib = null, noise = null;
   const L = {};
   let started = false, timer = 0, nextT = 0, step = 0, bar = 0, track = 'lounge', tempo = 1;
-  let lastLead = 72, jingleUntil = 0, want = null, hiddenAt = 0;
+  let lastLead = 72, jingleUntil = 0, want = null, hiddenAt = 0, soloIdx = 7, lastSolo = 72;
+  const held = {}; let heldTense = 0, lastTickAt = 0;
   const away = () => hiddenAt ? performance.now() - hiddenAt : 0;   // ms the tab has been in the background
 
   function setup() {
@@ -1445,13 +1448,20 @@ const music = (() => {
     const g = a.createGain(); g.gain.setValueAtTime(.05 * vel, t); g.gain.exponentialRampToValueAtTime(.0001, t + .06); g.connect(dest);
     osc('triangle', 330, t, t + .07, g);
   }
-  // rising alarm synth for the last seconds
-  function siren(t, m, dur, vel, dest) {
-    const lp = a.createBiquadFilter(); lp.type = 'lowpass'; lp.Q.value = 7;
-    lp.frequency.setValueAtTime(700, t); lp.frequency.exponentialRampToValueAtTime(3200, t + dur); lp.connect(dest);
-    const g = a.createGain(); g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.035 * vel, t + dur * .7);
-    g.gain.exponentialRampToValueAtTime(.0001, t + dur); g.connect(lp);
-    [['sawtooth', -12], ['sawtooth', 12]].forEach(([ty, det]) => { const o = osc(ty, hz(m), t, t + dur, g, det); o.frequency.exponentialRampToValueAtTime(hz(m + 12), t + dur); });
+  // fast, slightly unhinged synth solo for the last seconds
+  function soloNote(t, m, dur, vel, dest) {
+    const f = hz(m), from = hz(lastSolo); lastSolo = m;
+    const lp = a.createBiquadFilter(); lp.type = 'lowpass'; lp.Q.value = 4;
+    lp.frequency.setValueAtTime(3800, t); lp.frequency.exponentialRampToValueAtTime(1500, t + dur); lp.connect(dest);
+    const g = a.createGain(); g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.04 * vel, t + .008);
+    g.gain.exponentialRampToValueAtTime(.022 * vel, t + dur * .6); g.gain.exponentialRampToValueAtTime(.0001, t + dur * .98); g.connect(lp);
+    [['square', -6], ['sawtooth', 6]].forEach(([ty, det]) => { const o = osc(ty, from, t, t + dur, g, det, vib); o.frequency.exponentialRampToValueAtTime(f, t + .025); });
+  }
+  function soloPitch() {
+    const sc = SOLO_SCALE[track], r = Math.random();
+    soloIdx += r < .4 ? 1 : r < .7 ? -1 : r < .82 ? 2 : r < .94 ? -2 : 0;
+    if (soloIdx < 3) soloIdx = 4; if (soloIdx > 13) soloIdx = 11;
+    return sc[soloIdx % 5] + 12 * Math.floor(soloIdx / 5);
   }
   // clock tick, locked to the beat
   function woodTick(t, accent, dest) {
@@ -1463,8 +1473,8 @@ const music = (() => {
 
   /* ----- what should be playing right now ----- */
   function decide() {
-    const w = { track: 'lounge', keys: 0, bass: 0, hats: 0, drums: 0, lead: 0, arp: 0, pulse: 0, siren: 0, tick: 0,
-                tempo: 1, comp: false, hats16: false, pulse16: false, four: false, fill: false, tense: 0, cut: 2600 };
+    const w = { track: 'lounge', keys: 0, bass: 0, hats: 0, drums: 0, lead: 0, arp: 0, pulse: 0, solo: 0, tick: 0,
+                tempo: 1, comp: false, hats16: false, pulse16: false, four: false, fill: false, sparse: false, tense: 0, cut: 2600 };
     if (performance.now() < jingleUntil) return Object.assign(w, { duck: true });
     const inGame = !$('game').hidden;
     const pvp = inGame ? !!S.mp : !!(MP.ch || MP.lobbyOpen);
@@ -1477,12 +1487,12 @@ const music = (() => {
       if (w.track === 'drop') {                // Drop Out: a new instrument every few rounds
         const r = S.round;
         w.hats = .75; w.drums = r >= 3 ? .9 : 0; w.arp = r >= 5 ? .45 : 0; w.pulse = r >= 8 ? .55 : 0;
-        w.lead = r >= 11 ? .65 : 0; w.hats16 = r >= 15; w.siren = r >= 20 ? .3 : 0; w.cut = 2600 + Math.min(2400, r * 120);
+        w.lead = r >= 11 ? .65 : 0; w.hats16 = r >= 15; w.solo = r >= 20 ? .3 : 0; w.cut = 2600 + Math.min(2400, r * 120);
         w.tempo = 1 + Math.min(.3, (r - 1) * .015);
         if (done) { w.lead = .9; w.arp = Math.max(w.arp, .55); }
       } else {                                 // more instruments as more rules turn green
         w.hats = !playing || frac > 0 ? .75 : .35;
-        w.drums = !playing || frac >= .5 || pvp ? .9 : 0;
+        w.drums = !playing || frac >= .5 || pvp ? .9 : .5; w.sparse = playing && !pvp && frac < .5;
         if (done) { w.lead = .9; w.arp = .55; }
       }
       if (playing) {
@@ -1490,13 +1500,8 @@ const music = (() => {
         let tense = S.dispLeft < zone ? 1 - Math.max(0, S.dispLeft) / zone : 0;
         if (S.capAt) tense = Math.max(tense, .65);
         const ko = MP.match && MP.match.ko; if (S.mode === 'ko' && ko && ko.hp && ko.hp.me <= 40) tense = Math.max(tense, .35);
-        if (tense > 0) {
-          w.tense = tense; w.tempo *= 1 + .35 * tense; w.four = true; w.fill = tense > .8;
-          w.drums = Math.max(w.drums, .95); w.hats = Math.max(w.hats, .8); w.hats16 = w.hats16 || tense > .2;
-          w.pulse = Math.max(w.pulse, .5 + .5 * tense); w.pulse16 = tense > .6;
-          w.siren = Math.max(w.siren, .3 + .7 * tense); w.keys = .7 - .4 * tense; w.cut = 2600 + 5000 * tense;
-          w.tick = S.dispLeft <= Math.min(10, S.roundLen * .5) ? 1 : 0;
-        }
+        w.tense = tense;
+        w.tick = tense > 0 && S.dispLeft <= Math.min(10, S.roundLen * .5) ? 1 : 0;
       }
       w.tempo = Math.min(w.tempo, 1.55);
       return w;
@@ -1506,6 +1511,29 @@ const music = (() => {
     else { w.keys = .9; w.bass = .8; w.hats = .3; w.lead = .5; w.cut = 2200; }      // menu, account
     return w;
   }
+  // Tension is held and released slowly, and every layer lingers for a bar or two before fading,
+  // so a cleared round or a new set of rules never makes instruments vanish mid-phrase.
+  function shape(w, dt, bar) {
+    const t = w.tense || 0;
+    heldTense = t >= heldTense ? t : Math.max(t, heldTense - dt / 4);
+    const h = heldTense;
+    if (h > 0.001) {
+      w.tempo *= 1 + .35 * h; w.four = true; w.fill = h > .8; w.sparse = false;
+      w.drums = Math.max(w.drums, .95); w.hats = Math.max(w.hats, .8); w.hats16 = w.hats16 || h > .2;
+      w.pulse = Math.max(w.pulse, .5 + .5 * h); w.pulse16 = h > .6;
+      w.solo = Math.max(w.solo, h > .25 ? .35 + .65 * h : 0); w.keys = Math.max(.3, w.keys - .4 * h);
+      w.lead *= 1 - Math.min(1, h * 1.4); w.cut = Math.max(w.cut, 2600 + 5000 * h); w.tense = h;
+    }
+    w.tempo = Math.min(w.tempo, 1.6);
+    const now = performance.now();
+    LAYERS.forEach(k => {
+      const hk = held[k] || (held[k] = { v: 0, t: 0 });
+      if (w[k] >= hk.v) { hk.v = w[k]; hk.t = now; }
+      else if (now - hk.t > bar * 1000) hk.v = Math.max(w[k], hk.v - dt / 2.5);   // linger one bar, then fade over ~2.5 s
+      if (k !== 'tick') w[k] = hk.v;
+    });
+    return w;
+  }
   function apply(w, at) {
     const now = a.currentTime, quick = w.duck || w.silent, t0 = quick ? now : Math.max(now, at || now);
     LAYERS.forEach(k => {
@@ -1513,7 +1541,7 @@ const music = (() => {
       if (Math.abs(v - L[k].tgt) > .001) {
         L[k].tgt = v; L[k].at = t0;
         L[k].g.gain.cancelScheduledValues(t0);
-        L[k].g.gain.setTargetAtTime(v, t0, quick ? .08 : v > L[k].g.gain.value ? .12 : .35);
+        L[k].g.gain.setTargetAtTime(v, t0, quick ? .08 : v > L[k].g.gain.value ? .15 : .5);
       }
     });
     filt.frequency.setTargetAtTime(w.cut, t0, .4);
@@ -1533,10 +1561,15 @@ const music = (() => {
     });
     if (live('pulse') && (w.pulse16 || s % 2 === 0)) bass(ts, ch[0] + (s % 8 === 4 ? 12 : 0), sd * (w.pulse16 ? .6 : .8), .7, L.pulse.g);
     if (live('drums')) {
+      if (w.sparse) {                       // light kit: soft kick on 1, brushed snares, a ghost kick now and then
+        if (s === 0 || (s === 10 && bar % 2 === 1)) kick(t, s ? .45 : .7, L.drums.g);
+        if (s === 4 || s === 12) snare(ts, .4, L.drums.g);
+      } else {
       const kicks = w.four ? (w.tense > .7 ? [0, 4, 6, 8, 12, 14] : [0, 4, 8, 12]) : tr.kick;
       if (kicks.includes(s)) kick(t, 1, L.drums.g);
       if (tr.snare.includes(s)) snare(ts, 1, L.drums.g);
       else if (w.fill && bar % 2 === 1 && s >= 12) snare(t, .45 + (s - 12) * .15, L.drums.g);
+      }
     }
     if (live('hats')) {
       if (w.hats16) hat(ts, s % 2 ? .55 : 1, false, L.hats.g);
@@ -1544,7 +1577,12 @@ const music = (() => {
     }
     if (live('lead')) tr.mel[bar % 8].forEach(([at, m, len]) => { if (at === s) lead(ts, m, sd * len, 1, L.lead.g); });
     if (live('arp') && s % 2 === 0) pluck(ts, ch[1][(s / 2) % 4] + 12, 1, L.arp.g);
-    if (live('siren') && (s === 0 || (w.tense > .6 && s === 8))) siren(t, ch[0] + 24, sd * (w.tense > .6 ? 8 : 16) * .95, 1, L.siren.g);
+    if (live('solo')) {
+      const fast = w.tense > .55;                       // 8ths, then 16ths when it gets tight
+      if (fast || s % 2 === 0) {
+        if (Math.random() < (fast ? .9 : .8)) soloNote(ts, soloPitch(), sd * (fast ? 1 : 2) * .95, fast ? .9 : 1, L.solo.g);
+      }
+    }
     if (live('tick') && s % 2 === 0) woodTick(t, s % 4 === 0, L.tick.g);
   }
   function tick() {
@@ -1553,12 +1591,14 @@ const music = (() => {
     const on = !muted && vol.music > 0 && !gone;
     out.gain.setTargetAtTime(on ? vol.music * .6 * (hiddenAt ? .45 : 1) : 0, a.currentTime, hiddenAt ? 1.2 : .25);
     if (!on) { nextT = 0; return; }
+    const nowMs = performance.now(), dt = lastTickAt ? Math.min(2, (nowMs - lastTickAt) / 1000) : .04; lastTickAt = nowMs;
     want = decide();
-    if (want.silent || want.duck) { apply(want); step = 0; bar = 0; nextT = 0; return; }   // the next phrase starts fresh
+    if (want.silent || want.duck) { apply(want); step = 0; bar = 0; nextT = 0; heldTense = 0; LAYERS.forEach(k => { if (held[k]) held[k].v = 0; }); return; }
+    shape(want, dt, 16 * 60 / (TRACKS[track].bpm * tempo) / 4);   // the next phrase starts fresh
     if (nextT < a.currentTime) nextT = a.currentTime + .05;
     const sd0 = 60 / (TRACKS[track].bpm * tempo) / 4;
     apply(want, nextT + ((4 - step % 4) % 4) * sd0);
-    tempo += (want.tempo - tempo) * .1;
+    tempo += (want.tempo - tempo) * (want.tempo < tempo ? .03 : .1);
     const ahead = hiddenAt ? 1.6 : .18;           // background tabs only wake up about once a second
     while (nextT < a.currentTime + ahead) {
       if (step === 0 && want.track !== track) { track = want.track; bar = 0; }
@@ -1608,9 +1648,10 @@ const music = (() => {
 ['pointerdown', 'keydown'].forEach(ev => addEventListener(ev, () => { audio(); music.start(); }, { capture: true, passive: true }));
 
 function renderMute() {
-  $('mute').textContent = muted ? 'SOUND OFF' : 'SOUND';
-  $('muteAll').textContent = muted ? 'UNMUTE' : 'MUTE ALL';
-  $('muteAll').setAttribute('aria-pressed', String(muted));
+  const silent = muted || (vol.music <= 0 && vol.sfx <= 0);
+  $('mute').textContent = silent ? 'SOUND OFF' : 'SOUND';
+  $('muteAll').textContent = silent ? 'UNMUTE' : 'MUTE ALL';
+  $('muteAll').setAttribute('aria-pressed', String(silent));
   [['volMusic', 'music'], ['volSfx', 'sfx']].forEach(([id, k]) => { $(id).value = Math.round(vol[k] * 100); $(id + 'Out').textContent = Math.round(vol[k] * 100) + '%'; });
 }
 function toggleAudioPop(show) {
@@ -1618,9 +1659,20 @@ function toggleAudioPop(show) {
   p.hidden = !show; $('mute').setAttribute('aria-expanded', String(show));
 }
 $('mute').onclick = () => { sfx.click(); toggleAudioPop(); };
-$('muteAll').onclick = () => { muted = !muted; store.set('pg.muted', muted); renderMute(); if (!muted) sfx.click(); else if (typeof award === 'function') award('muted'); };
-$('volMusic').addEventListener('input', e => { vol.music = +e.target.value / 100; store.set('pg.vol', vol); renderMute(); });
-$('volSfx').addEventListener('input', e => { vol.sfx = +e.target.value / 100; store.set('pg.vol', vol); if (sfxBus) sfxBus.gain.value = vol.sfx; renderMute(); });
+let lastVol = { music: vol.music > 0 ? vol.music : .6, sfx: vol.sfx > 0 ? vol.sfx : 1 };
+function setVol(k, v) { vol[k] = v; if (v > 0) lastVol[k] = v; store.set('pg.vol', vol); if (k === 'sfx' && sfxBus) sfxBus.gain.value = v; }
+$('muteAll').onclick = () => {
+  if (!muted && vol.music <= 0 && vol.sfx <= 0) { setVol('music', lastVol.music); setVol('sfx', lastVol.sfx); renderMute(); sfx.click(); return; }  // both sliders at 0: bring them back
+  if (muted && vol.music <= 0 && vol.sfx <= 0) { setVol('music', lastVol.music); setVol('sfx', lastVol.sfx); }
+  muted = !muted; store.set('pg.muted', muted); renderMute(); if (!muted) sfx.click(); else if (typeof award === 'function') award('muted');
+};
+function volInput(k, e) {
+  const was = vol.music <= 0 && vol.sfx <= 0;
+  setVol(k, +e.target.value / 100); renderMute();
+  if (!was && vol.music <= 0 && vol.sfx <= 0 && typeof award === 'function') award('muted');
+}
+$('volMusic').addEventListener('input', e => volInput('music', e));
+$('volSfx').addEventListener('input', e => volInput('sfx', e));
 $('volSfx').addEventListener('change', () => sfx.ok());
 addEventListener('pointerdown', e => { if (!$('audioPop').hidden && !e.target.closest('#audioPop, #mute')) toggleAudioPop(false); });
 renderMute();
@@ -3404,8 +3456,11 @@ function renderOppBar() {
 }
 
 /* ---------- version + patch notes ---------- */
-const VERSION = 'V9.1';
+const VERSION = 'V9.2';
 const PATCH_NOTES = [
+  ['V9.2', 'Fine Tuning', ['The music no longer drops instruments mid-phrase: they linger for a bar and fade out, and the tension winds down gradually after a cleared round.',
+    'The alarm is gone. When time runs low you now get a frantic synth solo instead.', 'Standard rounds start with a light drum kit (soft kick and brushed snares), so they sound different from the menu.',
+    'The mode badge next to the title is readable again.', 'Turning both volume sliders to 0 now counts as muted, and UNMUTE brings them back.']],
   ['V9.1', 'Encore', ['Drop Out has its own track. A new instrument joins every few rounds and it keeps speeding up.',
     'Low on time? The music now gets loud: faster tempo, pounding drums, a rising alarm and a ticking clock in the last 10 seconds.',
     'After a game the music waits quietly until you press a button, instead of cutting out and back in.',
