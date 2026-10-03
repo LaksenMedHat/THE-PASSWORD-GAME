@@ -47,8 +47,11 @@ button { font: inherit; color: inherit; cursor: pointer; }
   background: var(--blue); color: var(--ink); box-shadow: 0 6px 0 var(--edge);
   transition: transform .08s, box-shadow .08s; text-shadow: 0 3px 0 rgba(0,0,0,.35);
 }
-.btn:hover { transform: translateY(-2px) rotate(-1deg); }
-.btn:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--edge); }
+.btn { transition: transform .2s cubic-bezier(.3,1.7,.5,1), box-shadow .1s, filter .18s; }
+.btn:hover { filter: brightness(1.13) saturate(1.12); animation: btnfloat 1.8s ease-in-out infinite; }
+@keyframes btnfloat { 0%, 100% { transform: translateY(-3px) rotate(-1deg); } 50% { transform: translateY(-7px) rotate(.8deg); } }
+.btn:active { animation: none; transform: translateY(4px) scale(.97); box-shadow: 0 2px 0 var(--edge); filter: brightness(.88) saturate(1.2); transition-duration: .05s; }
+.btn:active::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: rgba(255,255,255,.16); box-shadow: inset 0 0 0 2px rgba(255,255,255,.35); pointer-events: none; }
 .btn.red { background: var(--red); }
 .btn.gold { background: var(--gold); color: var(--edge); text-shadow: none; }
 .btn.dark { background: var(--panel-hi); }
@@ -208,6 +211,10 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .ach.locked:hover .hov, .ach.locked:focus-visible .hov { display: block; }
 .ach.locked .q { letter-spacing: .3em; color: var(--dim); }
 .ach.revealed em { color: var(--dim); }
+.ach-group { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: baseline; margin: 10px 2px 0; font-family: var(--display); font-weight: 400; font-size: 20px; letter-spacing: .06em; color: var(--dim); border-bottom: 2px solid var(--panel-hi); padding-bottom: 2px; }
+.ach-group:first-child { margin-top: 0; }
+.ach-group small { font-family: var(--body); font-size: 12px; color: var(--gold); }
+.ach.flipping { backface-visibility: hidden; }
 .emblem { width: 52px; height: 57px; display: block; }
 .emblem .hex-shadow { fill: #000; opacity: .45; }
 .emblem .hex { fill: #3a3466; stroke: var(--edge); stroke-width: 2; }
@@ -216,13 +223,18 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .emblem.on .hex { fill: var(--gold); }
 .emblem.on .hex-in { fill: #c9771d; }
 .emblem.on .px { fill: #fff6dc; }
-#toasts { position: fixed; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 25; display: grid; gap: 10px; width: min(calc(100% - 32px), 420px); pointer-events: none; }
+#toasts { position: fixed; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 25; display: flex; flex-direction: column; width: min(calc(100% - 32px), 420px); pointer-events: none; }
 .toast.info { grid-template-columns: 1fr; }
-.toast { display: grid; grid-template-columns: 52px 1fr; gap: 12px; align-items: center; background: var(--panel); border: 4px solid var(--edge); border-radius: 12px; box-shadow: 0 8px 0 var(--edge); padding: 10px 14px; animation: rise .5s cubic-bezier(.2,1.6,.4,1); }
+.toast { display: grid; grid-template-columns: 52px 1fr; gap: 12px; align-items: center; box-sizing: border-box; height: 88px; margin-top: 12px; overflow: hidden; background: var(--panel); border: 4px solid var(--edge); border-radius: 12px; box-shadow: 0 8px 0 var(--edge); padding: 8px 14px; animation: toastin .55s cubic-bezier(.2,.9,.3,1) both; }
+.toast-txt, .toast > div { min-width: 0; }
+.toast b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.toast span { display: -webkit-box !important; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+@keyframes toastin { 0% { opacity: 0; transform: translateY(26px) scale(.95); height: 0; margin-top: 0; } 40% { height: 88px; margin-top: 12px; } 100% { opacity: 1; transform: none; height: 88px; margin-top: 12px; } }
 .toast small { display: block; font-size: 11px; letter-spacing: .14em; color: var(--gold); }
 .toast b { display: block; font-size: 16px; line-height: 1.25; margin-top: 2px; }
 .toast span { display: block; font-size: 12px; color: var(--dim); margin-top: 2px; }
-.toast.out { animation: sink .4s ease-in forwards; }
+.toast.out { animation: toastout .6s cubic-bezier(.4,0,.6,1) forwards; }
+@keyframes toastout { 0% { opacity: 1; transform: none; height: 88px; margin-top: 12px; } 50% { opacity: 0; transform: translateY(16px) scale(.96); height: 88px; margin-top: 12px; } 100% { opacity: 0; transform: translateY(16px) scale(.96); height: 0; margin-top: 0; padding-block: 0; border-width: 0; box-shadow: none; } }
 @keyframes rise { 0% { transform: translateY(120%) rotate(3deg); opacity: 0; } 100% { transform: none; opacity: 1; } }
 @keyframes sink { to { transform: translateY(140%); opacity: 0; } }
 /* ---------- tiers ---------- */
@@ -245,6 +257,11 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
   background: conic-gradient(#ff4d5e, #ff9f3d, #ffe85a, #3ddc8f, #2fd0ff, #2f6bff, #a35bff, #ff4d9e, #ff4d5e);
   animation: swirl 18s linear infinite; }
 @keyframes swirl { to { transform: rotate(1turn); } }
+@property --ang { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+.medal .disc.tier-fill.t-rainbow { overflow: visible; }
+.medal .disc.tier-fill.t-rainbow::before { inset: 0; border-radius: 50%; animation: angspin 18s linear infinite;
+  background: conic-gradient(from var(--ang), #ff4d5e, #ff9f3d, #ffe85a, #3ddc8f, #2fd0ff, #2f6bff, #a35bff, #ff4d9e, #ff4d5e); }
+@keyframes angspin { to { --ang: 360deg; } }
 
 /* ---------- medals & level ---------- */
 .pxi { width: 26px; height: 26px; fill: currentColor; opacity: .82; display: block; }
@@ -433,9 +450,31 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .diag pre { background: var(--edge); border-radius: 8px; padding: 10px; max-height: 180px; overflow: auto; font-size: 11px; white-space: pre-wrap; color: var(--ink); user-select: text; }
 /* ---------- V8 ---------- */
 .btn.orange { background: #ff8a2b; color: var(--edge); text-shadow: none; }
-.playwrap { display: grid; }
-.playsplit { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; animation: splitin .35s cubic-bezier(.2,1.6,.4,1); }
-.playsplit .btn { font-size: 30px; padding-inline: .3em; }
+.playwrap { position: relative; height: 88px; }
+.goo { position: absolute; inset: -6px -6px 0; filter: url(#goo) drop-shadow(0 6px 0 var(--edge)); pointer-events: none; }
+.blob { position: absolute; top: 6px; bottom: 6px; left: 6px; right: 6px; border-radius: 12px; background: var(--red);
+  transition: left .62s cubic-bezier(.55,-0.35,.3,1.45), right .62s cubic-bezier(.55,-0.35,.3,1.45), transform .2s cubic-bezier(.3,1.6,.5,1), filter .2s; }
+.playwrap.split .bl { right: calc(50% + 6px); }
+.strand { position: absolute; left: 44%; right: 44%; top: 34%; bottom: 34%; border-radius: 40%; background: linear-gradient(90deg, var(--red), #ffb03d); opacity: 0; }
+.playwrap.split .strand { animation: strand .75s cubic-bezier(.4,0,.3,1); }
+.playwrap.joining .strand { animation: strand .6s cubic-bezier(.4,0,.3,1) reverse; }
+@keyframes strand { 0% { opacity: 1; transform: scaleX(.3) scaleY(1.6); } 35% { opacity: 1; transform: scaleX(1.6) scaleY(.7); } 70% { opacity: 1; transform: scaleX(2.2) scaleY(.22); } 100% { opacity: 0; transform: scaleX(2.4) scaleY(0); } }
+.playwrap.split .br { left: calc(50% + 6px); animation: tooranje .62s ease-out forwards; }
+.playwrap.joining .br { animation: tored .62s ease-in forwards; }
+@keyframes tooranje { 0% { background: var(--red); } 45% { background: #ffd23d; } 100% { background: #ff8a2b; } }
+@keyframes tored { 0% { background: #ff8a2b; } 55% { background: #ffd23d; } 100% { background: var(--red); } }
+.pbtn { position: absolute; top: 0; bottom: 0; border: 0; background: none; font-family: var(--display); font-size: 44px; letter-spacing: .04em; line-height: 1; color: var(--ink); text-shadow: 0 3px 0 rgba(0,0,0,.35); cursor: pointer; transition: opacity .25s, transform .3s cubic-bezier(.3,1.6,.5,1); }
+.pjoin { left: 0; right: 0; }
+.playwrap.split .pjoin { opacity: 0; transform: scale(.7); pointer-events: none; }
+.playsplit { position: absolute; inset: 0; }
+.playsplit .pbtn { width: calc(50% - 6px); font-size: 30px; opacity: 0; transform: scale(.6); }
+#playStd { left: 0; } #playDrop { right: 0; color: var(--edge); text-shadow: none; }
+.playwrap.split .playsplit .pbtn { opacity: 1; transform: none; transition-delay: .18s; }
+.playwrap:not(.split):hover .blob { transform: translateY(-4px); filter: brightness(1.1); }
+.playwrap:not(.split):active .blob { transform: translateY(4px); filter: brightness(.9); }
+.playwrap.split:has(#playStd:hover) .bl, .playwrap.split:has(#playDrop:hover) .br { transform: translateY(-4px) rotate(-1deg); filter: brightness(1.1); }
+.playwrap.split:has(#playStd:active) .bl, .playwrap.split:has(#playDrop:active) .br { transform: translateY(4px); filter: brightness(.9); }
+.playwrap.split:has(#playStd:hover) #playStd, .playwrap.split:has(#playDrop:hover) #playDrop { transform: translateY(-4px); }
 @keyframes splitin { 0% { transform: scaleX(.6); opacity: 0; } 100% { transform: none; opacity: 1; } }
 .version { margin-top: 6px; background: none; border: 0; color: var(--dim); font-size: 12px; letter-spacing: .12em; }
 .version:hover u { color: var(--gold); }
@@ -475,7 +514,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .ach .achnum { display: block; font-size: 11px; color: var(--gold); margin-top: 3px; font-variant-numeric: tabular-nums; }
 .ach.locked.revealed .achbar { background: var(--panel-hi); }
 .acc-body { align-items: stretch; }
-.acc-left { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.acc-leftcol { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
 .acc-achcol { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 460px; }
 .ach-scroll { position: relative; flex: 1 1 auto; }
 .ach-scroll > .achs.one { position: absolute; inset: 0; max-height: none; }
@@ -521,7 +560,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
   .modes, .scores-grid, .hpwrap { grid-template-columns: minmax(0, 1fr); }
   .pf-medals { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .pf-achs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .playsplit .btn { font-size: 24px; }
+  .playsplit .pbtn { font-size: 24px; } .pjoin { font-size: 40px; }
   .players, .mp-cols { grid-template-columns: minmax(0, 1fr); }
   .players .vs, .mp-cols .vs { justify-self: center; }
   .room-code b { font-size: 52px; }
@@ -534,9 +573,142 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition: none !important; }
 }
+
+/* ---------- V10: parties, chat, emotes, Knockout show ---------- */
+.sheet.lobby { max-width: 880px; }
+.players.party { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+.players:not(.party) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.pcard { position: relative; border-left: 5px solid var(--pc, var(--panel-hi)); transition: transform .18s cubic-bezier(.3,1.6,.5,1), background .18s; }
+.pcard.click { cursor: pointer; }
+.pcard.click:hover, .pcard.click:focus-visible { transform: translateY(-3px) rotate(-.6deg); background: var(--panel-hi); outline: none; }
+.pcard .pwins { font-style: normal; font-size: 11px; letter-spacing: .14em; color: var(--gold); }
+.pcard span i { font-style: normal; }
+.progress.tiny { font-size: 12px; margin: 6px 0 0; }
+.modes { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+.mode-opt { transition: transform .15s, border-color .15s, opacity .2s; cursor: pointer; }
+.mode-opt:not(.off):not(.static):hover { transform: translateY(-2px); border-color: var(--dim); }
+.mode-opt.on:hover { border-color: var(--gold); }
+.mode-opt.off { opacity: .38; cursor: not-allowed; }
+.mode-opt .mode-n { display: none; }
+.mode-group { margin-top: 12px; } .mode-group .modes { margin-top: 4px; }
+.modes.three { grid-template-columns: repeat(3, minmax(0, 1fr)); } .modes.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.mode-group:has(.mode-opt.off) > .acc-label { opacity: .5; }
+@media (max-width: 640px) { .modes.three, .modes.two { grid-template-columns: minmax(0, 1fr); } }
+.chat { background: var(--edge); border-radius: 10px; padding: 10px; margin-top: 12px; display: grid; gap: 8px; }
+.chat-log { max-height: 150px; min-height: 64px; overflow-y: auto; display: grid; gap: 3px; align-content: start; font-size: 13px; line-height: 1.35; overscroll-behavior: contain; }
+.cm { word-break: break-word; animation: chatin .25s ease-out; }
+.cm b { font-weight: 700; }
+.cm.sys { color: var(--dim); font-style: italic; font-size: 12px; }
+@keyframes chatin { from { transform: translateY(6px); opacity: 0; } }
+.chat-form { display: flex; gap: 8px; }
+.chat-form input { flex: 1; min-width: 0; font: inherit; font-size: 14px; color: var(--ink); background: var(--panel); border: 2px solid var(--panel-hi); border-radius: 8px; padding: 8px 10px; }
+.chat-form input:focus { outline: none; border-color: var(--gold); }
+.hudnote { margin: 2px 0 8px; padding: 7px 12px; border-radius: 8px; background: var(--panel); border: 2px solid var(--panel-hi); font-size: 14px; text-align: center; animation: chatin .3s ease-out; }
+.hudnote.warn { border-color: var(--gold); color: var(--ink); background: rgba(255, 184, 61, .12); }
+.hudnote.lock { border-color: var(--good); background: rgba(61, 220, 143, .1); }
+.hudnote .dim { color: var(--dim); }
+#lock.submitted { background: var(--good-bg); color: var(--good); border-color: var(--good); }
+#pw[readonly] { opacity: .75; }
+.emotes { position: fixed; left: 50%; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 5; display: flex; gap: 4px; background: var(--panel); border: 3px solid var(--edge); border-radius: 30px; padding: 4px 8px; box-shadow: 0 4px 0 var(--edge); }
+.emotes[hidden] { display: none; }
+.emo { font: inherit; font-size: 20px; line-height: 1; background: none; border: 0; border-radius: 50%; width: 36px; height: 36px; cursor: pointer; transition: transform .15s cubic-bezier(.3,1.8,.5,1); color: var(--ink); }
+.emo:last-child { font-family: var(--display); font-size: 20px; color: var(--gold); }
+.emo:hover { transform: scale(1.25) rotate(-8deg); } .emo:active { transform: scale(.9); }
+#emoteLayer { position: fixed; inset: 0; pointer-events: none; z-index: 8; overflow: hidden; }
+.emote-pop { position: absolute; bottom: 70px; display: grid; justify-items: center; animation: emofloat 2.8s cubic-bezier(.2,.8,.4,1) forwards; }
+.emote-pop big { font-size: 42px; line-height: 1; filter: drop-shadow(0 4px 0 rgba(0,0,0,.4)); }
+.emote-pop small { font-size: 11px; letter-spacing: .1em; color: var(--edge); background: var(--pc, var(--gold)); border-radius: 6px; padding: 1px 6px; margin-top: 2px; }
+@keyframes emofloat { 0% { transform: translateY(30px) scale(.4); opacity: 0; } 15% { transform: translateY(0) scale(1.15); opacity: 1; } 25% { transform: scale(1); } 80% { opacity: 1; } 100% { transform: translateY(-38vh) scale(.9); opacity: 0; } }
+.oppbar.party { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 4px 12px; padding: 6px 10px; }
+.prow { display: flex; align-items: center; gap: 8px; min-width: 0; border-left: 4px solid var(--pc, var(--panel-hi)); padding-left: 8px; }
+.oppbar:not(.party) .prow { flex: 1; flex-wrap: wrap; }
+.oppbar.party .opp-name { font-size: 18px; max-width: 9ch; }
+.oppbar.party .opp-score { font-size: 18px; }
+.oppbar.party .pips i { width: 7px; height: 7px; }
+.oppbar.party .opp-status { font-size: 10px; }
+.prow.out { opacity: .45; } .prow.out .opp-name { text-decoration: line-through; }
+.opp-status.s-eliminated, .opp-status.s-ko { color: var(--bad); }
+.wait-list { display: grid; gap: 4px; margin-top: 12px; min-width: min(360px, 80vw); text-align: left; }
+.wl { display: grid; grid-template-columns: auto 1fr auto auto; gap: 8px; align-items: center; font-size: 14px; }
+.wl .dot { width: 10px; height: 10px; border-radius: 50%; }
+.wl em { font-style: normal; font-size: 12px; color: var(--dim); }
+.wl .sc { font-family: var(--display); font-size: 20px; color: var(--gold); }
+.wl.me b { color: var(--gold); }
+.placings { display: grid; gap: 6px; }
+.pl-row { display: grid; grid-template-columns: 44px 1fr auto; grid-template-areas: "pl nm sc" "pl em sc"; align-items: center; column-gap: 10px; background: var(--panel); border-radius: 10px; padding: 8px 12px; border-left: 5px solid var(--pc, var(--panel-hi)); animation: chatin .35s ease-out backwards; }
+.pl-row:nth-child(2) { animation-delay: .06s; } .pl-row:nth-child(3) { animation-delay: .12s; } .pl-row:nth-child(4) { animation-delay: .18s; } .pl-row:nth-child(n+5) { animation-delay: .24s; }
+.pl-place { grid-area: pl; font-family: var(--display); font-size: 30px; text-align: center; }
+.pl-name { grid-area: nm; font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pl-row em { grid-area: em; font-style: normal; font-size: 12px; color: var(--dim); }
+.pl-sc { grid-area: sc; font-family: var(--display); font-size: 28px; color: var(--gold); font-variant-numeric: tabular-nums; }
+.pl-row.me { box-shadow: inset 0 0 0 2px var(--gold); }
+.pl-row.live .pl-place { animation: blink 1.2s steps(2) infinite; color: var(--dim); }
+#burst .card.kores { min-width: min(520px, 92vw); }
+#burst .card.kores h2 small { font-size: 22px; color: var(--gold); margin-left: 8px; }
+.kr-cols { display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; gap: 10px; margin-top: 10px; }
+.kr { display: grid; gap: 2px; justify-items: center; transition: transform .3s cubic-bezier(.3,1.6,.5,1); }
+.kr small { font-size: 12px; letter-spacing: .14em; color: var(--dim); max-width: 12ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.kr-pts { font-family: var(--display); font-weight: 400; font-size: 64px; line-height: .95; color: var(--ink); font-variant-numeric: tabular-nums; }
+.kr.top { transform: scale(1.12); } .kr.top .kr-pts { color: var(--good); text-shadow: 0 0 18px rgba(61, 220, 143, .5); }
+.kr-mid { min-width: 80px; text-align: center; padding-bottom: 14px; }
+.kr-diff { font-family: var(--display); font-size: 34px; color: var(--bad); }
+.kr-dmg { min-height: 52px; margin-top: 8px; font-family: var(--display); font-size: 26px; color: var(--dim); }
+.kr-dmg b { font-size: 40px; color: var(--bad); font-weight: 400; } .kr-dmg b.none { color: var(--dim); }
+.slam { animation: slam .35s cubic-bezier(.2,1.8,.4,1); }
+@keyframes slam { 0% { transform: scale(2.4); opacity: 0; } 100% { transform: none; opacity: 1; } }
+.dmg-orb { position: fixed; z-index: 30; transform: translate(0,0); margin: -18px 0 0 -40px; width: 80px; text-align: center; font-family: var(--display); font-size: 34px; color: #fff; text-shadow: 0 0 12px var(--bad), 0 3px 0 var(--edge); pointer-events: none; transition: transform .55s cubic-bezier(.5,-0.3,.6,1); }
+.dmg-orb.out { text-shadow: 0 0 12px var(--good), 0 3px 0 var(--edge); }
+.hp.crunch { animation: crunch .5s steps(6); }
+.hp.crunch .hpbar i { background: #fff !important; transition: width .5s steps(5), background .5s; }
+@keyframes crunch { 0%,100% { transform: none; } 20% { transform: translate(-6px, 2px) rotate(-1deg); } 40% { transform: translate(5px, -2px) scale(1.04); } 60% { transform: translate(-3px, 1px); } 80% { transform: translate(2px, 0); } }
+#burst .card.brres .br-out { font-family: var(--display); font-size: 40px; color: var(--ink); margin-top: 6px; max-width: 80vw; }
+#burst .card.brres.out .br-out { color: var(--bad); }
+#game.mp-pad { padding-bottom: 70px; }
+.pl-place.txt { font-size: 22px; }
+@media (max-width: 640px) {
+  .players.party { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .players.party .pcard { padding: 8px 10px; } .players.party .pcard b { font-size: 24px; }
+  .pl-row { grid-template-columns: 38px 1fr auto; padding: 8px 10px; }
+  .players:not(.party) { grid-template-columns: minmax(0, 1fr); }
+  .kr-pts { font-size: 44px; }
+  .emotes { bottom: 6px; } .emo { width: 32px; height: 32px; font-size: 18px; }
+}
+
+/* ---------- V10 juice ---------- */
+#beatFlash { position: fixed; inset: 0; pointer-events: none; opacity: 0; background: radial-gradient(ellipse at 50% 110%, rgba(255, 110, 50, .95), rgba(255, 60, 90, .55) 45%, rgba(255, 60, 90, 0) 80%); mix-blend-mode: screen; }
+#wipe { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 60; image-rendering: pixelated; image-rendering: crisp-edges; pointer-events: none; }
+#wipe[hidden] { display: none; }
+.screen.scr-r { animation: scrR .42s cubic-bezier(.2,.9,.3,1); } .screen.scr-l { animation: scrL .42s cubic-bezier(.2,.9,.3,1); }
+@keyframes scrR { from { transform: translateX(70px); opacity: 0; } } @keyframes scrL { from { transform: translateX(-70px); opacity: 0; } }
+#modal:not([hidden]) { animation: bdin .25s ease-out; } @keyframes bdin { from { background: rgba(6,4,16,0); } }
+.sheet-ghost { position: fixed !important; margin: 0 !important; z-index: 7; pointer-events: none; animation: sheetout .26s cubic-bezier(.4,0,.8,.6) forwards !important; }
+@keyframes sheetout { to { opacity: 0; transform: translateY(22px) scale(.94); } }
+.modal-ghost-bd { position: fixed; inset: 0; z-index: 7; background: rgba(6,4,16,.72); pointer-events: none; animation: bdout .28s ease-in forwards; } @keyframes bdout { to { opacity: 0; } }
+.acc-medals .medal .disc, .pf-medals .medal .disc { transition: transform .5s cubic-bezier(.3,1.5,.5,1); will-change: transform; }
+.medal.tilting .disc { transition: transform .08s linear; z-index: 2; }
+.acc-medals .medal .disc::after, .pf-medals .medal .disc::after, .halo .disc::after { content: ''; position: absolute; inset: 0; border-radius: 50%; pointer-events: none; opacity: 0; transition: opacity .3s;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 30%), rgba(255,255,255,.65), rgba(255,255,255,0) 48%); mix-blend-mode: soft-light; }
+.medal.tilting .disc::after, .halo .disc::after { opacity: 1; }
+.medal.tilting { cursor: grab; }
+.halo-dim { position: fixed; inset: 0; z-index: 45; background: radial-gradient(circle at 50% 50%, rgba(10,6,30,.6), rgba(2,1,8,.88)); opacity: 0; transition: opacity .7s; pointer-events: none; }
+.halo-dim.on { opacity: 1; }
+.halo { position: fixed; z-index: 46; pointer-events: none; transform: translate(-50%, -50%); display: grid; place-items: center; }
+.halo .disc { position: relative; opacity: 0; transition: opacity .35s, transform .08s linear; box-shadow: 0 0 0 3px var(--edge), 0 0 40px 12px rgba(255,236,160,.75), 0 0 110px 40px rgba(170,110,255,.5); }
+.halo.on .disc { opacity: 1; }
+.halo .rays { position: absolute; width: 360px; height: 360px; left: 50%; top: 50%; margin: -180px 0 0 -180px; border-radius: 50%; opacity: 0; transition: opacity .8s;
+  background: repeating-conic-gradient(from 0deg, rgba(255,244,190,.55) 0 5deg, rgba(255,244,190,0) 5deg 18deg);
+  -webkit-mask: radial-gradient(circle, #000 18%, transparent 68%); mask: radial-gradient(circle, #000 18%, transparent 68%); animation: swirl 14s linear infinite; }
+.halo.on .rays { opacity: 1; }
+.halo .sparks i { position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; background: #fff7d6; box-shadow: 0 0 8px #fff; opacity: 0; }
+.halo.on .sparks i { animation: spark 1.8s ease-out infinite; }
+.halo .sparks i:nth-child(1) { --dx: -90px; --dy: -70px; } .halo .sparks i:nth-child(2) { --dx: 95px; --dy: -60px; animation-delay: .3s; } .halo .sparks i:nth-child(3) { --dx: -70px; --dy: 85px; animation-delay: .6s; }
+.halo .sparks i:nth-child(4) { --dx: 80px; --dy: 90px; animation-delay: .9s; } .halo .sparks i:nth-child(5) { --dx: 0; --dy: -120px; animation-delay: 1.2s; } .halo .sparks i:nth-child(6) { --dx: -120px; --dy: 10px; animation-delay: 1.5s; }
+@keyframes spark { 0% { transform: translate(0,0) scale(.4); opacity: 0; } 20% { opacity: 1; } 100% { transform: translate(var(--dx), var(--dy)) scale(1.2); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .btn:hover { animation: none; } .screen.scr-r, .screen.scr-l { animation: none; } }
 </style>
 
 <canvas id="bg" class="layer" aria-hidden="true"></canvas>
+<div id="beatFlash" aria-hidden="true"></div>
 <canvas id="fx" class="layer" aria-hidden="true"></canvas>
 <div class="vig"></div>
 <div class="scan"></div>
@@ -557,21 +729,24 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
     </h1>
     <p class="menu-player" id="menuPlayer"></p>
     <div class="menu-btns">
-      <div class="playwrap" id="playWrap"><button class="btn red" id="play" type="button">PLAY</button>
-        <div class="playsplit" id="playSplit" hidden><button class="btn red" id="playStd" type="button">STANDARD</button><button class="btn orange" id="playDrop" type="button">DROP OUT</button></div></div>
+      <div class="playwrap" id="playWrap">
+        <div class="goo" aria-hidden="true"><i class="blob bl"></i><i class="strand"></i><i class="blob br"></i></div>
+        <button class="pbtn pjoin" id="play" type="button">PLAY</button>
+        <div class="playsplit" id="playSplit" inert><button class="pbtn" id="playStd" type="button">STANDARD</button><button class="pbtn" id="playDrop" type="button">DROP OUT</button></div>
+      </div>
+      <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="goo" x="-10%" y="-30%" width="120%" height="160%"><feGaussianBlur in="SourceGraphic" stdDeviation="6" result="b"/><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -9" result="g"/><feBlend in="SourceGraphic" in2="g" mode="normal"/></filter></svg>
       <button class="btn mpbtn" id="mpBtn" type="button">PVP</button>
       <button class="btn gold" id="lbBtn" type="button">LEADERBOARDS</button>
       <button class="btn" id="discBtn" type="button">DISCOVERED RULES <small id="discCount">0/67</small><span class="dot" id="dotDisc" hidden>!</span></button>
       <button class="btn" id="accBtn" type="button">ACCOUNT <small id="accSmall">LVL 0</small><span class="dot" id="dotAcc" hidden>!</span></button>
       <button class="btn dark" id="howBtn" type="button">HOW TO PLAY</button>
     </div>
-    <button class="version" id="verBtn" type="button">V9.2 · FINE TUNING · <u>PATCH NOTES</u></button>
+    <button class="version" id="verBtn" type="button">V10 · PARTY TIME · <u>PATCH NOTES</u></button>
   </section>
 
   <section id="account" class="screen account" hidden>
     <header class="acc-head">
       <div class="acc-left" id="accNameRow">
-        <small class="acc-label">USERNAME</small>
         <div class="acc-name" id="accNameText">Player</div>
         <div class="acc-titletext" id="accTitleText"></div>
         <button class="btn small dark edit-btn" id="accEdit" type="button">✎ EDIT<span class="dot" id="dotEdit" hidden>!</span></button>
@@ -588,7 +763,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
       </div>
     </header>
     <div class="acc-body">
-      <div class="acc-left">
+      <div class="acc-leftcol">
         <section class="acc-col acc-scores" id="accScores"><h3>HIGHSCORES</h3><div id="accScoresBody" class="scores-grid"></div></section>
         <section class="acc-col acc-achcol" id="accAch"><h3>ACHIEVEMENTS <small id="accAchCount">0/30</small></h3><div class="ach-scroll"><div class="achs one" id="accAchList"></div></div></section>
       </div>
@@ -607,6 +782,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
       <div class="hud-time" id="timeBox"><b id="timeOut">2:00</b></div>
       <div class="hud-score"><small id="scoreLbl">SCORE</small><b id="scoreOut">0</b></div>
     </div>
+    <div class="hudnote" id="hudNote" hidden></div>
     <div class="field">
       <textarea id="pw" rows="1" aria-label="Password" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off" placeholder="Type your password…"></textarea>
     </div>
@@ -615,10 +791,13 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
       <button id="lock" type="button">LOCK IN ⏎</button>
     </div>
     <ol id="rules"></ol>
+    <div class="emotes" id="emoteBar" hidden></div>
   </section>
 </div>
 
+<canvas id="wipe" aria-hidden="true" hidden></canvas>
 <div id="burst" hidden></div>
+<div id="emoteLayer" aria-hidden="true"></div>
 <div id="modal" hidden></div>
 <div id="countdown" hidden></div>
 <div id="toasts" aria-live="polite"></div>
@@ -1336,7 +1515,7 @@ const music = (() => {
       kick: [0, 8], snare: [4, 12], tKick: [0, 6, 8, 14]
     },
     pvp: {
-      bpm: 98,
+      bpm: 112,
       chords: [[38, [57, 60, 64, 65]], [46, [57, 60, 62, 65]], [43, [58, 62, 65, 69]], [45, [55, 58, 61, 64]],
                [38, [57, 60, 64, 65]], [46, [57, 60, 62, 65]], [43, [58, 62, 65, 69]], [45, [61, 64, 67, 70]]],
       mel: [[[0, 69, 3], [3, 74, 3], [6, 77, 2], [8, 76, 4], [12, 74, 4]], [[0, 74, 6], [6, 72, 2], [8, 74, 2], [10, 77, 6]],
@@ -1345,7 +1524,7 @@ const music = (() => {
             [[0, 79, 4], [4, 77, 4], [8, 74, 4], [12, 70, 4]], [[0, 73, 8], [8, 76, 4], [12, 69, 4]]],
       bass: [[0, 0, 3], [3, 0, 1], [6, 12, 2], [8, 0, 3], [11, 7, 2], [14, 'a', 2]],
       comp: [[0, 3], [6, 2], [10, 4]],
-      kick: [0, 7, 8], snare: [4, 12], tKick: [0, 3, 7, 8, 11, 14]
+      kick: [0, 4, 7, 8, 12], snare: [4, 12], tKick: [0, 3, 4, 7, 8, 11, 12, 14]
     },
     drop: {
       bpm: 104,
@@ -1365,6 +1544,7 @@ const music = (() => {
   let a = null, out = null, filt = null, jbus = null, wob = null, vib = null, noise = null;
   const L = {};
   let started = false, timer = 0, nextT = 0, step = 0, bar = 0, track = 'lounge', tempo = 1;
+  let ducked = false;
   let lastLead = 72, jingleUntil = 0, want = null, hiddenAt = 0, soloIdx = 7, lastSolo = 72;
   const held = {}; let heldTense = 0, lastTickAt = 0;
   const away = () => hiddenAt ? performance.now() - hiddenAt : 0;   // ms the tab has been in the background
@@ -1494,12 +1674,18 @@ const music = (() => {
         w.hats = !playing || frac > 0 ? .75 : .35;
         w.drums = !playing || frac >= .5 || pvp ? .9 : .5; w.sparse = playing && !pvp && frac < .5;
         if (done) { w.lead = .9; w.arp = .55; }
+        if (pvp && playing) {                   // PvP: the band follows the standings
+          const sd = typeof mpStanding === 'function' ? mpStanding() : 0;
+          w.drums = .95; w.hats = Math.max(w.hats, .8);
+          if (sd > .15) w.lead = Math.max(w.lead, .6 + .3 * sd);
+          else if (sd < -.15) { w.pulse = Math.max(w.pulse, .3 + .5 * -sd); w.keys = .45; w.cut = 1700; w.lead = Math.min(w.lead, .4); }
+        }
       }
       if (playing) {
         const zone = Math.min(30, S.roundLen * .5);
         let tense = S.dispLeft < zone ? 1 - Math.max(0, S.dispLeft) / zone : 0;
         if (S.capAt) tense = Math.max(tense, .65);
-        const ko = MP.match && MP.match.ko; if (S.mode === 'ko' && ko && ko.hp && ko.hp.me <= 40) tense = Math.max(tense, .35);
+        if (S.mode === 'ko' && myKoHp() <= 400) tense = Math.max(tense, .35);
         w.tense = tense;
         w.tick = tense > 0 && S.dispLeft <= Math.min(10, S.roundLen * .5) ? 1 : 0;
       }
@@ -1515,7 +1701,7 @@ const music = (() => {
   // so a cleared round or a new set of rules never makes instruments vanish mid-phrase.
   function shape(w, dt, bar) {
     const t = w.tense || 0;
-    heldTense = t >= heldTense ? t : Math.max(t, heldTense - dt / 4);
+    heldTense = t >= heldTense ? t : Math.max(t, heldTense - dt / 7);
     const h = heldTense;
     if (h > 0.001) {
       w.tempo *= 1 + .35 * h; w.four = true; w.fill = h > .8; w.sparse = false;
@@ -1589,7 +1775,7 @@ const music = (() => {
     if (!a) return;
     const gone = away() > 30000;                 // background tab: quieter, silent after 30 s
     const on = !muted && vol.music > 0 && !gone;
-    out.gain.setTargetAtTime(on ? vol.music * .6 * (hiddenAt ? .45 : 1) : 0, a.currentTime, hiddenAt ? 1.2 : .25);
+    out.gain.setTargetAtTime(on ? vol.music * .6 * (hiddenAt ? .45 : 1) * (ducked ? .18 : 1) : 0, a.currentTime, hiddenAt ? 1.2 : ducked ? .4 : .6);
     if (!on) { nextT = 0; return; }
     const nowMs = performance.now(), dt = lastTickAt ? Math.min(2, (nowMs - lastTickAt) / 1000) : .04; lastTickAt = nowMs;
     want = decide();
@@ -1598,7 +1784,7 @@ const music = (() => {
     if (nextT < a.currentTime) nextT = a.currentTime + .05;
     const sd0 = 60 / (TRACKS[track].bpm * tempo) / 4;
     apply(want, nextT + ((4 - step % 4) % 4) * sd0);
-    tempo += (want.tempo - tempo) * (want.tempo < tempo ? .03 : .1);
+    tempo += (want.tempo - tempo) * (want.tempo < tempo ? .008 : .1);
     const ahead = hiddenAt ? 1.6 : .18;           // background tabs only wake up about once a second
     while (nextT < a.currentTime + ahead) {
       if (step === 0 && want.track !== track) { track = want.track; bar = 0; }
@@ -1641,11 +1827,71 @@ const music = (() => {
     return true;
   }
   const playing = () => started && !muted && vol.music > 0 && !hiddenAt;
-  return { start, jingle, playing, tracks: TRACKS, state: () => ({ started, track, tempo, want, bar, step }) };
+  const duck = v => { ducked = !!v; };
+  const beat = () => { if (!a || !started || !want || want.silent || want.duck) return null; const sd = 60 / (TRACKS[track].bpm * tempo) / 4; return { next: nextT + ((4 - step % 4) % 4) * sd, len: sd * 4, now: a.currentTime }; };
+  return { start, jingle, playing, duck, beat, tracks: TRACKS, state: () => ({ started, track, tempo, want, bar, step }) };
 })();
 
 
 ['pointerdown', 'keydown'].forEach(ev => addEventListener(ev, () => { audio(); music.start(); }, { capture: true, passive: true }));
+
+/* quiet retro fire crackle: louder with more fire, silent with FX off */
+const crackle = { t: 0, g: null, buf: null };
+function crackleTick(amt, dt) {
+  const a = ac; if (!a || !sfxBus) return;
+  if (muted || vol.sfx <= 0 || quality === 'off' || document.visibilityState === 'hidden') amt = 0;
+  if (!crackle.buf) {
+    const n = a.sampleRate; crackle.buf = a.createBuffer(1, n, a.sampleRate);
+    const d = crackle.buf.getChannelData(0); for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+  }
+  if (!crackle.g && amt > 0) {
+    // a soft, low hiss under the pops
+    const s = a.createBufferSource(); s.buffer = crackle.buf; s.loop = true;
+    const f = a.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 420;
+    crackle.g = a.createGain(); crackle.g.gain.value = 0;
+    s.connect(f); f.connect(crackle.g); crackle.g.connect(sfxBus); s.start();
+  }
+  if (crackle.g) crackle.g.gain.setTargetAtTime(amt * .09, a.currentTime, .5);
+  if (amt < .01) return;
+  crackle.t -= dt;
+  let guard = 0;
+  while (crackle.t <= 0 && guard++ < 8) {
+    crackle.t += (.04 + Math.random() * .22) / (.35 + amt);
+    const t = a.currentTime + Math.random() * .05, len = .004 + Math.random() * .025;
+    const src = a.createBufferSource(); src.buffer = crackle.buf;
+    const hp = a.createBiquadFilter(); hp.type = Math.random() < .3 ? 'bandpass' : 'highpass'; hp.frequency.value = 900 + Math.random() * 3200;
+    const g = a.createGain(); g.gain.setValueAtTime((.015 + Math.random() * .05) * amt, t); g.gain.exponentialRampToValueAtTime(.0001, t + len);
+    src.connect(hp); hp.connect(g); g.connect(sfxBus); src.start(t, Math.random() * .9); src.stop(t + len + .02);
+  }
+}
+
+/* a retro angelic choir for rainbow medals */
+const choir = (() => {
+  let n = null;
+  function start() {
+    const a = audio(); if (!a || muted || vol.sfx <= 0 || n) return;
+    const t = a.currentTime, out = a.createGain();
+    out.gain.setValueAtTime(.0001, t); out.gain.exponentialRampToValueAtTime(.16 * Math.max(.35, vol.sfx), t + 1.1);
+    const crush = a.createWaveShaper(); const c = new Float32Array(256); for (let i = 0; i < 256; i++) { const x = i / 127.5 - 1; c[i] = Math.round(x * 10) / 10; } crush.curve = c;
+    out.connect(crush); crush.connect(sfxBus || a.destination);
+    const oscs = [];
+    [[60, 1], [64, 1], [67, 1], [72, .8], [76, .6], [79, .4]].forEach(([m, lv]) => [-9, 9].forEach(det => {
+      const o = a.createOscillator(); o.type = 'sawtooth'; o.frequency.value = 440 * Math.pow(2, (m - 69) / 12); o.detune.value = det + Math.random() * 6 - 3;
+      const lfo = a.createOscillator(), lg = a.createGain(); lfo.frequency.value = 4.2 + Math.random() * 1.2; lg.gain.value = 9; lfo.connect(lg); lg.connect(o.detune);
+      const vg = a.createGain(); vg.gain.value = .05 * lv; o.connect(vg);
+      [[780, 7, 1], [1150, 9, .55], [2800, 11, .25]].forEach(([f, q, gn]) => { const bp = a.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = f * (m > 70 ? 1.08 : 1); bp.Q.value = q; const g = a.createGain(); g.gain.value = gn; vg.connect(bp); bp.connect(g); g.connect(out); });
+      o.start(t); lfo.start(t); oscs.push(o, lfo);
+    }));
+    [84, 88, 91, 96].forEach((m, i) => tone(440 * Math.pow(2, (m - 69) / 12), .5, 'triangle', .025, 0, .2 + i * .12));
+    n = { out, oscs };
+  }
+  function stop() {
+    if (!n) return; const a = ac, cur = n; n = null;
+    cur.out.gain.cancelScheduledValues(a.currentTime); cur.out.gain.setTargetAtTime(.0001, a.currentTime, .3);
+    setTimeout(() => cur.oscs.forEach(o => { try { o.stop(); } catch (e) {} }), 1800);
+  }
+  return { start, stop, on: () => !!n };
+})();
 
 function renderMute() {
   const silent = muted || (vol.music <= 0 && vol.sfx <= 0);
@@ -1659,21 +1905,54 @@ function toggleAudioPop(show) {
   p.hidden = !show; $('mute').setAttribute('aria-expanded', String(show));
 }
 $('mute').onclick = () => { sfx.click(); toggleAudioPop(); };
-let lastVol = { music: vol.music > 0 ? vol.music : .6, sfx: vol.sfx > 0 ? vol.sfx : 1 };
-function setVol(k, v) { vol[k] = v; if (v > 0) lastVol[k] = v; store.set('pg.vol', vol); if (k === 'sfx' && sfxBus) sfxBus.gain.value = v; }
-$('muteAll').onclick = () => {
-  if (!muted && vol.music <= 0 && vol.sfx <= 0) { setVol('music', lastVol.music); setVol('sfx', lastVol.sfx); renderMute(); sfx.click(); return; }  // both sliders at 0: bring them back
-  if (muted && vol.music <= 0 && vol.sfx <= 0) { setVol('music', lastVol.music); setVol('sfx', lastVol.sfx); }
-  muted = !muted; store.set('pg.muted', muted); renderMute(); if (!muted) sfx.click(); else if (typeof award === 'function') award('muted');
-};
-function volInput(k, e) {
-  const was = vol.music <= 0 && vol.sfx <= 0;
-  setVol(k, +e.target.value / 100); renderMute();
-  if (!was && vol.music <= 0 && vol.sfx <= 0 && typeof award === 'function') award('muted');
+let lastVol = Object.assign({ music: .6, sfx: 1 }, store.get('pg.volLast', {}) || {});
+if (vol.music > 0) lastVol.music = vol.music; if (vol.sfx > 0) lastVol.sfx = vol.sfx;
+if (muted && (vol.music > 0 || vol.sfx > 0)) { vol.music = 0; vol.sfx = 0; store.set('pg.vol', vol); }   // older saves: muted with sliders up
+function saveLast() { store.set('pg.volLast', lastVol); }
+function setVol(k, v) { vol[k] = Math.max(0, Math.min(1, v)); store.set('pg.vol', vol); if (k === 'sfx' && sfxBus) sfxBus.gain.value = vol.sfx; }
+let volAnim = 0;
+// sliders glide down when muting, and spring back (with a little overshoot) when unmuting
+function animateVols(to, spring, done) {
+  cancelAnimationFrame(volAnim);
+  const from = { music: vol.music, sfx: vol.sfx }, t0 = performance.now(), dur = spring ? 800 : 340;
+  const ease = spring ? p => 1 - Math.cos(p * Math.PI * 2.5) * Math.exp(-5 * p) : p => p * p * (3 - 2 * p);
+  const step = () => {
+    const p = Math.min(1, (performance.now() - t0) / dur), e = p >= 1 ? 1 : ease(p);
+    ['music', 'sfx'].forEach(k => setVol(k, from[k] + (to[k] - from[k]) * e));
+    renderMute();
+    ['volMusic', 'volSfx'].forEach(id => $(id).classList.toggle('springing', p < 1));
+    if (p < 1) volAnim = requestAnimationFrame(step);
+    else { ['music', 'sfx'].forEach(k => setVol(k, to[k])); renderMute(); if (done) done(); }
+  };
+  step();
 }
-$('volMusic').addEventListener('input', e => volInput('music', e));
-$('volSfx').addEventListener('input', e => volInput('sfx', e));
-$('volSfx').addEventListener('change', () => sfx.ok());
+$('muteAll').onclick = () => {
+  const silent = muted || (vol.music <= 0 && vol.sfx <= 0);
+  if (silent) {
+    muted = false; store.set('pg.muted', false);
+    animateVols({ music: lastVol.music || .6, sfx: lastVol.sfx || 1 }, true);
+    setTimeout(() => sfx.ok(), 220);
+  } else {
+    if (vol.music > 0) lastVol.music = vol.music; if (vol.sfx > 0) lastVol.sfx = vol.sfx; saveLast();
+    sfx.click();
+    animateVols({ music: 0, sfx: 0 }, false, () => { muted = true; store.set('pg.muted', true); renderMute(); if (typeof award === 'function') award('muted'); });
+  }
+};
+const dragFrom = {};
+[['music', 'volMusic'], ['sfx', 'volSfx']].forEach(([k, id]) => {
+  const el = $(id);
+  const begin = () => { if (dragFrom[k] == null) dragFrom[k] = vol[k]; };
+  el.addEventListener('pointerdown', begin); el.addEventListener('keydown', begin);
+  el.addEventListener('input', e => {
+    cancelAnimationFrame(volAnim); begin();
+    if (muted) { muted = false; store.set('pg.muted', false); }
+    const was = vol.music <= 0 && vol.sfx <= 0;
+    setVol(k, +e.target.value / 100); renderMute();
+    if (!was && vol.music <= 0 && vol.sfx <= 0 && typeof award === 'function') award('muted');
+  });
+  // remember where the slider was before it was dragged down to 0
+  el.addEventListener('change', () => { if (vol[k] > 0) lastVol[k] = vol[k]; else if (dragFrom[k] > 0) lastVol[k] = dragFrom[k]; dragFrom[k] = null; saveLast(); if (k === 'sfx') sfx.ok(); });
+});
 addEventListener('pointerdown', e => { if (!$('audioPop').hidden && !e.target.closest('#audioPop, #mute')) toggleAudioPop(false); });
 renderMute();
 
@@ -1754,8 +2033,12 @@ function spawnFlame(n, burst) {
   for (let i = 0; i < n && pCount < Q.maxP; i++) {
     const k = pCount++;
     const life = 30 + Math.random() * (burst ? 70 : 50);
-    pX[k] = Math.random() * W; pY[k] = H + 2; pVX[k] = (Math.random() - .5) * .3;
-    pVY[k] = -(0.5 + Math.random() * (burst ? 1.6 : 1.0)); pLife[k] = life; pMax[k] = life;
+    const halfC = Math.min(innerWidth, 820) / 2 * (W / innerWidth), side = W / 2 - halfC;
+    let x = Math.random() * W;
+    if (side > 6 && Math.random() < .45) x = Math.random() < .5 ? Math.random() * side : W - Math.random() * side;
+    const sf = side > 6 ? Math.max(0, Math.min(1, (Math.abs(x - W / 2) - halfC) / side)) : 0;   // 0 under the content, 1 at the screen edge
+    pX[k] = x; pY[k] = H + 2; pVX[k] = (Math.random() - .5) * .3;
+    pVY[k] = -(0.5 + Math.random() * (burst ? 1.6 : 1.0)) * (1 + .5 * sf); pLife[k] = life * (1 + 1.3 * sf); pMax[k] = pLife[k];
     pS[k] = Math.random() < .3 ? 2 : 1; pPh[k] = Math.random() * 6;
   }
 }
@@ -1810,9 +2093,11 @@ const MODES = {
   dropout: { name: 'Drop Out', rounds: Infinity, perRound: 3, fresh: true, time: r => Math.max(10, 60 - 5 * Math.floor((r - 1) / 2)) },
   score: { name: 'Score', rounds: 5, perRound: 2, pvp: true, time: () => 120, desc: 'Both play every round. When one player submits, the other has 15 seconds left. Most points after 5 rounds wins.' },
   race: { name: 'Race', rounds: 5, perRound: 2, pvp: true, time: () => 120, desc: 'Race through 5 rounds at your own pace. The first player to finish all 5 wins.' },
-  ko: { name: 'Knockout', rounds: 5, perRound: 2, pvp: true, time: () => 60, desc: '100 HP each, 1 minute per round. The shorter password deals damage. Fail a round and you take a big hit. Most HP after 5 rounds wins, or KO your opponent first.' }
+  ko: { name: 'Knockout', rounds: 5, perRound: 2, pvp: true, time: () => 60, desc: '1,000 HP each, 1 minute per round. The lower round score takes the difference as damage, and the damage multiplier grows every round. Lock in early, or unlock to keep editing.' },
+  br: { name: 'Battle Royale', rounds: Infinity, perRound: 2, pvp: true, party: true, time: () => 90, desc: '1:30 per round, rules keep piling up. Lock in and wait for the others. The last to submit, or anyone who fails, is knocked out. Last one standing wins.' },
+  ffa: { name: 'FFA', rounds: 5, perRound: 2, pvp: true, party: true, time: () => 120, desc: 'Everyone plays the same 5 rounds together. Most points wins.' }
 };
-const PVP_MODES = ['score', 'race', 'ko'];
+const PVP_MODES = ['score', 'race', 'ko'], PARTY_MODES = ['br', 'ffa'];
 
 /* ---------- game state ---------- */
 const S = { phase: 'menu', mode: 'standard', mp: false, round: 0, active: [], pool: [], score: 0, shownScore: 0, roundStart: 0, roundLen: ROUND_TIME, timeLeft: ROUND_TIME, dispLeft: ROUND_TIME, capAt: 0, streak: 0, history: [], lastTick: 99, counter: 0, playTime: 0, chars: 0, pending: new Set(), discBefore: [], betweenTimer: 0, lastWin: false, lastStreak: 0, menuIdle: 0 };
@@ -1823,9 +2108,42 @@ function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.fl
 function fmtTime(t) { t = Math.max(0, Math.ceil(t)); return Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0'); }
 const nf = n => Math.round(n).toLocaleString('en-US');
 
-function show(screen) { $('menu').hidden = screen !== 'menu'; $('game').hidden = screen !== 'game'; $('account').hidden = screen !== 'account'; if (screen !== 'menu') collapsePlay(); }
+const SCREEN_ORDER = { menu: 0, account: 1, game: 2 };
+let curScreen = 'menu';
+function show(screen) {
+  const prev = curScreen; curScreen = screen;
+  $('menu').hidden = screen !== 'menu'; $('game').hidden = screen !== 'game'; $('account').hidden = screen !== 'account';
+  if (screen !== 'menu') collapsePlay();
+  if (prev !== screen && quality !== 'off') {   // forward slides in from the right, back from the left
+    const el = $(screen); el.classList.remove('scr-r', 'scr-l'); void el.offsetWidth;
+    el.classList.add(SCREEN_ORDER[screen] > SCREEN_ORDER[prev] ? 'scr-r' : 'scr-l');
+  }
+}
+/* retro pixel wipe: blocks sweep across, the screen changes underneath, then they sweep away */
+let wiping = false;
+function wipeTo(fn) {
+  const cv = $('wipe');
+  if (wiping || !cv || quality === 'off' || document.visibilityState === 'hidden' || matchMedia('(prefers-reduced-motion: reduce)').matches) { fn(); return; }
+  wiping = true;
+  const cell = innerWidth < 640 ? 22 : 30, cols = Math.ceil(innerWidth / cell), rows = Math.ceil(innerHeight / cell);
+  cv.width = cols; cv.height = rows; cv.hidden = false;
+  const c = cv.getContext('2d'), th = new Float32Array(cols * rows);
+  for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) th[y * cols + x] = ((x / cols) * .62 + (y / rows) * .38) * .82 + Math.random() * .18;
+  const draw = (p, reveal) => {
+    c.clearRect(0, 0, cols, rows);
+    for (let i = 0; i < th.length; i++) {
+      const d = p - th[i]; if (reveal ? d >= 0 : d <= 0) continue;
+      c.fillStyle = Math.abs(d) < .07 ? (i % 3 ? '#ffb83d' : '#ff4d5e') : '#120f2a';
+      c.fillRect(i % cols, (i / cols) | 0, 1, 1);
+    }
+  };
+  const run = (dur, reveal, done) => { const t0 = performance.now(); const step = () => { const p = Math.min(1.08, (performance.now() - t0) / dur * 1.08); draw(p, reveal); p < 1.08 ? requestAnimationFrame(step) : done(); }; step(); };
+  tone(180, .22, 'square', .018, 3);
+  run(230, false, () => { try { fn(); } catch (e) { console.error(e); } run(340, true, () => { cv.hidden = true; wiping = false; }); });
+}
 
-function startGame(opts) {
+function startGame(opts) { if (curScreen === 'game' && S.phase !== 'over') return startGameNow(opts); wipeTo(() => startGameNow(opts)); }
+function startGameNow(opts) {
   audio(); sfx.click();
   closeModal();
   const mode = opts && MODES[opts.mode] ? opts.mode : 'standard';
@@ -1846,6 +2164,7 @@ function startGame(opts) {
   show('game');
   nextRound();
   setTimeout(() => { if (!S.paused) $('pw').focus(); }, 50);
+  clearNote(); $('pw').readOnly = false; $('lock').classList.remove('submitted');
   renderOppBar(); renderHp();
   tutEvent('gameStart');
 }
@@ -1856,7 +2175,8 @@ function nextRound() {
   if (md.fresh) { S.active = []; $('rules').innerHTML = ''; $('pw').value = ''; autosize(); }
   for (let i = 0; i < md.perRound; i++) addRule();
   S.roundLen = md.time(S.round);
-  S.roundStart = performance.now(); S.timeLeft = S.dispLeft = S.roundLen; S.capAt = 0; S.lastTick = 99; S.phase = 'playing';
+  S.roundStart = performance.now(); S.timeLeft = S.dispLeft = S.roundLen; S.capAt = 0; S.lastTick = 99; S.phase = 'playing'; S.lockUsed = 0;
+  clearNote(); $('pw').readOnly = false; $('lock').classList.remove('submitted');
   $('roundOut').textContent = md.rounds === Infinity ? String(S.round) : S.round + '/' + md.rounds;
   $('timeOut').classList.remove('capped');
   sfx.add();
@@ -1936,7 +2256,7 @@ function lockIn() {
   }
   const r = roundScore(S.active.length, t, len);
   let pts = r.points;
-  if (S.mode === 'score' && MP.match) pts = Math.round(pts * catchUp());
+  if (S.mp && S.mode === 'ko') { S.history.push({ round: S.round, rules: S.active.length, time: t, len, points: pts, timeF: r.timeF, eff: r.eff }); koLock(pts, len, S.roundLen - t); return; }
   S.score += pts;
   S.history.push({ round: S.round, rules: S.active.length, time: t, len, points: pts, timeF: r.timeF, eff: r.eff });
   S.streak = t > 60 ? S.streak + 1 : 0;
@@ -1945,7 +2265,7 @@ function lockIn() {
   const final = S.round >= md.rounds;
   if (final) S.finalSubmitted = true;
   if (S.mp) {
-    if (S.mode === 'ko') { koRoundDone('c', len); return; }
+    if (S.mode === 'br') { brLock(S.roundLen - t, len); return; }
     if (!final) sendProg({ status: 'cleared', round: S.round, score: S.score, len });
   }
   let delay = 1900;
@@ -1961,7 +2281,7 @@ function lockIn() {
     b.hidden = true;
     const w = document.querySelector('.field .wave'); if (w) w.remove(); $('pw').classList.remove('waving');
     if (final) { if (S.mp) pvpRunEnd('finished'); else finish(); }
-    else if (S.mp && S.mode === 'score') mpAfterClear();
+    else if (S.mp && (S.mode === 'score' || S.mode === 'ffa')) mpAfterClear();
     else { nextRound(); if ($('modal').hidden) $('pw').focus(); }
   }, delay);
 }
@@ -1970,7 +2290,8 @@ function lockIn() {
 function timeUp() {
   S.timeLeft = Math.max(0, S.timeLeft); $('timeOut').textContent = '0:00';
   if (S.mode === 'dropout') return dropEnd();
-  if (S.mp && S.mode === 'ko') { S.playTime += S.roundLen; koRoundDone('f', [...$('pw').value].length); return; }
+  if (S.mp && S.mode === 'ko') { S.playTime += S.roundLen; koFail(); return; }
+  if (S.mp && S.mode === 'br') { S.playTime += S.roundLen; brFail(); return; }
   if (S.mp) return pvpRunEnd('out');
   fail();
 }
@@ -2151,7 +2472,16 @@ function escapeHtml(s) { return String(s).replace(/[&<>"']/g, ch => ({ '&': '&am
 
 /* ---------- modal & screens ---------- */
 function openModal(html, cls) { if (S.seq) S.seq.dead = true; const m = $('modal'); m.innerHTML = `<div class="sheet${cls ? ' ' + cls : ''}" role="dialog" aria-modal="true">${html}</div>`; m.hidden = false; const f = m.querySelector('button'); if (f) f.focus({ preventScroll: true }); }
-function closeModal() { if (S.seq) S.seq.dead = true; releaseToasts(); document.querySelectorAll('.xp-fly, .xp-bit').forEach(e => e.remove()); $('modal').hidden = true; $('modal').innerHTML = ''; }
+function ghostOut() {
+  const m = $('modal'), sh = m.querySelector('.sheet'); if (!sh || m.hidden || quality === 'off') return;
+  const r = sh.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return;
+  const bd = document.createElement('div'); bd.className = 'modal-ghost-bd';
+  const g = sh.cloneNode(true); g.querySelectorAll('[id]').forEach(e => e.removeAttribute('id'));
+  g.classList.add('sheet-ghost'); g.style.left = r.left + 'px'; g.style.top = r.top + 'px'; g.style.width = r.width + 'px';
+  document.body.append(bd, g);
+  setTimeout(() => { g.remove(); bd.remove(); }, 280);
+}
+function closeModal() { if (!$('modal').hidden) ghostOut(); if (S.seq) S.seq.dead = true; releaseToasts(); document.querySelectorAll('.xp-fly, .xp-bit').forEach(e => e.remove()); $('modal').hidden = true; $('modal').innerHTML = ''; }
 $('modal').addEventListener('click', e => {
   if (S.seq && !S.seq.done && !S.seq.dead && !e.target.closest('button')) { S.seq.skip = true; return; }
   const a = e.target.closest('[data-act]');
@@ -2160,7 +2490,9 @@ $('modal').addEventListener('click', e => {
     const act = a.dataset.act;
     if (act === 'play') startGame({ mode: 'standard' });
     if (act === 'play-drop') { startGame({ mode: 'dropout' }); return; }
-    if (act === 'mp-mode') { if (MP.host && PVP_MODES.includes(a.dataset.mode)) { MP.mode = a.dataset.mode; sayHello(true); renderLobby(); } return; }
+    if (act === 'mp-mode') { if (MP.host && modeFits(a.dataset.mode, roomCount())) { MP.mode = a.dataset.mode; sayHello(true); renderLobby(); } return; }
+    if (act === 'mp-prof') { requestProfile(a.dataset.peer); return; }
+    if (act === 'mp-lobby') { MP.profWait = null; if (MP.ch) openLobby(); else closeModal(); return; }
     if (act === 'lb-player') { openProfile(lbRows[+a.dataset.i]); return; }
     if (act === 'lb-back') { openBoards(lastBoard); return; }
     if (act === 'lb-retry') { NET.user = null; $('lbBody').innerHTML = '<p class="progress">Loading…</p>'; loadBoard(lastBoard); return; }
@@ -2202,10 +2534,14 @@ addEventListener('keydown', e => {
   }
   if (!$('game').hidden && (S.phase === 'playing' || S.phase === 'between' || S.phase === 'waiting')) { e.preventDefault(); askQuit(); return; }
   if (!$('account').hidden) { if (!$('accEditForm').hidden) closeEdit(); else { sfx.click(); toMenu(); } return; }
-  if (!$('playSplit').hidden) collapsePlay();
+  if (isSplit()) collapsePlay();
 });
 
-function toMenu() { S.phase = 'menu'; S.paused = false; flameLevel = 0; show('menu'); renderMenuStats(); renderOppBar(); tutEvent('menu'); }
+function toMenu() {
+  S.phase = 'menu'; S.paused = false; flameLevel = 0;
+  const go = () => { show('menu'); renderMenuStats(); renderOppBar(); tutEvent('menu'); };
+  if (curScreen === 'game') wipeTo(go); else go();
+}
 
 function askQuit() {
   if (S.phase !== 'playing' && S.phase !== 'between' && S.phase !== 'waiting') return;
@@ -2302,6 +2638,28 @@ const ACH = [
 ];
 const achKey = a => a.name.toLowerCase().replace(/[^a-z0-9]/g, '');
 function sortedAch() { return ACH.slice().sort((a, b) => achKey(a).localeCompare(achKey(b))); }
+const ACH_GROUPS = [
+  ['Getting started', ['beginning', 'buddy', 'robot', 'hello', 'uncertain', 'style', 'muted', 'stillthere']],
+  ['Speed', ['quickster', 'justintime', 'quick', 'holy', 'there']],
+  ['Passwords', ['short', 'long', 'explorer']],
+  ['Grinding', ['office', 'addicted', 'hard', 'chicken', 'leader', 'maxxer', 'millionaire']],
+  ['Medals', ['champion', 'rainbow']],
+  ['Drop Out', ['dropout', 'hurry']],
+  ['PvP', ['mpfirst', 'mpcrush', 'racewin', 'kowin', 'undefeated', 'mprival']]
+];
+// grouped, alphabetical inside each group; headings show how many you have
+function groupedAchHTML(card, has) {
+  const seen = new Set(), out = [];
+  const groups = ACH_GROUPS.map(([name, ids]) => [name, ids.map(id => ACH.find(a => a.id === id)).filter(Boolean)]);
+  groups.forEach(([, list]) => list.forEach(a => seen.add(a.id)));
+  const rest = ACH.filter(a => !seen.has(a.id)); if (rest.length) groups.push(['Other', rest]);
+  groups.forEach(([name, list]) => {
+    list.sort((a, b) => achKey(a).localeCompare(achKey(b)));
+    out.push(`<h4 class="ach-group"><span>${name}</span><small>${list.filter(a => has(a.id)).length}/${list.length}</small></h4>`);
+    list.forEach(a => out.push(card(a)));
+  });
+  return out.join('');
+}
 function achProgHTML(a, done) {
   let cur = done ? 1 : 0, goal = 1, unit = '';
   if (!done && a.prog) { try { const p = a.prog({ st: getStats(), acct, discovered: discovered.size }); cur = num(+p[0], 0); goal = num(+p[1], 1) || 1; unit = p[2] || ''; } catch (e) {} }
@@ -2346,13 +2704,22 @@ function toastInfo(title, text) {
   t.innerHTML = '<div><small></small><b></b></div>';
   t.querySelector('small').textContent = title; t.querySelector('b').textContent = text;
   $('toasts').appendChild(t);
-  setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 400); }, 5200);
+  setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 620); }, 5200);
 }
 function revealAch(btn) {
-  const a = ACH.find(x => x.id === btn.dataset.id); if (!a) return;
-  btn.classList.add('revealed'); btn.removeAttribute('data-act');
-  btn.querySelector('.emblem').outerHTML = emblem(a.icon, false);
-  btn.querySelector('.ach-txt').innerHTML = `<b>${escapeHtml(a.name)}</b><span>${escapeHtml(a.desc)}</span>${achProgHTML(a, false)}`;
+  const a = ACH.find(x => x.id === btn.dataset.id); if (!a || btn.classList.contains('flipping')) return;
+  btn.removeAttribute('data-act'); btn.classList.add('flipping');
+  const swap = () => {
+    btn.classList.add('revealed');
+    btn.querySelector('.emblem').outerHTML = emblem(a.icon, false);
+    btn.querySelector('.ach-txt').innerHTML = `<b>${escapeHtml(a.name)}</b><span>${escapeHtml(a.desc)}</span>${achProgHTML(a, false)}`;
+  };
+  tone(660, .05, 'triangle', .04); tone(990, .08, 'triangle', .035, 0, .17);
+  if (!btn.animate || quality === 'off') { swap(); btn.classList.remove('flipping'); return; }
+  btn.animate([{ transform: 'perspective(700px) rotateY(0)' }, { transform: 'perspective(700px) rotateY(90deg)' }], { duration: 170, easing: 'ease-in' }).onfinish = () => {
+    swap();
+    btn.animate([{ transform: 'perspective(700px) rotateY(-90deg)' }, { transform: 'perspective(700px) rotateY(12deg)', offset: .7 }, { transform: 'perspective(700px) rotateY(0)' }], { duration: 380, easing: 'ease-out' }).onfinish = () => btn.classList.remove('flipping');
+  };
 }
 
 /* ---------- progression: XP, levels, medals, titles ---------- */
@@ -2628,7 +2995,7 @@ function toastEl(kind, art, small, title, text) {
   $('toasts').appendChild(t);
   const notes = kind === 'level' ? [523, 659, 784, 1046, 1318] : kind === 'medal' ? [659, 880, 1175, 1568] : [784, 1046, 1318];
   notes.forEach((f, k) => tone(f, .12, 'square', .04, 0, k * .08));
-  setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 400); }, 4200);
+  setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 620); }, 4200);
 }
 
 /* ---------- account screen ---------- */
@@ -2658,10 +3025,10 @@ function statsHTML(st) {
     <p class="progress note">Quickest, slowest, shortest and longest count only finished 5-round runs. Quit games don't count. Saved in this browser only.</p>`;
 }
 function achCardsHTML(fresh) {
-  return sortedAch().map(a => {
+  return groupedAchHTML(a => {
     if (unlocked[a.id]) return `<div class="ach on">${emblem(a.icon, true)}<div class="ach-txt"><b>${escapeHtml(a.name)}${fresh && fresh.has(a.id) ? '<span class="newtag">NEW</span>' : ''}</b><span>${escapeHtml(a.desc)}</span><em>Unlocked ${unlocked[a.id]}</em>${achProgHTML(a, true)}</div></div>`;
     return `<button type="button" class="ach locked" data-act="reveal" data-id="${a.id}">${emblem('q', false)}<div class="ach-txt"><b class="q">???</b><b class="hov">Click to reveal</b></div></button>`;
-  }).join('');
+  }, id => !!unlocked[id]);
 }
 const MEDAL_HOW = { wins: 'by winning games', typed: 'by typing characters in games', points: 'by earning points', time: 'by playing (time spent in rounds)', pvp: 'by playing PvP games' };
 function titleWhy(key) {
@@ -2956,7 +3323,8 @@ async function loadBoard(cat) {
 }
 
 /* someone else's account, read-only, from their public profile */
-function openProfile(r) {
+function openProfile(r, back) {
+  back = back || { act: 'lb-back', label: 'BACK TO LEADERBOARDS' };
   if (!r) return;
   sfx.click();
   const p = (r.profile && typeof r.profile === 'object') ? r.profile : {};
@@ -2965,7 +3333,7 @@ function openProfile(r) {
   const lvl = num(+r.level, 0);
   const medals = MEDALS.map(m => { const l = Math.max(0, Math.min(11, Math.floor(num(+(p.medals || {})[m.id], 0)))); const tc = l ? tierCls(l - 1) : 't-locked'; return `<div class="medal sm"><div class="disc tier-fill ${tc}">${pixelSvg(m.icon)}<span class="lv">${l === 11 ? '★' : l || '–'}</span></div><b>${escapeHtml(m.name)}</b><span class="tier-name">${l ? TIERS[l - 1] : 'Locked'}</span></div>`; }).join('');
   const have = new Set(Array.isArray(p.ach) ? p.ach.filter(id => typeof id === 'string') : []);
-  const achs = sortedAch().map(a => have.has(a.id) ? `<div class="ach on mini">${emblem(a.icon, true)}<div class="ach-txt"><b>${escapeHtml(a.name)}</b></div></div>` : `<div class="ach locked mini">${emblem('q', false)}<div class="ach-txt"><b class="q">???</b></div></div>`).join('');
+  const achs = groupedAchHTML(a => have.has(a.id) ? `<div class="ach on mini">${emblem(a.icon, true)}<div class="ach-txt"><b>${escapeHtml(a.name)}</b></div></div>` : `<div class="ach locked mini">${emblem('q', false)}<div class="ach-txt"><b class="q">???</b></div></div>`, id => have.has(id));
   const tile = (label, value) => `<div class="stat"><small>${label}</small><b>${value}</b></div>`;
   const titleTier = Math.max(-1, Math.min(10, Math.floor(num(+p.titleTier, -1))));
   openModal(`<div class="profile">
@@ -2978,18 +3346,20 @@ function openProfile(r) {
     <h3>Achievements <small>${[...have].filter(id => ACH.some(a => a.id === id)).length}/${ACH.length}</small></h3>
     <div class="achs pf-achs">${achs}</div>
   </div>
-  <div class="row"><button class="btn" data-act="lb-back" type="button">BACK TO LEADERBOARDS</button><button class="btn dark" data-act="close" type="button">CLOSE</button></div>`);
+  <div class="row"><button class="btn" data-act="${back.act}" type="button">${back.label}</button>${back.act === 'lb-back' ? '<button class="btn dark" data-act="close" type="button">CLOSE</button>' : ''}</div>`);
   const nm = $('modal').querySelector('.pf-name'); nm.textContent = String(r.name || 'Player').slice(0, 14);
   const tt = $('modal').querySelector('.pf-title'); tt.textContent = typeof p.title === 'string' && p.title ? p.title.slice(0, 60) : 'No title';
   if (!p.title) tt.classList.add('none');
   if (titleTier >= 0) tt.dataset.tier = titleTier;
 }
 
-/* ---------- PvP rooms ---------- */
+/* ---------- PvP rooms (2-8 players) ---------- */
 const PEER = Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
 const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+const MAX_PLAYERS = 8;
 let lastBoard = 'std_best';
-const MP = { mode: 'score', ch: null, code: '', host: false, status: 'idle', opp: null, oppSeen: 0, joinedAt: 0, hb: 0, where: 'lobby', match: null, goneAt: 0, msg: '', lobbyOpen: false, log: [], seenAt: 0 };
+const MP = { mode: 'score', ch: null, code: '', host: false, status: 'idle', peers: {}, joinedAt: 0, hb: 0, where: 'lobby', match: null, msg: '', lobbyOpen: false, log: [], seenAt: 0,
+  chat: [], wins: 0, lastChatAt: 0, lastEmoteAt: 0, profWait: null, presenceSeen: false };
 function mpLog(line) {
   const t = new Date(); const ts = t.toTimeString().slice(0, 8);
   MP.log.push(ts + '  ' + line); if (MP.log.length > 40) MP.log.shift();
@@ -2998,30 +3368,56 @@ function mpLog(line) {
 function diagHTML() {
   return `<details class="diag"><summary>Connection details</summary><pre id="mpDiag"></pre><p class="progress">If PvP isn't working, copy this and send it to whoever maintains the game.</p></details>`;
 }
-const END = s => s === 'finished' || s === 'out' || s === 'forfeit' || s === 'gone' || s === 'beaten' || s === 'ko';
+const END = s => s === 'finished' || s === 'out' || s === 'forfeit' || s === 'gone' || s === 'beaten' || s === 'ko' || s === 'eliminated' || s === 'won';
+const GONE = s => s === 'forfeit' || s === 'gone';
 const num = (v, d) => (typeof v === 'number' && isFinite(v) ? v : d);
+const cleanName = v => String(v || 'Player').replace(/[\u0000-\u001f]/g, '').slice(0, 14) || 'Player';
+const ordinal = n => n + (n % 100 >= 11 && n % 100 <= 13 ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] || 'th');
+const PLAYER_COLORS = ['#ffb83d', '#5ad1ff', '#ff6b8b', '#7dff8a', '#c58bff', '#ff9f43', '#4ff0c8', '#f5f56b'];
 
+/* ----- who's here ----- */
+const peerList = () => Object.values(MP.peers).sort((a, b) => a.joinedAt - b.joinedAt || (a.peer < b.peer ? -1 : 1));
+const roomCount = () => 1 + Object.keys(MP.peers).length;
+function modeFits(mode, n) { return MODES[mode] && (MODES[mode].party ? n >= 3 && n <= MAX_PLAYERS : n === 2); }
+function colorOf(peer) {
+  const ids = [PEER, ...Object.keys(MP.peers)].sort();
+  return PLAYER_COLORS[Math.max(0, ids.indexOf(peer)) % PLAYER_COLORS.length];
+}
+// the host is in charge; if the host has left, the earliest remaining player takes over
+function checkHost() {
+  if (MP.host || !MP.ch || MP.status !== 'online') return;
+  if (peerList().some(p => p.host)) return;
+  const first = [{ peer: PEER, joinedAt: MP.joinedAt }, ...peerList()].sort((a, b) => a.joinedAt - b.joinedAt || (a.peer < b.peer ? -1 : 1))[0];
+  if (first.peer === PEER && Date.now() - MP.joinedAt > 3000) { MP.host = true; mpLog('you are now the host'); sysChat('You are now the host.'); sayHello(true); trackMe(); }
+}
+function fixMode() {
+  if (!MP.host || matchLive()) return;
+  const n = roomCount(); if (n < 2) return;
+  if (!modeFits(MP.mode, n)) { MP.mode = n >= 3 ? 'ffa' : 'score'; sayHello(true); }
+}
+
+/* ----- lobby ----- */
 function openLobby(msg) {
   sfx.click();
-  MP.msg = msg || '';
+  if (msg != null) MP.msg = msg;
   MP.lobbyOpen = true;
-  openModal(`<div class="no-dismiss"></div><h2>PVP</h2><div id="lobbyBox"></div>`);
+  openModal(`<div class="no-dismiss"></div><h2>PVP</h2><div id="lobbyBox"></div><div id="lobbyChat"></div><div id="lobbyDiag"></div>`, 'lobby');
   renderLobby();
 }
 function renderLobby() {
   const box = $('lobbyBox'); if (!box) return;
   renderLobbyInner(box);
-  if (!box.querySelector('.diag')) box.insertAdjacentHTML('beforeend', diagHTML());
+  const chat = $('lobbyChat'); if (chat) { if (MP.ch && MP.status === 'online') mountChat(chat); else chat.innerHTML = ''; }
+  const dg = $('lobbyDiag'); if (dg && !dg.firstChild) dg.innerHTML = diagHTML();
   const pre = $('mpDiag'); if (pre) pre.textContent = MP.log.join('\n') || 'Nothing yet.';
 }
 function renderLobbyInner(box) {
-  const meName = escapeHtml(acct.name), meLvl = levelInfo(acct.xp).lvl;
   if (!MP.ch) {
     const ok = !!sbClient();
-    box.innerHTML = `<p>Play a friend 1v1: you both get the same rules at the same time. The host picks the game mode: <b>Score</b>, <b>Race</b> or <b>Knockout</b>.</p>
+    box.innerHTML = `<p>Play with friends. <b>2 players:</b> Score, Race or Knockout. <b>3-8 players:</b> Battle Royale or FFA. Everyone gets the same rules at the same time.</p>
       ${MP.msg ? `<p class="warn"><b>${escapeHtml(MP.msg)}</b></p>` : ''}
       ${ok ? `<div class="lobby-grid">
-        <div class="lobby-card"><h3>Create a room</h3><p class="progress">You get a code to send to your friend.</p><button class="btn red" data-act="mp-create" type="button">CREATE ROOM</button></div>
+        <div class="lobby-card"><h3>Create a room</h3><p class="progress">You get a code to send to your friends.</p><button class="btn red" data-act="mp-create" type="button">CREATE ROOM</button></div>
         <div class="lobby-card"><h3>Join a room</h3><label class="acc-field"><small class="acc-label">ROOM CODE</small><input id="mpCodeIn" maxlength="4" autocomplete="off" spellcheck="false" placeholder="K7QX" class="code-in"></label><button class="btn" data-act="mp-join" type="button">JOIN</button></div>
       </div>` : `<p class="warn"><b>Multiplayer couldn't load.</b> Check your internet connection. Multiplayer only works on the hosted version of the game.</p>`}
       <div class="row"><button class="btn dark" data-act="mp-close" type="button">BACK</button></div>`;
@@ -3030,28 +3426,47 @@ function renderLobbyInner(box) {
     return;
   }
   if (MP.status === 'connecting') { box.innerHTML = `<p class="progress wait-dots">${MP.host ? 'Creating your room' : 'Connecting to room <b>' + MP.code + '</b>'}</p><div class="row"><button class="btn dark" data-act="mp-leave" type="button">CANCEL</button></div>`; return; }
-  if (!MP.host && !MP.opp) {
+  if (MP.status === 'error') { box.innerHTML = `<p class="warn"><b>Couldn't connect to the multiplayer server.</b> Check your connection and try again. Multiplayer only works on the hosted version of the game.</p><div class="row"><button class="btn dark" data-act="mp-leave" type="button">BACK</button></div>`; return; }
+  const peers = peerList();
+  if (!MP.host && !peers.length) {
     const long = Date.now() - MP.joinedAt > 12000;
     box.innerHTML = `<p class="progress wait-dots">Looking for room <b>${MP.code}</b></p>
-      ${long ? `<p class="warn"><b>Can't find that room yet.</b> Check that your friend's room shows the code <b>${MP.code}</b>, that they're still in it, and that you're both on the same website (the hosted game, not the claude.ai copy). This keeps searching.</p>` : ''}
+      ${long ? `<p class="warn"><b>Can't find that room yet.</b> Check that your friend's room shows the code <b>${MP.code}</b>, that they're still in it, and that you're all on the same website (the hosted game, not the claude.ai copy). This keeps searching.</p>` : ''}
       <div class="row"><button class="btn dark" data-act="mp-leave" type="button">CANCEL</button></div>`;
     return;
   }
-  if (MP.status === 'error') { box.innerHTML = `<p class="warn"><b>Couldn't connect to the multiplayer server.</b> Check your connection and try again. Multiplayer only works on the hosted version of the game.</p><div class="row"><button class="btn dark" data-act="mp-leave" type="button">BACK</button></div>`; return; }
-  const o = MP.opp;
-  const canStart = MP.host && o && o.where === 'lobby';
-  box.innerHTML = `<div class="room-code"><small class="acc-label">ROOM CODE</small><b>${MP.code}</b><button class="btn small dark" data-act="mp-copy" type="button">COPY</button></div>
-    <div class="players">
-      <div class="pcard me"><small>${MP.host ? 'HOST · YOU' : 'YOU'}</small><b>${meName}</b><span>Level ${meLvl}</span></div>
-      <div class="vs">VS</div>
-      ${o ? `<div class="pcard"><small>${o.host ? 'HOST' : 'GUEST'}${o.where !== 'lobby' ? ' · STILL ON RESULTS' : ''}</small><b>${escapeHtml(String(o.name || 'Player').slice(0, 14))}</b><span>Level ${num(o.level, 0)}${o.title ? ' · ' + escapeHtml(String(o.title).slice(0, 40)) : ''}</span></div>`
-        : `<div class="pcard empty"><small>WAITING</small><b>…</b><span>Send the code to a friend</span></div>`}
-    </div>
-    <div class="modes">${PVP_MODES.map(k => MP.host ? `<button type="button" class="mode-opt${k === MP.mode ? ' on' : ''}" data-act="mp-mode" data-mode="${k}"><b>${MODES[k].name}</b><span>${MODES[k].desc}</span></button>`
-      : k === MP.mode ? `<div class="mode-opt on static"><small class="acc-label">MODE · PICKED BY THE HOST</small><b>${MODES[k].name}</b><span>${MODES[k].desc}</span></div>` : '').join('')}</div>
-    ${MP.match && MP.match.result ? `<p class="progress">Last match: <b>${{ win: 'you won', loss: 'you lost', draw: 'draw' }[MP.match.result]}</b>.</p>` : ''}
-    <div class="row">${MP.host ? `<button class="btn red" data-act="mp-start" type="button"${canStart ? '' : ' disabled'}>START</button>` : `<p class="progress wait-dots">Waiting for the host to start</p>`}
+  const n = roomCount();
+  const busy = peers.filter(p => p.where !== 'lobby');
+  const canStart = MP.host && modeFits(MP.mode, n) && !busy.length;
+  const card = (p, me) => {
+    const tag = [p.host ? '👑 HOST' : '', me ? 'YOU' : '', !me && p.where === 'game' ? 'IN A MATCH' : !me && p.where === 'result' ? 'ON RESULTS' : ''].filter(Boolean).join(' · ') || 'PLAYER';
+    return `<div class="pcard${me ? ' me' : ' click'}" ${me ? '' : `data-act="mp-prof" data-peer="${escapeHtml(p.peer)}" tabindex="0" title="View profile"`} style="--pc:${colorOf(p.peer)}">
+      <small>${tag}</small><b class="pname"></b><span>Level ${num(p.level, 0)}${p.title ? ' · <i class="ptitle"></i>' : ''}</span>
+      <em class="pwins">${num(p.wins, 0)} ${num(p.wins, 0) === 1 ? 'WIN' : 'WINS'}</em></div>`;
+  };
+  const meInfo = Object.assign(myInfo(), { wins: MP.wins });
+  const cards = [card(meInfo, true), ...peers.map(p => card(p, false))];
+  const empty = n < 2 ? `<div class="pcard empty"><small>WAITING</small><b>…</b><span>Send the code to your friends</span></div>` : '';
+  const modeBtn = k => {
+    const fits = modeFits(k, n), why = MODES[k].party ? '3-8 players' : '2 players';
+    if (MP.host) return `<button type="button" class="mode-opt${k === MP.mode ? ' on' : ''}${fits ? '' : ' off'}" data-act="mp-mode" data-mode="${k}"${fits ? '' : ' disabled'}><b>${MODES[k].name}</b><small class="mode-n">${why}</small><span>${MODES[k].desc}</span></button>`;
+    return k === MP.mode ? `<div class="mode-opt on static"><small class="acc-label">MODE · PICKED BY THE HOST</small><b>${MODES[k].name}</b><span>${MODES[k].desc}</span></div>` : '';
+  };
+  const modes = MP.host ? `<div class="mode-group"><small class="acc-label">2 PLAYERS</small><div class="modes three">${PVP_MODES.map(modeBtn).join('')}</div></div>
+      <div class="mode-group"><small class="acc-label">3-8 PLAYERS</small><div class="modes two">${PARTY_MODES.map(modeBtn).join('')}</div></div>`
+    : `<div class="modes">${[...PVP_MODES, ...PARTY_MODES].map(modeBtn).join('')}</div>`;
+  const last = MP.match && MP.match.result ? (MP.match.party ? `you placed <b>${ordinal(MP.match.myPlace || 0)}</b>` : `<b>${{ win: 'you won', loss: 'you lost', draw: 'draw' }[MP.match.result]}</b>`) : '';
+  box.innerHTML = `<div class="room-code"><small class="acc-label">ROOM CODE · ${n}/${MAX_PLAYERS} PLAYERS</small><b>${MP.code}</b><button class="btn small dark" data-act="mp-copy" type="button">COPY</button></div>
+    <div class="players${n > 2 ? ' party' : ''}">${cards.join('')}${empty}</div>
+    <p class="progress tiny">Wins are counted for this room. Click a player to see their account.</p>
+    ${modes}
+    ${last ? `<p class="progress">Last match: ${last}.</p>` : ''}
+    <div class="row">${MP.host ? `<button class="btn red" data-act="mp-start" type="button"${canStart ? '' : ' disabled'}>START</button>${!modeFits(MP.mode, n) ? `<span class="progress">${n < 2 ? 'Waiting for players…' : MODES[MP.mode].party ? 'Needs 3-8 players.' : 'Needs exactly 2 players.'}</span>` : busy.length ? `<span class="progress">Waiting for ${busy.length === 1 ? escapeHtml(busy[0].name) : busy.length + ' players'} to return…</span>` : ''}`
+      : `<p class="progress wait-dots">Waiting for the host to start</p>`}
       <button class="btn dark" data-act="mp-leave" type="button">LEAVE ROOM</button></div>`;
+  // names and titles are set as text, never as HTML
+  const nodes = box.querySelectorAll('.pcard:not(.empty)');
+  [meInfo, ...peers].forEach((p, i) => { const c = nodes[i]; if (!c) return; c.querySelector('.pname').textContent = cleanName(p.name); const t = c.querySelector('.ptitle'); if (t) t.textContent = String(p.title).slice(0, 40); });
 }
 function newCode() { let c = ''; for (let i = 0; i < 4; i++) c += CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)]; return c; }
 function mpCreate() { joinRoom(newCode(), true); }
@@ -3064,10 +3479,9 @@ async function joinRoom(code, asHost) {
   leaveRoom();
   const c = sbClient(); if (!c) { MP.msg = 'Multiplayer couldn\'t load.'; mpLog('supabase library not loaded'); renderLobby(); return; }
   const topic = 'pg-room-' + code;
-  Object.assign(MP, { code, host: asHost, status: 'connecting', opp: null, joinedAt: Date.now(), where: 'lobby', match: null, msg: '', goneAt: 0, oppSeen: 0 });
+  Object.assign(MP, { code, host: asHost, status: 'connecting', peers: {}, joinedAt: Date.now(), where: 'lobby', match: null, msg: '', chat: [], wins: 0, presenceSeen: false });
   mpLog(`${asHost ? 'creating' : 'joining'} room ${code}`);
   renderLobby();
-  // supabase-js hands back an existing channel with the same name, so make sure an old one is fully gone
   try { for (const old of (c.getChannels ? c.getChannels() : [])) if (old.topic === 'realtime:' + topic) { mpLog('removing stale channel'); await c.removeChannel(old); } } catch (e) {}
   if (MP.code !== code || MP.status !== 'connecting') return;
   const ch = c.channel(topic, { config: { broadcast: { self: false }, presence: { key: PEER } } });
@@ -3079,6 +3493,7 @@ async function joinRoom(code, asHost) {
     mpLog('channel: ' + status + (err ? ' (' + (err.message || err) + ')' : ''));
     if (status === 'SUBSCRIBED') {
       MP.status = 'online'; trackMe(); sayHello(false); renderLobby();
+      sysChat(asHost ? 'Room created. Send the code to your friends.' : 'You joined the room.');
       setTimeout(() => { if (MP.ch === ch) renderLobby(); }, 12500);
     } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
       if (MP.status !== 'online') { MP.status = 'error'; renderLobby(); }
@@ -3089,20 +3504,34 @@ async function joinRoom(code, asHost) {
 }
 function myInfo() {
   const ti = titleInfo(acct.title);
-  return { peer: PEER, name: String(acct.name).slice(0, 14), level: levelInfo(acct.xp).lvl, title: ti ? ti.text : '', host: MP.host, joinedAt: MP.joinedAt, where: MP.where, mode: MP.mode };
+  return { peer: PEER, name: cleanName(acct.name), level: levelInfo(acct.xp).lvl, title: ti ? ti.text : '', host: MP.host, joinedAt: MP.joinedAt, where: MP.where, mode: MP.mode, wins: MP.wins };
 }
 function sayHello(reply) { send(Object.assign({ t: 'hello', reply: !!reply }, myInfo())); }
-function setOpp(info, via) {
-  if (!info || typeof info.peer !== 'string' || info.peer === PEER) return;
-  if (!!info.host === MP.host) { if (via === 'hello') mpLog('ignored another ' + (MP.host ? 'host' : 'guest')); return; }
-  if (MP.opp && MP.opp.peer !== info.peer) {
-    if (num(info.joinedAt, 0) > num(MP.opp.joinedAt, 0)) { send({ t: 'full', to: info.peer }); return; }
+function setPeer(info, via) {
+  if (!info || typeof info.peer !== 'string' || info.peer === PEER || info.peer.length > 40) return false;
+  const had = MP.peers[info.peer];
+  const p = had || (MP.peers[info.peer] = { peer: info.peer });
+  Object.assign(p, { name: cleanName(info.name), level: num(info.level, 0), title: String(info.title || '').slice(0, 60), host: !!info.host,
+    joinedAt: num(info.joinedAt, Date.now()), where: info.where === 'game' || info.where === 'result' ? info.where : 'lobby', wins: Math.max(0, Math.min(999, num(info.wins, 0))), seen: Date.now() });
+  if (p.host && MODES[info.mode] && MODES[info.mode].pvp && !MP.host && MP.mode !== info.mode && !matchLive()) MP.mode = info.mode;
+  if (p.host && MP.host && info.peer !== PEER && num(info.joinedAt, 0) < MP.joinedAt) { MP.host = false; mpLog('another host was here first'); }
+  // a full room: the latest arrivals beyond 8 are turned away
+  if (!had) {
+    const all = [{ peer: PEER, joinedAt: MP.joinedAt }, ...peerList()].sort((a, b) => a.joinedAt - b.joinedAt || (a.peer < b.peer ? -1 : 1));
+    if (all.findIndex(x => x.peer === PEER) >= MAX_PLAYERS) { mpFail('That room is full (8 players).'); return false; }
+    mpLog(`found ${p.name} (via ${via})`); sysChat(`${p.name} joined.`);
+    if (MP.host && !matchLive()) tone(880, .1, 'square', .04);
   }
-  const had = MP.opp;
-  MP.opp = { peer: info.peer, name: String(info.name || 'Player').slice(0, 14), level: num(info.level, 0), title: String(info.title || '').slice(0, 60), host: !!info.host, joinedAt: num(info.joinedAt, 0), where: info.where === 'game' || info.where === 'result' ? info.where : 'lobby' };
-  MP.oppSeen = Date.now(); MP.goneAt = 0;
-  if (!MP.host && info.host && PVP_MODES.includes(info.mode) && MP.mode !== info.mode && !matchLive()) MP.mode = info.mode;
-  if (!had) { mpLog(`found ${MP.opp.host ? 'host' : 'guest'} ${MP.opp.name} (via ${via})`); if (MP.host && !MP.match) tone(880, .1, 'square', .04); }
+  const mp = MP.match && MP.match.players[info.peer]; if (mp) { mp.seen = Date.now(); if (mp.goneAt) { mp.goneAt = 0; renderPlayersBar(); } }
+  return true;
+}
+function dropPeer(peer, why) {
+  const p = MP.peers[peer]; if (!p) return;
+  delete MP.peers[peer];
+  mpLog(p.name + ' ' + why); sysChat(`${p.name} left.`);
+  const mp = MP.match && MP.match.players[peer];
+  if (mp && matchLive() && !END(mp.status)) { mp.status = 'gone'; afterPeerUpdate(peer, true); }
+  checkHost(); fixMode();
 }
 function mpFail(msg) { leaveRoom(); MP.msg = msg; renderLobby(); }
 function leaveRoom() {
@@ -3114,7 +3543,7 @@ function leaveRoom() {
     try { ch.untrack && ch.untrack(); } catch (e) {}
     try { sbClient().removeChannel(ch); } catch (e) {}
   }
-  MP.status = 'idle'; MP.opp = null; MP.code = ''; renderOppBar();
+  MP.status = 'idle'; MP.peers = {}; MP.code = ''; MP.chat = []; renderPlayersBar();
 }
 function trackMe() {
   if (!MP.ch || MP.status !== 'online') return;
@@ -3122,72 +3551,185 @@ function trackMe() {
   sayHello(true);
 }
 function onPresence() {
-  let peers = [];
-  try { peers = Object.values(MP.ch.presenceState() || {}).map(a => a && a[0]).filter(Boolean); } catch (e) {}
-  const others = peers.filter(p => p.peer !== PEER).sort((a, b) => num(a.joinedAt, 0) - num(b.joinedAt, 0));
-  if (others.length >= 2 && others.every(o => num(o.joinedAt, 0) < MP.joinedAt)) { mpFail('That room is already full.'); return; }
-  if (!MP.presenceSeen) { MP.presenceSeen = true; mpLog('presence working: ' + others.length + ' other player(s) here'); }
-  const opp = others.find(o => !!o.host !== MP.host) || null;
-  if (opp) setOpp(opp, 'presence');
-  else if (MP.opp && Date.now() - MP.oppSeen > 6000) { if (matchLive()) startGone(); else { mpLog(MP.opp.name + ' left'); MP.opp = null; } }
-  renderLobby(); renderOppBar();
+  let list = [];
+  try { list = Object.values(MP.ch.presenceState() || {}).map(a => a && a[0]).filter(Boolean); } catch (e) {}
+  if (!MP.presenceSeen) { MP.presenceSeen = true; mpLog('presence working: ' + (list.length - 1) + ' other player(s) here'); }
+  list.forEach(p => setPeer(p, 'presence'));
+  checkHost(); fixMode();
+  renderLobby(); renderPlayersBar();
 }
-function send(payload) { if (!MP.ch || MP.status !== 'online') return; try { MP.ch.send({ type: 'broadcast', event: 'msg', payload }); } catch (e) {} }
+function send(payload) { if (!MP.ch || MP.status !== 'online') return; try { payload.from = PEER; MP.ch.send({ type: 'broadcast', event: 'msg', payload }); } catch (e) {} }
 function onMsg(p) {
-  if (!p || typeof p !== 'object') return;
-  if (p.t === 'hello') { const isNew = !MP.opp; setOpp(p, 'hello'); if (!p.reply || isNew) sayHello(true); renderLobby(); renderOppBar(); return; }
-  if (p.t === 'full') { if (p.to === PEER) { mpLog('room is full'); mpFail('That room is already full.'); } return; }
-  if (p.t === 'bye') { if (MP.opp) { mpLog(MP.opp.name + ' left the room'); if (matchLive()) startGone(); else MP.opp = null; renderLobby(); } return; }
-  if (!MP.opp) return;
-  MP.oppSeen = Date.now(); if (MP.goneAt) { MP.goneAt = 0; renderOppBar(); }
-  if (p.t === 'start') mpLog('host started the match');
-  if (p.t === 'start' && !MP.host && typeof p.seed === 'number' && (!MP.match || MP.match.seed !== p.seed) && MP.where === 'lobby') beginMatch(p.seed, p.mode);
-  if (p.t === 'prog' && MP.match && p.seed === MP.match.seed) {
-    const o = MP.match.opp, wasEnded = END(o.status);
-    if (wasEnded && !END(p.status)) return; // never un-end
-    o.round = num(p.round, o.round); o.ok = num(p.ok, o.ok); o.total = num(p.total, o.total); o.score = num(p.score, o.score);
-    if (typeof p.status === 'string') o.status = p.status;
-    if (typeof p.pw === 'string') o.pw = p.pw.slice(0, 400);
-    if (typeof p.time === 'number') o.time = p.time;
-    if (typeof p.len === 'number') o.len = p.len;
-    if (Array.isArray(p.hist)) o.hist = p.hist.slice(0, 5).map(h => h && (h.s === 'c' || h.s === 'f') ? { s: h.s, len: num(h.len, 999) } : null);
-    afterOppUpdate(!wasEnded && END(o.status));
+  if (!p || typeof p !== 'object' || typeof p.from !== 'string' || p.from === PEER) return;
+  if (p.t === 'hello') { const isNew = !MP.peers[p.from]; if (!setPeer(Object.assign({}, p, { peer: p.from }), 'hello')) return; if (!p.reply || isNew) sayHello(true); checkHost(); fixMode(); renderLobby(); renderPlayersBar(); return; }
+  if (p.t === 'bye') { dropPeer(p.from, 'left the room'); renderLobby(); renderPlayersBar(); return; }
+  if (p.t === 'full') return;
+  const peer = MP.peers[p.from];
+  if (peer) peer.seen = Date.now();
+  if (p.t === 'chat') { gotChat(p); return; }
+  if (p.t === 'emote') { gotEmote(p); return; }
+  if (p.t === 'profReq' && p.to === PEER) { send({ t: 'prof', to: p.from, row: { name: acct.name, level: levelInfo(acct.xp).lvl, profile: myProfile() } }); return; }
+  if (p.t === 'prof' && p.to === PEER) { gotProfile(p.from, p.row); return; }
+  if (p.t === 'start') {
+    mpLog('host started the match');
+    if (typeof p.seed === 'number' && Array.isArray(p.roster) && p.roster.includes(PEER) && (!MP.match || MP.match.seed !== p.seed) && MP.where === 'lobby') beginMatch(p.seed, p.mode, p.roster.filter(x => typeof x === 'string').slice(0, MAX_PLAYERS));
+    return;
   }
+  const m = MP.match; if (!m || p.seed !== m.seed) return;
+  const pl = m.players[p.from]; if (!pl) return;
+  pl.seen = Date.now(); if (pl.goneAt) pl.goneAt = 0;
+  if (p.t === 'prog') {
+    const wasEnded = END(pl.status);
+    if (wasEnded && !END(p.status) && p.status !== undefined) return; // never un-end
+    pl.round = num(p.round, pl.round); pl.ok = num(p.ok, pl.ok); pl.total = num(p.total, pl.total); pl.score = num(p.score, pl.score);
+    if (typeof p.status === 'string') pl.status = p.status;
+    if (typeof p.pw === 'string') pl.pw = p.pw.slice(0, 400);
+    if (typeof p.time === 'number') pl.time = p.time;
+    if (typeof p.len === 'number') pl.len = p.len;
+    if (Array.isArray(p.hist)) pl.hist = p.hist.slice(0, 60).map(h => h && (h.s === 'c' || h.s === 'f') ? { s: h.s, len: num(h.len, 999), pts: Math.max(0, num(h.pts, 0)), used: num(h.used, 999) } : null);
+    afterPeerUpdate(p.from, !wasEnded && END(pl.status));
+  }
+  if (p.t === 'koRes') applyKoRes(num(p.round, 0), p.snap || {});
+  if (p.t === 'brRes') applyBrRes(num(p.round, 0), Array.isArray(p.out) ? p.out.filter(x => typeof x === 'string') : []);
 }
-const matchLive = () => !!(MP.match && !MP.match.result);
+const matchLive = () => !!(MP.match && !MP.match.over);
 function heartbeat() {
   if (!MP.ch) return;
   if (MP.status === 'online') sayHello(true);
-  if (MP.opp && !matchLive() && Date.now() - MP.oppSeen > 12000) { mpLog(MP.opp.name + ' timed out'); MP.opp = null; renderLobby(); }
-  if (!MP.host && !MP.opp && MP.status === 'online' && !MP.seenAt) renderLobby();
+  const now = Date.now();
+  for (const p of peerList()) {
+    const inMatch = matchLive() && MP.match.players[p.peer];
+    if (!inMatch && now - p.seen > 12000) { dropPeer(p.peer, 'timed out'); renderLobby(); }
+  }
+  checkHost(); fixMode();
   if (matchLive()) {
     sendProg();
-    if (!END(MP.match.opp.status) && !MP.goneAt && Date.now() - MP.oppSeen > 10000) startGone();
-    if (MP.goneAt && Date.now() - MP.goneAt > 20000 && !END(MP.match.opp.status)) { MP.match.opp.status = 'gone'; afterOppUpdate(true); }
-    renderOppBar();
+    for (const pl of others()) {
+      if (END(pl.status)) continue;
+      if (!pl.goneAt && now - pl.seen > 10000) pl.goneAt = now;
+      if (pl.goneAt && now - pl.goneAt > 20000) { pl.status = 'gone'; afterPeerUpdate(pl.peer, true); }
+    }
+    renderPlayersBar();
+    authorityTick();
   }
 }
-function startGone() { if (!MP.goneAt) MP.goneAt = Date.now(); renderOppBar(); }
 
-/* match flow */
-function mpStart() {
-  if (!MP.host || !MP.opp || MP.opp.where !== 'lobby') return;
-  const seed = (Math.random() * 4294967296) >>> 0;
-  mpLog('starting ' + MODES[MP.mode].name + ' match');
-  send({ t: 'start', seed, mode: MP.mode });
-  beginMatch(seed, MP.mode);
+/* ----- chat & emotes ----- */
+function sysChat(text) { MP.chat.push({ sys: true, text }); if (MP.chat.length > 60) MP.chat.shift(); renderChatLog(); }
+function chatHTML() {
+  return `<div class="chat"><div class="chat-log" id="chatLog" aria-live="polite"></div>
+    <form class="chat-form" id="chatForm" autocomplete="off"><input id="chatIn" maxlength="140" placeholder="Say something…" aria-label="Chat message"><button class="btn small" type="submit">SEND</button></form></div>`;
 }
-function beginMatch(seed, mode) {
-  mode = PVP_MODES.includes(mode) ? mode : 'score';
-  const oppName = MP.opp ? String(MP.opp.name || 'Opponent').slice(0, 14) : 'Opponent';
-  MP.match = { seed, mode, oppName, result: null, recorded: false, capRound: 0,
-    me: { round: 1, ok: 0, total: 2, score: 0, status: 'playing', hist: [] },
-    opp: { round: 1, ok: 0, total: 2, score: 0, status: 'playing', hist: [] },
-    ko: { hp: { me: 100, opp: 100 }, applied: 0, done: false, last: null } };
-  MP.where = 'game'; MP.oppSeen = Date.now(); MP.goneAt = 0; trackMe();
+function mountChat(box) {
+  if (!box) return;
+  if (!box.querySelector('.chat')) {
+    box.innerHTML = chatHTML();
+    box.querySelector('#chatForm').addEventListener('submit', e => { e.preventDefault(); sendChat(); });
+  }
+  renderChatLog();
+}
+function renderChatLog() {
+  const log = $('chatLog'); if (!log) return;
+  log.innerHTML = MP.chat.slice(-50).map(c => c.sys ? `<div class="cm sys"></div>` : `<div class="cm"><b style="color:${c.color}"></b><span></span></div>`).join('') || '<div class="cm sys">No messages yet. Say hi!</div>';
+  const nodes = log.querySelectorAll('.cm');
+  MP.chat.slice(-50).forEach((c, i) => { const n = nodes[i]; if (!n) return; if (c.sys) n.textContent = c.text; else { n.querySelector('b').textContent = c.name + ':'; n.querySelector('span').textContent = ' ' + c.text; } });
+  log.scrollTop = log.scrollHeight;
+}
+function sendChat() {
+  const inp = $('chatIn'); if (!inp) return;
+  const text = inp.value.replace(/\s+/g, ' ').trim().slice(0, 140);
+  if (!text || !MP.ch) return;
+  if (Date.now() - MP.lastChatAt < 600) return;
+  MP.lastChatAt = Date.now();
+  inp.value = '';
+  MP.chat.push({ name: cleanName(acct.name), text, color: colorOf(PEER) }); if (MP.chat.length > 60) MP.chat.shift();
+  send({ t: 'chat', name: cleanName(acct.name), text });
+  renderChatLog(); sfx.click();
+}
+function gotChat(p) {
+  const text = String(p.text || '').replace(/\s+/g, ' ').trim().slice(0, 140); if (!text) return;
+  MP.chat.push({ name: cleanName(p.name), text, color: colorOf(p.from) }); if (MP.chat.length > 60) MP.chat.shift();
+  renderChatLog();
+  if ($('chatLog')) tone(1320, .05, 'triangle', .03);
+}
+const EMOTES = ['👍', '😂', '😅', '🔥', '😱', '🫡', 'GG'];
+function renderEmoteBar() {
+  const bar = $('emoteBar'); if (!bar) return;
+  if (!S.mp || !MP.match || S.phase === 'menu') { bar.hidden = true; $('game').classList.remove('mp-pad'); return; }
+  if (!bar.firstChild) bar.innerHTML = EMOTES.map((e, i) => `<button type="button" class="emo" data-emote="${i}" aria-label="Send ${e}">${e}</button>`).join('');
+  bar.hidden = false; $('game').classList.add('mp-pad');
+}
+function sendEmote(i) {
+  if (!MP.match || !EMOTES[i] || Date.now() - MP.lastEmoteAt < 900) return;
+  MP.lastEmoteAt = Date.now();
+  send({ t: 'emote', name: cleanName(acct.name), e: i, seed: MP.match.seed });
+  popEmote(PEER, cleanName(acct.name), EMOTES[i]);
+}
+function gotEmote(p) {
+  const e = EMOTES[num(p.e, -1)]; if (!e) return;
+  if (MP.lobbyOpen && !$('lobbyBox')) return;
+  popEmote(p.from, cleanName(p.name), e);
+  tone(990, .06, 'triangle', .03);
+}
+function popEmote(peer, name, e) {
+  const layer = $('emoteLayer'); if (!layer) return;
+  const el = document.createElement('div'); el.className = 'emote-pop';
+  el.style.setProperty('--pc', colorOf(peer));
+  el.style.left = (12 + Math.random() * 70) + '%';
+  el.innerHTML = '<big></big><small></small>';
+  el.querySelector('big').textContent = e; el.querySelector('small').textContent = peer === PEER ? 'You' : name;
+  layer.appendChild(el);
+  setTimeout(() => el.remove(), 2800);
+}
+
+/* ----- someone else's profile ----- */
+function requestProfile(peer) {
+  const p = MP.peers[peer]; if (!p) return;
+  MP.profWait = peer;
+  openModal(`<h2>${escapeHtml(p.name)}</h2><p class="progress wait-dots">Loading their account</p><div class="row"><button class="btn dark" data-act="mp-lobby" type="button">BACK TO ROOM</button></div>`);
+  send({ t: 'profReq', to: peer });
+  setTimeout(() => {
+    if (MP.profWait !== peer || !$('modal').querySelector('.wait-dots')) return;
+    MP.profWait = null;
+    $('modal').querySelector('.wait-dots').outerHTML = `<p class="warn"><b>Couldn't load their account.</b> They may have a slow connection. Try again in a moment.</p>`;
+  }, 6000);
+}
+function gotProfile(from, row) {
+  if (MP.profWait !== from || !row || typeof row !== 'object') return;
+  MP.profWait = null;
+  openProfile({ name: cleanName(row.name), level: num(row.level, 0), profile: row.profile && typeof row.profile === 'object' ? row.profile : {} }, { act: 'mp-lobby', label: 'BACK TO ROOM' });
+}
+
+/* ----- match flow ----- */
+function mpStart() {
+  if (!MP.host) return;
+  const peers = peerList();
+  if (peers.some(p => p.where !== 'lobby') || !modeFits(MP.mode, roomCount())) return;
+  const seed = (Math.random() * 4294967296) >>> 0;
+  const roster = [PEER, ...peers.map(p => p.peer)];
+  mpLog('starting ' + MODES[MP.mode].name + ' match with ' + roster.length + ' players');
+  send({ t: 'start', seed, mode: MP.mode, roster });
+  beginMatch(seed, MP.mode, roster);
+}
+const KO_HP = 1000, KO_MULT = [1, 1.5, 2, 3, 4];
+function beginMatch(seed, mode, roster) {
+  mode = MODES[mode] && MODES[mode].pvp ? mode : 'score';
+  const players = {};
+  roster.forEach(id => {
+    const info = id === PEER ? myInfo() : MP.peers[id];
+    players[id] = { peer: id, name: info ? cleanName(info.name) : 'Player', level: info ? num(info.level, 0) : 0, host: !!(info && info.host), joinedAt: info ? num(info.joinedAt, 0) : 0,
+      round: 1, ok: 0, total: 2, score: 0, status: 'playing', hist: [], pw: null, time: null, len: 0, seen: Date.now(), goneAt: 0 };
+  });
+  MP.match = { seed, mode, party: !!MODES[mode].party, roster, players, over: false, result: null, recorded: false, capRound: 0, myPlace: 0,
+    ko: { hp: Object.fromEntries(roster.map(id => [id, KO_HP])), resolved: 0, anim: false },
+    br: { alive: new Set(roster), resolved: 0, outs: [] } };
+  MP.where = 'game'; trackMe();
   MP.lobbyOpen = false; closeModal();
   countdown(() => { if (MP.match && MP.match.seed === seed) startGame({ seed, mode }); });
 }
+const meP = () => MP.match && MP.match.players[PEER];
+const others = () => MP.match ? MP.match.roster.filter(id => id !== PEER).map(id => MP.match.players[id]) : [];
+const oppP = () => others()[0];
 function countdown(done) {
   const el = $('countdown'); el.hidden = false;
   const steps = ['3', '2', '1', 'GO!'];
@@ -3200,139 +3742,341 @@ let progT = 0;
 function sendProgSoon() { if (!S.mp || progT) return; progT = setTimeout(() => { progT = 0; sendProg(); }, 250); }
 function sendProg(extra) {
   if (!S.mp || !MP.match) return;
-  const me = MP.match.me;
+  const me = meP(); if (!me) return;
   if (!END(me.status)) Object.assign(me, { round: S.round, ok: S.active.filter(e => e.ok).length, total: S.active.length, score: S.score });
   if (extra) Object.assign(me, extra);
-  send(Object.assign({ t: 'prog', seed: MP.match.seed }, me));
+  send(Object.assign({ t: 'prog', seed: MP.match.seed }, { round: me.round, ok: me.ok, total: me.total, score: me.score, status: me.status, pw: me.pw, time: me.time, len: me.len, hist: me.hist }));
 }
+// the earliest-joined connected player (the host, normally) decides Knockout and Battle Royale rounds
+function isAuthority() {
+  const m = MP.match; if (!m) return false;
+  const live = m.roster.map(id => m.players[id]).filter(p => !GONE(p.status) && (p.peer === PEER || !p.goneAt));
+  const host = live.find(p => p.host);
+  const lead = host || live.sort((a, b) => a.joinedAt - b.joinedAt || (a.peer < b.peer ? -1 : 1))[0];
+  return !!lead && lead.peer === PEER;
+}
+function authorityTick() { if (S.mode === 'ko') koMaybeResolve(); if (S.mode === 'br') brMaybeResolve(); }
 
-/* Score mode: hidden catch-up for whoever keeps submitting last while far behind (never shown to players) */
-function catchUp() {
-  const o = MP.match.opp;
-  const wasLast = (o.status === 'cleared' || o.status === 'submitting' || o.status === 'finished') && o.round >= S.round;
-  S.lastStreak = wasLast ? S.lastStreak + 1 : 0;
-  if (S.lastStreak >= 2 && S.score < 0.85 * o.score) return 1 + Math.min(0.25, 0.08 * S.lastStreak);
-  return 1;
-}
+/* HUD note: a slim, non-blocking banner under the clock */
+function setNote(html, kind) { const n = $('hudNote'); if (!n) return; if (n.dataset.html !== html) { n.innerHTML = html; n.dataset.html = html; } n.className = 'hudnote' + (kind ? ' ' + kind : ''); n.hidden = false; }
+function clearNote() { const n = $('hudNote'); if (n) { n.hidden = true; n.dataset.html = ''; } }
 
-/* Score mode: rounds stay in sync */
-function oppReadyFor(n) {
-  const o = MP.match.opp;
-  return END(o.status) || ((o.status === 'cleared' || o.status === 'submitting') && o.round >= n) || o.round > n;
-}
+/* Score + FFA: rounds stay in sync */
+function readyFor(p, n) { return END(p.status) || ((p.status === 'cleared' || p.status === 'submitting') && p.round >= n) || p.round > n; }
 function mpAfterClear() {
-  if (oppReadyFor(S.round)) { $('burst').hidden = true; nextRound(); if ($('modal').hidden) $('pw').focus(); return; }
+  if (others().every(p => readyFor(p, S.round))) { $('burst').hidden = true; nextRound(); if ($('modal').hidden) $('pw').focus(); return; }
   S.phase = 'waiting';
   renderWait();
 }
 function renderWait() {
   if (S.phase !== 'waiting' || !MP.match) return;
-  const m = MP.match, o = m.opp, b = $('burst');
-  if (S.mode === 'ko') {
-    b.innerHTML = `<div class="card wait"><h2>ROUND ${S.round} ${m.ko.myFail ? 'FAILED' : 'DONE'}</h2><p>Waiting for <b>${escapeHtml(m.oppName)}</b>…</p><div class="why">${o.ok}/${o.total} rules${MP.goneAt ? ' · connection lost' : ''}</div></div>`;
-  } else {
-    b.innerHTML = `<div class="card wait"><h2>ROUND ${S.round} CLEARED</h2><p>Waiting for <b>${escapeHtml(m.oppName)}</b> to clear it…</p><div class="why">${o.ok}/${o.total} rules · ${nf(o.score)} points${MP.goneAt ? ' · connection lost' : ''}</div></div>`;
+  if (S.mode === 'ko' || S.mode === 'br') { renderLockNote(); return; }
+  const b = $('burst');
+  let card = b.querySelector('.card.wait');
+  if (!card || b.hidden) {
+    b.innerHTML = `<div class="card wait"><h2>ROUND ${S.round} CLEARED</h2><p class="wait-who"></p><div class="wait-list"></div></div>`;
+    card = b.querySelector('.card.wait'); b.hidden = false;
   }
-  b.hidden = false;
+  const slow = others().filter(p => !readyFor(p, S.round));
+  card.querySelector('.wait-who').innerHTML = slow.length === 1 ? `Waiting for <b></b> to clear it…` : `Waiting for <b>${slow.length} players</b>…`;
+  if (slow.length === 1) card.querySelector('.wait-who b').textContent = slow[0].name;
+  const rows = MP.match.roster.map(id => MP.match.players[id]).sort((a, b) => b.score - a.score);
+  card.querySelector('.wait-list').innerHTML = rows.map(p => `<div class="wl${p.peer === PEER ? ' me' : ''}"><span class="dot" style="background:${colorOf(p.peer)}"></span><b></b><em>${readyFor(p, S.round) ? (END(p.status) ? stLabel(p.status) : '✓ cleared') : `${p.ok}/${p.total} rules`}${p.goneAt ? ' · connection lost' : ''}</em><span class="sc">${nf(p.score)}</span></div>`).join('');
+  card.querySelectorAll('.wl b').forEach((n, i) => { n.textContent = rows[i].peer === PEER ? 'You' : rows[i].name; });
 }
 
-/* Knockout */
-function koRoundDone(s, len) {
-  const m = MP.match; if (!m) return;
-  m.me.hist[S.round - 1] = { s, len };
-  m.ko.myFail = s === 'f';
-  if (s === 'f') sfx.no(); else sfx.clear();
-  sendProg({ status: s === 'f' ? 'failed' : 'cleared', round: S.round, len, hist: m.me.hist });
-  S.phase = 'waiting';
-  renderWait();
-  koTryResolve();
+/* ----- Knockout: GeoGuessr-style damage ----- */
+function koLock(pts, len, used) {
+  const m = MP.match, me = meP(); if (!m || !me) return;
+  me.hist[S.round - 1] = { s: 'c', pts, len, used };
+  S.phase = 'waiting'; S.lockUsed = used; $('pw').readOnly = true;
+  sfx.clear();
+  me.status = 'cleared';
+  sendProg({ status: 'cleared', round: S.round, len, hist: me.hist });
+  renderLockNote(); koMaybeResolve();
 }
-function koDamage(a, b) {
-  // returns [damage to me, damage to opponent]
-  if (a.s === 'f' && b.s === 'f') return [20, 20];
-  if (a.s === 'f') return [40, 0];
-  if (b.s === 'f') return [0, 40];
-  if (a.len === b.len) return [0, 0];
-  const d = Math.min(40, 10 + 2 * Math.abs(a.len - b.len));
-  return a.len < b.len ? [0, d] : [d, 0];
+function koUnlock() {
+  const m = MP.match, me = meP(); if (!m || !me || S.mode !== 'ko' || S.phase !== 'waiting' || m.ko.anim || m.ko.resolved >= S.round) return;
+  const h = me.hist[S.round - 1]; if (!h || h.s !== 'c') return;
+  if (S.roundLen - (performance.now() - S.roundStart) / 1000 <= 1) return;
+  me.hist[S.round - 1] = null; me.status = 'playing';
+  S.playTime -= S.lockUsed || 0; S.lockUsed = 0;
+  S.phase = 'playing'; $('pw').readOnly = false; clearNote();
+  sendProg({ status: 'playing', hist: me.hist });
+  evaluate(true); sfx.off(); $('pw').focus();
 }
-function koTryResolve() {
-  const m = MP.match; if (!m || S.mode !== 'ko' || m.ko.done) return;
-  const n = S.round;
-  if (m.ko.applied >= n) return;
-  const a = m.me.hist[n - 1];
-  if (!a) return;
-  const oEnded = m.opp.status === 'forfeit' || m.opp.status === 'gone';
-  const b = m.opp.hist[n - 1];
-  if (!b && !oEnded) return;
-  m.ko.applied = n;
-  let dm = [0, 0];
-  if (b) dm = koDamage(a, b);
-  m.ko.hp.me = Math.max(0, m.ko.hp.me - dm[0]); m.ko.hp.opp = Math.max(0, m.ko.hp.opp - dm[1]);
-  m.ko.last = { dm, a, b };
-  renderHp(true);
+function koFail() {
+  const me = meP(); if (!me) return;
+  me.hist[S.round - 1] = { s: 'f', pts: 0, len: [...$('pw').value].length, used: S.roundLen };
+  S.phase = 'waiting'; $('pw').readOnly = true; me.status = 'failed';
+  sfx.no();
+  sendProg({ status: 'failed', round: S.round, hist: me.hist });
+  renderLockNote(); koMaybeResolve();
+}
+function renderLockNote() {
+  const m = MP.match; if (!m || S.phase !== 'waiting' || m.ko.anim || m.br.card) return;
+  if (S.mode === 'ko') {
+    const o = oppP(), mine = meP().hist[S.round - 1];
+    const oDone = o && o.hist[S.round - 1];
+    setNote(mine && mine.s === 'f' ? `Out of time this round. Waiting for <b class="nm"></b>… <span class="dim">${o ? o.ok + '/' + o.total + ' rules' : ''}</span>`
+      : `Locked in. Waiting for <b class="nm"></b>… <span class="dim">${oDone ? 'they\'re done' : o ? o.ok + '/' + o.total + ' rules' : ''}</span>`, 'lock');
+    const nmEl = $('hudNote').querySelector('.nm'); if (nmEl && o) nmEl.textContent = o.name;
+  } else if (S.mode === 'br') {
+    const alive = [...m.br.alive].map(id => m.players[id]).filter(p => p.peer !== PEER);
+    const left = alive.filter(p => !p.hist[S.round - 1] && !GONE(p.status));
+    const mine = meP().hist[S.round - 1];
+    setNote(`${mine && mine.s === 'f' ? 'Out of time this round.' : 'Locked in!'} ${!left.length ? 'Counting the results…' : `Waiting for ${left.length === 1 ? '<b class="nm"></b>' : `<b>${left.length} players</b>`}…`}`, 'lock');
+    if (left.length === 1) $('hudNote').querySelector('.nm').textContent = left[0].name;
+  }
+  renderLockBtn();
+}
+function renderLockBtn() {
+  const b = $('lock');
+  const locked = S.mp && S.phase === 'waiting' && (S.mode === 'ko' || S.mode === 'br');
+  b.classList.toggle('submitted', locked);
+  if (!locked) return;
+  const canUnlock = S.mode === 'ko' && !MP.match.ko.anim && MP.match.ko.resolved < S.round && meP().hist[S.round - 1] && meP().hist[S.round - 1].s === 'c';
+  b.textContent = canUnlock ? 'SUBMITTED ✓ · CLICK TO UNLOCK' : 'SUBMITTED ✓';
+  b.classList.toggle('ready', false);
+}
+function koMaybeResolve() {
+  const m = MP.match; if (!m || S.mode !== 'ko' || m.over || !isAuthority()) return;
+  const n = m.ko.resolved + 1; if (n > 5) return;
+  const snap = {};
+  for (const id of m.roster) {
+    const p = m.players[id];
+    if (GONE(p.status)) { snap[id] = { s: 'g', pts: 0 }; continue; }
+    const h = p.hist[n - 1]; if (!h) return;
+    snap[id] = { s: h.s, pts: h.pts || 0, len: h.len };
+  }
+  send({ t: 'koRes', seed: m.seed, round: n, snap });
+  applyKoRes(n, snap);
+}
+function applyKoRes(n, snap) {
+  const m = MP.match; if (!m || S.mode !== 'ko' || m.ko.resolved >= n || n < 1) return;
+  m.ko.resolved = n;
+  const me = meP(), o = oppP();
+  const a = snap[PEER] || { s: 'f', pts: 0 }, b = (o && snap[o.peer]) || { s: 'g', pts: 0 };
+  // the authority's snapshot is final, even if we unlocked a moment too late
+  if (a.s === 'c' && (!me.hist[n - 1] || me.hist[n - 1].s !== 'c')) me.hist[n - 1] = { s: 'c', pts: a.pts, len: a.len, used: S.lockUsed || 0 };
+  S.score += Math.max(0, num(a.pts, 0));
+  S.phase = 'waiting'; $('pw').readOnly = true; clearNote(); renderLockBtn();
+  const pa = Math.max(0, num(a.pts, 0)), pb = Math.max(0, num(b.pts, 0));
+  const mult = KO_MULT[n - 1] || 4;
+  const dmg = b.s === 'g' ? 0 : Math.round(Math.abs(pa - pb) * mult);
+  const loser = pa > pb ? o && o.peer : pa < pb ? PEER : null;
+  m.ko.anim = true;
+  koAnimate(n, a, b, mult, dmg, loser).then(() => {
+    if (MP.match !== m) return;
+    m.ko.anim = false;
+    renderHp();
+    const myHp = m.ko.hp[PEER], oHp = o ? m.ko.hp[o.peer] : 0;
+    const over = myHp <= 0 || oHp <= 0 || n >= 5 || !o || GONE(o.status);
+    $('burst').hidden = true;
+    if (over) { m.ko.done = true; pvpRunEnd(myHp <= 0 ? 'ko' : 'finished'); }
+    else { $('pw').readOnly = false; nextRound(); if ($('modal').hidden) $('pw').focus(); }
+  });
+}
+function koAnimate(n, a, b, mult, dmg, loser) {
+  const m = MP.match, o = oppP();
   const bEl = $('burst');
-  const line = !b ? `${escapeHtml(m.oppName)} left the match` :
-    dm[0] && dm[1] ? `You both failed: <b>-${dm[0]} HP</b> each` :
-    dm[1] ? `${a.s === 'f' ? '' : `Your password was ${b.s === 'f' ? 'in' : 'shorter (' + a.len + ' vs ' + b.len + ')'}. `}You dealt <b class="dmg-out">${dm[1]} damage</b>` :
-    dm[0] ? `${a.s === 'f' ? 'You ran out of time. ' : `Their password was shorter (${b.len} vs ${a.len}). `}You took <b class="dmg-in">${dm[0]} damage</b>` :
-    'Same length: no damage';
-  bEl.innerHTML = `<div class="card ko"><h2>ROUND ${n} RESULT</h2><p>${line}</p><div class="hp-mini"><span>YOU ${m.ko.hp.me} HP</span><span>${escapeHtml(m.oppName)} ${m.ko.hp.opp} HP</span></div></div>`;
+  const fmtPts = h => h.s === 'f' ? 'FAILED' : h.s === 'g' ? 'LEFT' : '0';
+  bEl.innerHTML = `<div class="card kores"><h2>ROUND ${n} <small>DAMAGE ×${mult}</small></h2>
+    <div class="kr-cols"><div class="kr me"><small>YOU</small><b class="kr-pts">${a.s === 'c' ? '0' : fmtPts(a)}</b></div>
+    <div class="kr-mid"><span class="kr-diff"></span></div>
+    <div class="kr opp"><small class="kr-nm"></small><b class="kr-pts">${b.s === 'c' ? '0' : fmtPts(b)}</b></div></div>
+    <div class="kr-dmg"></div></div>`;
+  bEl.querySelector('.kr-nm').textContent = o ? o.name.toUpperCase() : 'OPPONENT';
   bEl.hidden = false;
-  if (dm[1]) tone(220, .2, 'sawtooth', .05, .5); if (dm[0]) tone(140, .3, 'sawtooth', .06, .6);
-  const over = m.ko.hp.me <= 0 || m.ko.hp.opp <= 0 || n >= 5 || oEnded;
-  setTimeout(() => {
-    if (!MP.match || MP.match !== m || S.phase !== 'waiting') return;
-    bEl.hidden = true;
-    if (over) { m.ko.done = true; pvpRunEnd(m.ko.hp.me <= 0 ? 'ko' : 'finished'); }
-    else nextRound();
-  }, 2600);
+  const [ea, eb] = bEl.querySelectorAll('.kr-pts');
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  return (async () => {
+    await wait(500);
+    // 1. both scores count up together
+    const t0 = performance.now(), dur = 1300; let lastBlip = 0;
+    await new Promise(res => { const step = () => {
+      const p = Math.min(1, (performance.now() - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      if (a.s === 'c') ea.textContent = nf(a.pts * e); if (b.s === 'c') eb.textContent = nf(b.pts * e);
+      if (p < 1 && performance.now() - lastBlip > 70) { lastBlip = performance.now(); tone(500 + 700 * p, .03, 'square', .025); }
+      p < 1 ? requestAnimationFrame(step) : res(); }; step(); });
+    const pa = num(a.pts, 0), pb = num(b.pts, 0);
+    if (pa !== pb) (pa > pb ? ea : eb).parentElement.classList.add('top');
+    await wait(450);
+    // 2. the difference, then the multiplier
+    const diffEl = bEl.querySelector('.kr-diff'), dmgEl = bEl.querySelector('.kr-dmg');
+    if (!dmg) { diffEl.textContent = '='; dmgEl.innerHTML = '<b class="none">NO DAMAGE</b>'; tone(440, .15, 'triangle', .04); await wait(1600); return; }
+    diffEl.textContent = '−' + nf(Math.abs(pa - pb)); diffEl.classList.add('slam'); tone(330, .08, 'square', .05);
+    await wait(500);
+    dmgEl.innerHTML = `<span>×${mult}</span> = <b>${nf(dmg)} DAMAGE</b>`; dmgEl.classList.add('slam'); tone(220, .1, 'square', .05);
+    await wait(650);
+    // 3. the damage flies to the loser's health bar
+    const from = (loser === PEER ? eb : ea).getBoundingClientRect();
+    const bar = document.querySelector(loser === PEER ? '#hpWrap .hp.me .hpbar' : '#hpWrap .hp.opp .hpbar');
+    const to = bar ? bar.getBoundingClientRect() : { left: innerWidth / 2, top: 40, width: 0, height: 0 };
+    const orb = document.createElement('div'); orb.className = 'dmg-orb' + (loser === PEER ? ' in' : ' out'); orb.textContent = '-' + nf(dmg);
+    orb.style.left = (from.left + from.width / 2) + 'px'; orb.style.top = (from.top + from.height / 2) + 'px';
+    document.body.appendChild(orb);
+    whoosh();
+    await wait(30);
+    orb.style.transform = `translate(${to.left + to.width * (MP.match.ko.hp[loser] / KO_HP) - from.left - from.width / 2}px, ${to.top + to.height / 2 - from.top - from.height / 2}px) scale(.6)`;
+    await wait(560);
+    orb.remove();
+    // 4. crunch
+    MP.match.ko.hp[loser] = Math.max(0, MP.match.ko.hp[loser] - dmg);
+    renderHp(loser); renderPlayersBar();
+    crunch(loser === PEER);
+    await wait(1500);
+  })();
 }
-function renderHp(hit) {
+function whoosh() { if (muted) return; const a = audio(); if (!a) return; const t = a.currentTime; const o = a.createOscillator(), g = a.createGain(); o.type = 'sawtooth'; o.frequency.setValueAtTime(200, t); o.frequency.exponentialRampToValueAtTime(1400, t + .45); g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.03, t + .3); g.gain.exponentialRampToValueAtTime(.0001, t + .5); o.connect(g); g.connect(sfxBus || a.destination); o.start(t); o.stop(t + .55); }
+function crunch(tookIt) {
+  const a = audio();
+  if (a && !muted) {
+    const t = a.currentTime, len = .35;
+    const buf = a.createBuffer(1, Math.floor(a.sampleRate * len), a.sampleRate), d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 2) * (i % 300 < 150 ? 1 : .4);
+    const s = a.createBufferSource(), f = a.createBiquadFilter(), g = a.createGain();
+    s.buffer = buf; f.type = 'lowpass'; f.frequency.value = 1800; g.gain.value = .22;
+    s.connect(f); f.connect(g); g.connect(sfxBus || a.destination); s.start(t);
+    tone(90, .3, 'sine', .14, .5);
+  }
+  (tookIt ? [523, 415, 311] : [523, 659, 880]).forEach((f, i) => tone(f, .14, 'square', .045, 0, .25 + i * .1));
+  const g = $('game'); g.classList.remove('shake-x'); void g.offsetWidth; g.classList.add('shake-x');
+}
+function renderHp(hitPeer) {
   const wrap = $('hpWrap'); if (!wrap) return;
   if (!S.mp || S.mode !== 'ko' || !MP.match) { wrap.hidden = true; return; }
-  const hp = MP.match.ko.hp;
-  wrap.innerHTML = `<div class="hp me"><small>YOU</small><div class="hpbar"><i style="width:${hp.me}%"></i></div><b>${hp.me}</b></div><div class="hp opp"><small></small><div class="hpbar"><i style="width:${hp.opp}%"></i></div><b>${hp.opp}</b></div>`;
-  wrap.querySelector('.opp small').textContent = MP.match.oppName.toUpperCase();
+  const hp = MP.match.ko.hp, o = oppP();
+  const mine = hp[PEER], theirs = o ? hp[o.peer] : 0;
+  if (!wrap.querySelector('.hp')) wrap.innerHTML = `<div class="hp me"><small>YOU</small><div class="hpbar"><i></i></div><b></b></div><div class="hp opp"><small></small><div class="hpbar"><i></i></div><b></b></div>`;
+  wrap.querySelector('.opp small').textContent = o ? o.name.toUpperCase() : '';
+  wrap.querySelector('.me i').style.width = (mine / KO_HP * 100) + '%'; wrap.querySelector('.me b').textContent = nf(mine);
+  wrap.querySelector('.opp i').style.width = (theirs / KO_HP * 100) + '%'; wrap.querySelector('.opp b').textContent = nf(theirs);
   wrap.hidden = false;
-  if (hit) { wrap.classList.remove('hit'); void wrap.offsetWidth; wrap.classList.add('hit'); }
+  if (hitPeer) { const el = wrap.querySelector(hitPeer === PEER ? '.hp.me' : '.hp.opp'); el.classList.remove('crunch'); void el.offsetWidth; el.classList.add('crunch'); }
 }
 
-/* opponent updates */
-function afterOppUpdate(justEnded) {
-  if (!MP.match) return;
-  const m = MP.match, o = m.opp;
-  renderOppBar();
+/* ----- Battle Royale ----- */
+function brLock(used, len) {
+  const me = meP(); if (!me) return;
+  me.hist[S.round - 1] = { s: 'c', used, len, pts: 0 };
+  S.phase = 'waiting'; $('pw').readOnly = true; me.status = 'cleared';
+  sfx.clear();
+  sendProg({ status: 'cleared', round: S.round, hist: me.hist });
+  renderLockNote(); brMaybeResolve();
+}
+function brFail() {
+  const me = meP(); if (!me) return;
+  me.hist[S.round - 1] = { s: 'f', used: S.roundLen, len: [...$('pw').value].length, pts: 0 };
+  S.phase = 'waiting'; $('pw').readOnly = true; me.status = 'failed';
+  sfx.no();
+  sendProg({ status: 'failed', round: S.round, hist: me.hist });
+  renderLockNote(); brMaybeResolve();
+}
+function brMaybeResolve() {
+  const m = MP.match; if (!m || m.mode !== 'br' || m.over || !isAuthority()) return;
+  const n = m.br.resolved + 1;
+  const alive = [...m.br.alive].map(id => m.players[id]);
+  const gone = alive.filter(p => GONE(p.status));
+  const playing = alive.filter(p => !GONE(p.status));
+  if (playing.some(p => !p.hist[n - 1])) return;
+  let out = gone.map(p => p.peer);
+  const failed = playing.filter(p => p.hist[n - 1].s === 'f');
+  if (failed.length && failed.length < playing.length) out = out.concat(failed.map(p => p.peer));
+  else if (!failed.length && playing.length > 1 && !gone.length) {   // someone who left takes this round's knockout
+    const last = playing.slice().sort((a, b) => b.hist[n - 1].used - a.hist[n - 1].used)[0];
+    out.push(last.peer);
+  }
+  send({ t: 'brRes', seed: m.seed, round: n, out });
+  applyBrRes(n, out);
+}
+function applyBrRes(n, out) {
+  const m = MP.match; if (!m || m.mode !== 'br' || m.br.resolved >= n || n < 1) return;
+  m.br.resolved = n;
+  out = out.filter(id => m.br.alive.has(id));
+  const place = m.br.alive.size - out.length + 1;
+  out.forEach(id => { m.br.alive.delete(id); const p = m.players[id]; p.place = place; p.outRound = n; if (!GONE(p.status)) p.status = 'eliminated'; });
+  if (out.length) m.br.outs.push({ round: n, peers: out });
+  if (m.br.alive.size === 1) { const w = m.players[[...m.br.alive][0]]; w.place = 1; if (!GONE(w.status)) w.status = 'won'; }
+  if (m.br.alive.size <= 1) m.over = true;
+  renderPlayersBar();
+  const iAmOut = out.includes(PEER);
+  if (S.phase === 'over') { renderMpResult(); mpResolve(); return; }      // spectating
+  // round result card
+  const names = out.map(id => id === PEER ? 'You' : m.players[id].name);
+  const why = !out.length ? 'Everyone failed, so nobody is out. 2 more rules!'
+    : out.every(id => m.players[id].hist[n - 1] && m.players[id].hist[n - 1].s === 'f') ? (out.length === 1 ? 'failed the round' : 'failed the round')
+    : out.some(id => GONE(m.players[id].status)) && out.length === 1 ? 'left the match' : 'submitted last';
+  const bEl = $('burst');
+  bEl.innerHTML = `<div class="card brres${iAmOut ? ' out' : ''}"><h2>ROUND ${n}</h2><div class="br-out"></div><div class="why">${out.length ? escapeHtml(why) + ' · ' : ''}${m.br.alive.size} left</div></div>`;
+  bEl.querySelector('.br-out').textContent = out.length ? `${names.join(', ')} ${out.length === 1 && names[0] !== 'You' ? 'is' : 'are'} knocked out!` : why;
+  if (!out.length) bEl.querySelector('.why').textContent = `${m.br.alive.size} left`;
+  bEl.hidden = false; clearNote(); m.br.card = true;
+  if (iAmOut) crunch(true); else if (out.length) tone(660, .12, 'square', .04);
+  setTimeout(() => {
+    if (MP.match !== m) return;
+    bEl.hidden = true; m.br.card = false;
+    if (iAmOut) pvpRunEnd('eliminated');
+    else if (m.br.alive.size <= 1) pvpRunEnd('won');
+    else { $('pw').readOnly = false; meP().status = 'playing'; nextRound(); if ($('modal').hidden) $('pw').focus(); }
+  }, 2600);
+}
+
+/* ----- other players' updates ----- */
+function afterPeerUpdate(peer, justEnded) {
+  const m = MP.match; if (!m) return;
+  const o = m.players[peer]; if (!o) return;
+  renderPlayersBar();
   const live = S.mp && (S.phase === 'playing' || S.phase === 'waiting' || S.phase === 'between');
   // Score: when the opponent submits a round you're still on, your clock drops to 15 seconds
   if (live && S.mode === 'score' && S.phase === 'playing' && m.capRound !== S.round && (o.status === 'cleared' || o.status === 'submitting' || o.status === 'finished') && o.round === S.round) {
     m.capRound = S.round;
     if (S.dispLeft > 15) { S.capAt = performance.now() + 15000; $('timeOut').classList.add('capped'); }
-    toastEl('info', '<span class="bang">!</span>', 'SCORE', `${m.oppName} submitted!`, S.dispLeft > 15 ? 'You have 15 seconds left this round.' : 'Hurry up!');
+    setNote(`<b class="nm"></b> submitted! ${S.dispLeft > 15 ? 'You have <b>15 seconds</b> left this round.' : 'Hurry up!'}`, 'warn');
+    $('hudNote').querySelector('.nm').textContent = o.name;
   }
   // Race: someone finishing first ends the race
   if (live && S.mode === 'race' && o.status === 'finished' && !S.finalSubmitted) { pvpRunEnd('beaten'); return; }
-  // Knockout: opponent results arrive round by round
-  if (S.mode === 'ko' && S.phase === 'waiting') koTryResolve();
-  if (justEnded && live) {
-    if (S.mode === 'ko' && (o.status === 'forfeit' || o.status === 'gone')) { koTryResolve(); if (S.phase === 'playing') { m.ko.done = true; pvpRunEnd('finished'); } return; }
+  if (S.mode === 'ko' || S.mode === 'br') { authorityTick(); if (S.phase === 'waiting') renderLockNote(); }
+  if (justEnded && live && !m.party && S.mode !== 'ko') {
     const what = o.status === 'out' ? 'ran out of time' : o.status === 'finished' ? 'finished all 5 rounds' : o.status === 'beaten' ? 'is out' : 'left the match';
-    toastEl('info', '<span class="bang">!</span>', 'PVP', `${m.oppName} ${what}`, o.status === 'finished' ? `Their score: ${nf(o.score)}. Keep going!` : 'Finish your run to lock in the win.');
+    toastEl('info', '<span class="bang">!</span>', 'PVP', `${o.name} ${what}`, o.status === 'finished' ? `Their score: ${nf(o.score)}. Keep going!` : 'Finish your run to lock in the win.');
   }
-  if (S.mode === 'score' && S.phase === 'waiting' && oppReadyFor(S.round)) { $('burst').hidden = true; nextRound(); if ($('modal').hidden) $('pw').focus(); }
-  else if (S.phase === 'waiting') renderWait();
+  if (justEnded && S.mode === 'ko' && GONE(o.status) && S.phase === 'playing') { m.ko.done = true; pvpRunEnd('finished'); return; }
+  if ((S.mode === 'score' || S.mode === 'ffa') && S.phase === 'waiting') {
+    if (others().every(p => readyFor(p, S.round))) { $('burst').hidden = true; nextRound(); if ($('modal').hidden) $('pw').focus(); }
+    else renderWait();
+  }
   if (S.phase === 'over') mpResolve();
 }
 
-/* ---------- results ---------- */
+/* ----- results ----- */
+const stLabel = s => ({ finished: 'Finished', out: 'Ran out of time', beaten: "Didn't finish", ko: 'Knocked out', forfeit: 'Left the match', gone: 'Disconnected', eliminated: 'Knocked out', won: 'Winner' }[s] || 'Playing');
+function partyPlaces(m) {
+  const ps = m.roster.map(id => m.players[id]);
+  if (m.mode === 'br') return ps.map(p => ({ p, place: p.place || (m.br.alive.has(p.peer) ? 1 : ps.length) })).sort((a, b) => a.place - b.place);
+  // FFA: by score; players who left go last
+  const sorted = ps.slice().sort((a, b) => (GONE(a.status) - GONE(b.status)) || b.score - a.score);
+  let place = 0, prev = null;
+  return sorted.map((p, i) => { if (!prev || p.score !== prev.score || GONE(p.status) !== GONE(prev.status)) place = i + 1; prev = p; return { p, place }; });
+}
 function mpOutcome(m) {
-  const me = m.me, op = m.opp;
+  const me = meP(); if (!me) return null;
   if (me.status === 'forfeit') return 'loss';
+  if (m.party) {
+    if (m.mode === 'br') { if (me.place) return me.place === 1 ? 'win' : 'loss'; return null; }
+    if (!END(me.status)) return null;
+    if (!m.roster.every(id => END(m.players[id].status))) return null;
+    const mine = partyPlaces(m).find(x => x.p.peer === PEER);
+    return mine && mine.place === 1 ? 'win' : 'loss';
+  }
+  const op = oppP();
   if (!END(me.status)) return null;
-  if (op.status === 'forfeit' || op.status === 'gone') return 'win';
+  if (!op || GONE(op.status)) return 'win';
   if (m.mode === 'ko') {
     if (!m.ko.done) return null;
-    return m.ko.hp.me > m.ko.hp.opp ? 'win' : m.ko.hp.me < m.ko.hp.opp ? 'loss' : 'draw';
+    const a = m.ko.hp[PEER], b = m.ko.hp[op.peer];
+    return a > b ? 'win' : a < b ? 'loss' : 'draw';
   }
   if (!END(op.status)) return null;
   const outish = s => s === 'out' || s === 'beaten';
@@ -3348,34 +4092,47 @@ function mpOutcome(m) {
   if (outish(op.status) && !outish(me.status)) return 'win';
   return me.score > op.score ? 'win' : me.score < op.score ? 'loss' : 'draw';
 }
-/* my run is over (finished, out of time, beaten in a race, or knocked out) */
+/* my run is over (finished, out of time, beaten in a race, knocked out, eliminated, or the last one standing) */
 function pvpRunEnd(status) {
   if (S.phase === 'over') return;
   const m = MP.match;
-  S.phase = 'over'; S.lastWin = status === 'finished';
-  clearTimeout(S.betweenTimer); $('burst').hidden = true;
+  S.phase = 'over'; S.lastWin = status === 'finished' || status === 'won';
+  clearTimeout(S.betweenTimer); $('burst').hidden = true; clearNote(); $('pw').readOnly = false;
   const w = document.querySelector('.field .wave'); if (w) w.remove(); $('pw').classList.remove('waving');
   if (status === 'out') { S.playTime += S.roundLen; sfx.fail(); }
   if (status === 'ko' || status === 'beaten') sfx.fail();
-  if (m) sendProg({ status, pw: $('pw').value.slice(0, 400), time: Math.round(S.playTime * 10) / 10, score: S.score, round: S.round, len: [...$('pw').value].length, hist: m.me.hist });
+  if (m) { const me = meP(); if (me) { me.status = status; me.pw = $('pw').value.slice(0, 400); me.time = Math.round(S.playTime * 10) / 10; me.score = S.score; me.round = S.round; me.len = [...$('pw').value].length; } sendProg(); }
+  MP.where = 'result'; trackMe();
   toastHold = true;
+  renderEmoteBar(); renderLockBtn();
   const pwLen = [...$('pw').value].length;
-  const label = { finished: S.mode === 'ko' ? 'You survived all 5 rounds' : 'You finished all 5 rounds', out: 'You ran out of time', beaten: `${m ? escapeHtml(m.oppName) : 'Your opponent'} finished first`, ko: 'You got knocked out' }[status] || '';
-  openModal(`<h2 class="result">${escapeHtml((m ? MODES[m.mode].name : 'PvP').toUpperCase())}</h2>
+  const md = m ? MODES[m.mode] : null;
+  const label = { finished: S.mode === 'ko' ? 'You survived' : 'You finished all 5 rounds', out: 'You ran out of time', beaten: 'Someone finished first', ko: 'You got knocked out', eliminated: 'You were knocked out', won: 'Last one standing!' }[status] || '';
+  const roundsTxt = md && md.rounds === Infinity ? String(S.round) : Math.min(S.round, 5) + '/5';
+  openModal(`<h2 class="result">${escapeHtml((md ? md.name : 'PvP').toUpperCase())}</h2>
     <p class="progress">${label}</p>
     <div class="mpres" id="mpRes"></div>
-    <div id="resultInfo"><div class="runline"><span><small>SCORE</small><b>${nf(S.score)}</b></span><span><small>RUN TIME</small><b>${fmtRun(S.playTime)}</b></span><span><small>ROUND</small><b>${Math.min(S.round, 5)}/5</b></span><span><small>PASSWORD</small><b>${pwLen} ch</b></span></div>
+    <div id="resultInfo"><div class="runline"><span><small>SCORE</small><b>${nf(S.score)}</b></span><span><small>RUN TIME</small><b>${fmtRun(S.playTime)}</b></span><span><small>ROUND</small><b>${roundsTxt}</b></span><span><small>PASSWORD</small><b>${pwLen} ch</b></span></div>
     <div id="pvpRewards"></div></div>
+    <h3>Chat</h3><div id="resChat"></div>
     <h3>Your password<span class="meta">${pwLen} ${pwLen === 1 ? 'character' : 'characters'}</span></h3>
     ${copyPwRow()}
     ${resultButtons('PLAY AGAIN')}`, 'slide');
   wireCopy();
+  if (MP.ch) mountChat($('resChat')); else { const rc = $('resChat'); if (rc) rc.previousElementSibling.remove(), rc.remove(); }
   mpResolve();
 }
 function mpResolve() {
   const m = MP.match; if (!m) return;
   const res = mpOutcome(m);
-  if (res && !m.recorded) { m.recorded = true; m.result = res; mpRecord(res); music.jingle(res === 'win' ? 'win' : res === 'draw' ? 'draw' : 'lose'); }
+  if (res && !m.recorded) {
+    m.recorded = true; m.result = res;
+    if (m.party) { const mine = partyPlaces(m).find(x => x.p.peer === PEER); m.myPlace = mine ? mine.place : m.roster.length; }
+    if (res === 'win') { MP.wins++; sayHello(true); }
+    mpRecord(res);
+    music.jingle(res === 'win' ? 'win' : res === 'draw' ? 'draw' : 'lose');
+  }
+  if (m.roster.every(id => END(m.players[id].status)) || (m.mode === 'br' && m.br.alive.size <= 1) || (!m.party && m.result)) m.over = true;
   renderMpResult();
 }
 /* stats, achievements and XP once the result is known */
@@ -3393,34 +4150,58 @@ function mpRecord(res) {
   st.pvp = st.pvp || {}; const pm = st.pvp[m.mode] = st.pvp[m.mode] || { w: 0, l: 0, d: 0 };
   pm[res === 'win' ? 'w' : res === 'loss' ? 'l' : 'd']++;
   store.set('pg.stats', st); statsMem = st;
+  const op = oppP();
   if (res === 'win') {
-    S.pending.add({ score: 'mpfirst', race: 'racewin', ko: 'kowin' }[m.mode]);
-    if (m.mode === 'score' && m.me.score - m.opp.score > 5000 && m.opp.status !== 'forfeit' && m.opp.status !== 'gone') S.pending.add('mpcrush');
+    const id = { score: 'mpfirst', race: 'racewin', ko: 'kowin' }[m.mode]; if (id) S.pending.add(id);
+    if (m.mode === 'score' && op && meP().score - op.score > 5000 && !GONE(op.status)) S.pending.add('mpcrush');
     if (st.mpStreak >= 3) S.pending.add('undefeated');
     [523, 659, 784, 1046].forEach((f, k) => tone(f, .14, 'square', .045, 0, k * .09));
   }
-  const base = res === 'win' ? 800 : res === 'draw' ? 400 : 200;
-  S.rewards = endRewards(res === 'win', st, { base, baseLabel: 'PvP ' + res });
+  let base = res === 'win' ? 800 : res === 'draw' ? 400 : 200, label = 'PvP ' + res;
+  if (m.party) { const n = m.roster.length, pl = Math.max(1, m.myPlace || n); base = pl === 1 ? 800 : Math.round(200 + 400 * (n - pl) / Math.max(1, n - 1)); label = `${MODES[m.mode].name} · ${ordinal(pl)} of ${n}`; }
+  S.rewards = endRewards(res === 'win', st, { base, baseLabel: label });
   lbPushSoon();
   const box = $('pvpRewards');
-  if (box) {
-    box.innerHTML = progHTML(S.rewards);
-    runProgress(S.rewards).then(() => releaseToasts());
-  } else releaseToasts();
+  if (box) { box.innerHTML = progHTML(S.rewards); runProgress(S.rewards).then(() => releaseToasts()); }
+  else releaseToasts();
 }
-function mpResultHTML() { return '<div class="mpres" id="mpRes"></div>'; }
 function renderMpResult() {
   const box = $('mpRes'); const m = MP.match; if (!box || !m) return;
-  const st = s => ({ finished: m.mode === 'ko' ? 'Survived' : 'Finished all 5 rounds', out: 'Ran out of time', beaten: 'Finished second', ko: 'Knocked out', forfeit: 'Left the match', gone: 'Disconnected', cleared: 'Playing', submitting: 'Playing', failed: 'Playing', playing: 'Playing', lobby: '' }[s] || '');
+  if (m.party) return renderPartyResult(box, m);
+  const op = oppP(), me = meP();
   const head = m.result === 'win' ? '<b class="w">YOU WIN!</b>' : m.result === 'loss' ? '<b class="l">YOU LOST</b>' : m.result === 'draw' ? '<b>IT\'S A DRAW</b>'
-    : `<b class="p">WAITING FOR ${escapeHtml(m.oppName.toUpperCase())}…</b><span>Round ${Math.min(5, m.opp.round)}/5 · ${m.opp.ok}/${m.opp.total} rules</span>`;
-  const big = p => m.mode === 'ko' ? `${p === m.me ? m.ko.hp.me : m.ko.hp.opp} HP` : m.mode === 'race' && p.time != null && END(p.status) ? fmtRun(p.time) : nf(p.score);
-  const col = (who, p, mine) => `<div class="mp-p${mine ? ' me' : ''}${m.result && ((m.result === 'win') === mine) && m.result !== 'draw' ? ' won' : ''}"><small>${who}</small><b class="nm"></b><span class="sc">${big(p)}</span><em>${st(p.status)}${m.mode !== 'score' ? ' · ' + nf(p.score) + ' pts' : ''}</em>${p.pw != null && END(p.status) ? `<code></code>` : ''}</div>`;
-  box.innerHTML = `<div class="mp-head">${head}</div><div class="mp-cols">${col('YOU', m.me, true)}<div class="vs">VS</div>${col('OPPONENT', m.opp, false)}</div>`;
+    : `<b class="p">WAITING FOR ${escapeHtml((op ? op.name : 'OPPONENT').toUpperCase())}…</b><span>Round ${Math.min(5, op ? op.round : 1)}/5 · ${op ? op.ok : 0}/${op ? op.total : 0} rules</span>`;
+  const big = p => {
+    if (m.mode === 'ko') return `${nf(m.ko.hp[p.peer])} HP`;
+    if (m.mode === 'race') return p.status === 'finished' && p.time != null ? fmtRun(p.time) : END(p.status) ? 'DNF' : '…';
+    return nf(p.score);
+  };
+  const sub = p => m.mode === 'race' ? (p.status === 'finished' ? 'Finished all 5 rounds' : END(p.status) ? `${stLabel(p.status)} · reached round ${Math.min(5, p.round)}` : 'Playing')
+    : stLabel(p.status) + (m.mode !== 'score' ? ' · ' + nf(p.score) + ' pts' : '');
+  const won = mine => m.result && m.result !== 'draw' && ((m.result === 'win') === mine);
+  const col = (who, p, mine) => `<div class="mp-p${mine ? ' me' : ''}${won(mine) ? ' won' : ''}"><small>${who}</small><b class="nm"></b><span class="sc">${big(p)}</span><em>${sub(p)}</em>${p.pw != null && END(p.status) ? `<code></code>` : ''}</div>`;
+  box.innerHTML = `<div class="mp-head">${head}</div><div class="mp-cols">${col('YOU', me, true)}<div class="vs">VS</div>${op ? col('OPPONENT', op, false) : ''}</div>`;
   const cols = box.querySelectorAll('.mp-p');
-  cols[0].querySelector('.nm').textContent = acct.name; cols[1].querySelector('.nm').textContent = m.oppName;
-  const c0 = cols[0].querySelector('code'), c1 = cols[1].querySelector('code');
-  if (c0) c0.textContent = m.me.pw || ''; if (c1) c1.textContent = m.opp.pw || '';
+  cols[0].querySelector('.nm').textContent = acct.name; if (cols[1] && op) cols[1].querySelector('.nm').textContent = op.name;
+  const c0 = cols[0].querySelector('code'), c1 = cols[1] && cols[1].querySelector('code');
+  if (c0) c0.textContent = me.pw || ''; if (c1 && op) c1.textContent = op.pw || '';
+}
+function renderPartyResult(box, m) {
+  const places = partyPlaces(m);
+  const alive = m.mode === 'br' ? m.br.alive.size : m.roster.filter(id => !END(m.players[id].status)).length;
+  const head = m.over ? (m.myPlace === 1 ? '<b class="w">YOU WIN!</b>' : `<b>YOU PLACED ${ordinal(m.myPlace || places.findIndex(x => x.p.peer === PEER) + 1).toUpperCase()}</b>`)
+    : m.mode === 'br' ? `<b class="p">SPECTATING · ${alive} LEFT</b>${meP().place ? `<span>You placed ${ordinal(meP().place)}</span>` : ''}`
+    : `<b class="p">WAITING FOR ${alive} ${alive === 1 ? 'PLAYER' : 'PLAYERS'}…</b>`;
+  const medal = pl => pl === 1 ? '🥇' : pl === 2 ? '🥈' : pl === 3 ? '🥉' : ordinal(pl);
+  const rows = places.map(({ p, place }) => {
+    const live = !END(p.status) && !(m.mode === 'br' && !p.place);
+    const stillIn = m.mode === 'br' ? m.br.alive.has(p.peer) && !m.over : !END(p.status);
+    const detail = m.mode === 'br' ? (stillIn ? `Round ${p.round} · ${p.ok}/${p.total} rules` : p.place === 1 ? 'Last one standing' : `Out in round ${p.outRound || '?'}${GONE(p.status) ? ' · left' : ''}`)
+      : (stillIn ? `Round ${Math.min(5, p.round)}/5 · ${p.ok}/${p.total} rules` : stLabel(p.status));
+    return `<div class="pl-row${p.peer === PEER ? ' me' : ''}${stillIn ? ' live' : ''}" style="--pc:${colorOf(p.peer)}"><span class="pl-place${stillIn || place > 3 ? ' txt' : ''}">${stillIn ? '…' : medal(place)}</span><b class="pl-name"></b><em>${detail}</em><span class="pl-sc">${m.mode === 'br' ? '' : nf(p.score)}</span></div>`;
+  }).join('');
+  box.innerHTML = `<div class="mp-head">${head}</div><div class="placings">${rows}</div>`;
+  box.querySelectorAll('.pl-name').forEach((n, i) => { n.textContent = places[i].p.peer === PEER ? 'You' : places[i].p.name; });
 }
 function resultButtons(retry) {
   if (S.mp && MP.ch) return `<div class="row"><button class="btn red" data-act="mp-room" type="button">BACK TO ROOM</button><button class="btn" data-act="mp-menu" type="button">LEAVE ROOM</button></div>`;
@@ -3429,11 +4210,12 @@ function resultButtons(retry) {
 function mpBackToRoom() {
   MP.where = 'lobby'; trackMe();
   S.mp = false; closeModal(); toMenu();
+  renderEmoteBar();
   openLobby();
 }
 function mpForfeit() {
   if (!S.mp || !MP.match || MP.match.recorded) return;
-  MP.match.me.status = 'forfeit';
+  const me = meP(); if (me) me.status = 'forfeit';
   sendProg({ status: 'forfeit' });
   const m = MP.match; m.recorded = true; m.result = 'loss';
   const st = baseStats();
@@ -3442,22 +4224,60 @@ function mpForfeit() {
   store.set('pg.stats', st); statsMem = st;
 }
 
-/* opponent bar during a match */
-function renderOppBar() {
+/* players bar during a match */
+function renderPlayersBar() {
   const bar = $('oppBar'); if (!bar) return;
-  if (!S.mp || !MP.match || S.phase === 'menu') { bar.hidden = true; return; }
-  const o = MP.match.opp;
-  const status = MP.goneAt && !END(o.status) ? `CONNECTION LOST · ${Math.max(0, 20 - Math.floor((Date.now() - MP.goneAt) / 1000))}s`
-    : { playing: 'TYPING…', cleared: `CLEARED ROUND ${o.round}`, submitting: `CLEARED ROUND ${o.round}`, failed: `FAILED ROUND ${o.round}`, finished: 'FINISHED', out: 'OUT OF TIME', beaten: 'OUT', ko: 'KNOCKED OUT', forfeit: 'LEFT', gone: 'DISCONNECTED' }[o.status] || '';
-  const pips = Array.from({ length: Math.max(0, Math.min(10, o.total)) }, (_, i) => `<i class="${i < o.ok ? 'on' : ''}"></i>`).join('');
-  bar.innerHTML = `<span class="opp-tag">VS</span><b class="opp-name"></b><span class="opp-round">R${Math.min(5, o.round)}</span><span class="pips">${pips}</span><span class="opp-score">${S.mode === 'ko' ? MP.match.ko.hp.opp + ' HP' : nf(o.score)}</span><span class="opp-status s-${o.status}${MP.goneAt ? ' s-gone' : ''}">${status}</span>`;
-  bar.querySelector('.opp-name').textContent = MP.match.oppName;
+  renderEmoteBar();
+  if (!S.mp || !MP.match || S.phase === 'menu' || $('game').hidden) { bar.hidden = true; return; }
+  const m = MP.match;
+  const row = o => {
+    const out = m.mode === 'br' && !m.br.alive.has(o.peer);
+    const status = o.goneAt && !END(o.status) ? `CONNECTION LOST · ${Math.max(0, 20 - Math.floor((Date.now() - o.goneAt) / 1000))}s`
+      : out ? (GONE(o.status) ? 'LEFT' : 'KNOCKED OUT')
+      : { playing: 'TYPING…', cleared: m.mode === 'ko' || m.mode === 'br' ? 'LOCKED IN' : `CLEARED ROUND ${o.round}`, submitting: `CLEARED ROUND ${o.round}`, failed: `FAILED ROUND ${o.round}`, finished: 'FINISHED', out: 'OUT OF TIME', beaten: 'OUT', ko: 'KNOCKED OUT', forfeit: 'LEFT', gone: 'DISCONNECTED', eliminated: 'KNOCKED OUT', won: 'WINNER' }[o.status] || '';
+    const pips = Array.from({ length: Math.max(0, Math.min(m.party ? 8 : 10, o.total)) }, (_, i) => `<i class="${i < o.ok ? 'on' : ''}"></i>`).join('');
+    const right = m.mode === 'ko' ? nf(m.ko.hp[o.peer]) + ' HP' : m.mode === 'br' ? '' : nf(o.score);
+    return `<div class="prow${out ? ' out' : ''}" style="--pc:${colorOf(o.peer)}"><b class="opp-name"></b><span class="opp-round">R${m.mode === 'br' ? o.round : Math.min(5, o.round)}</span><span class="pips">${pips}</span><span class="opp-score">${right}</span><span class="opp-status s-${o.status}${o.goneAt ? ' s-gone' : ''}">${status}</span></div>`;
+  };
+  const os = others();
+  bar.className = 'oppbar' + (m.party ? ' party' : '');
+  bar.innerHTML = (m.party ? '' : '<span class="opp-tag">VS</span>') + os.map(row).join('');
+  bar.querySelectorAll('.opp-name').forEach((n, i) => { n.textContent = os[i].name; });
   bar.hidden = false;
 }
+const renderOppBar = renderPlayersBar;
+/* for the music: how am I doing? -1 (behind) … 1 (ahead) */
+function mpStanding() {
+  const m = MP.match; if (!S.mp || !m) return 0;
+  const me = meP(), os = others().filter(p => !GONE(p.status)); if (!me || !os.length) return 0;
+  if (m.mode === 'ko') { const o = oppP(); const d = (m.ko.hp[PEER] - m.ko.hp[o.peer]) / KO_HP; return Math.max(-1, Math.min(1, d * 2)); }
+  const prog = p => (p.round - 1) * 10 + (p.total ? p.ok / p.total * 10 : 0);
+  if (m.mode === 'race' || m.mode === 'br') { const best = Math.max(...os.map(prog)); return Math.max(-1, Math.min(1, (prog(me) - best) / 8)); }
+  const best = Math.max(...os.map(p => p.score)); const mine = S.score;
+  return Math.max(-1, Math.min(1, (mine - best) / Math.max(600, best * .25)));
+}
+function myKoHp() { const m = MP.match; return m && m.ko && m.ko.hp ? m.ko.hp[PEER] : KO_HP; }
 
 /* ---------- version + patch notes ---------- */
-const VERSION = 'V9.2';
+const VERSION = 'V10';
 const PATCH_NOTES = [
+  ['V10', 'Party Time', ['PvP rooms now hold up to 8 players.',
+    'New: Battle Royale (3-8 players). Rules pile up every round; the last to submit, or anyone who fails, is knocked out. Last one standing wins.',
+    'New: FFA (3-8 players). Everyone plays the same 5 rounds; most points wins. Both party modes end with a placement board.',
+    'Chat in the room and on the results screen, plus emotes during a round.',
+    'The room shows how many wins each player has this session. Click a player to see their account.',
+    'Knockout rebuilt: 1,000 HP, the lower round score takes the difference as damage, and the multiplier grows every round. Animated damage, crunchy hits.',
+    'Knockout: the lock button now says SUBMITTED, and you can unlock to keep editing.',
+    "Race no longer shows a time for the player who didn't finish.", 'Score: the "opponent submitted" message no longer covers the rules.',
+    'PvP music is faster, and follows the score: a melody when you lead, a darker groove when you trail.',
+    'Volume sliders remember where they were. Mute All slides them down, Unmute springs them back.',
+    'The music slows back down more gently after a tense moment.',
+    'Play splits into Standard and Drop Out like pulling butter apart.', 'The last 20 seconds of a Standard round pulse with the beat.',
+    'Smoother background, slide transitions between menus and a pixel wipe into and out of games.',
+    'Buttons float when you hover them and press in more clearly.',
+    'Medals tilt and shine as you move over them. Rainbow medals get a choir.',
+    'Achievements flip over when revealed and are grouped by theme.', 'Notifications are all the same size, slide in smoothly and never overlap.',
+    'Fire climbs higher at the sides of the screen and crackles quietly (turned off with FX: OFF).']],
   ['V9.2', 'Fine Tuning', ['The music no longer drops instruments mid-phrase: they linger for a bar and fade out, and the tension winds down gradually after a cleared round.',
     'The alarm is gone. When time runs low you now get a frantic synth solo instead.', 'Standard rounds start with a light drum kit (soft kick and brushed snares), so they sound different from the menu.',
     'The mode badge next to the title is readable again.', 'Turning both volume sliders to 0 now counts as muted, and UNMUTE brings them back.']],
@@ -3522,12 +4342,25 @@ function renderMenuStats() {
 }
 
 let splitTimer = 0;
-function collapsePlay() { clearTimeout(splitTimer); if ($('playSplit')) { $('playSplit').hidden = true; $('play').hidden = false; } }
-function armSplit(ms) { clearTimeout(splitTimer); splitTimer = setTimeout(() => { if ($('playSplit').matches(':hover')) return armSplit(1500); collapsePlay(); }, ms); }
-$('play').onclick = () => { sfx.click(); $('play').hidden = true; $('playSplit').hidden = false; $('playStd').focus(); armSplit(4000); };
+const isSplit = () => $('playWrap').classList.contains('split');
+function collapsePlay() {
+  clearTimeout(splitTimer);
+  const w = $('playWrap'); if (!w || !isSplit()) return;
+  w.classList.remove('split'); w.classList.add('joining'); setTimeout(() => w.classList.remove('joining'), 650);
+  $('playSplit').inert = true; $('play').inert = false;
+  if (document.activeElement && document.activeElement.closest('#playSplit')) $('play').focus({ preventScroll: true });
+  if (!$('menu').hidden) squish(false);
+}
+function armSplit(ms) { clearTimeout(splitTimer); splitTimer = setTimeout(() => { if ($('playWrap').matches(':hover')) return armSplit(1500); collapsePlay(); }, ms); }
+// a stretchy, gooey sound for the split and the join
+function squish(open) { const a = audio(); if (!a || muted) return; const t = a.currentTime; const o = a.createOscillator(), g = a.createGain(), f = a.createBiquadFilter(); o.type = 'triangle'; f.type = 'lowpass'; f.frequency.value = 900;
+  o.frequency.setValueAtTime(open ? 140 : 320, t); o.frequency.exponentialRampToValueAtTime(open ? 340 : 120, t + .32);
+  g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.09, t + .05); g.gain.exponentialRampToValueAtTime(.0001, t + .4);
+  o.connect(f); f.connect(g); g.connect(sfxBus || a.destination); o.start(t); o.stop(t + .45); if (open) tone(880, .05, 'square', .03, 0, .34); }
+$('play').onclick = () => { const w = $('playWrap'); w.classList.remove('joining'); w.classList.add('split'); $('playSplit').inert = false; $('play').inert = true; squish(true); setTimeout(() => $('playStd').focus({ preventScroll: true }), 120); armSplit(4000); };
 $('playStd').onclick = () => startGame({ mode: 'standard' });
 $('playDrop').onclick = () => startGame({ mode: 'dropout' });
-document.addEventListener('click', e => { if (!$('playSplit').hidden && !e.target.closest('#playWrap')) collapsePlay(); });
+document.addEventListener('click', e => { if (isSplit() && !e.target.closest('#playWrap')) collapsePlay(); });
 $('howBtn').onclick = () => { sfx.click(); openModal(`
   <h2>HOW TO PLAY</h2>
   <ol>
@@ -3538,7 +4371,7 @@ $('howBtn').onclick = () => { sfx.click(); openModal(`
     <li>If the clock hits 0:00, the run is over.</li>
   </ol>
   <h3>Game modes</h3>
-  <p><b>Standard</b> is the game described above. <b>Drop Out</b> is endless: every round gives 3 brand-new rules and a fresh password, starting with 1 minute and getting 5 seconds shorter every 2 rounds (down to 10 seconds). Your score is the round you reach. <b>PvP</b> lets you play a friend in <b>Score</b>, <b>Race</b> or <b>Knockout</b>.</p>
+  <p><b>Standard</b> is the game described above. <b>Drop Out</b> is endless: every round gives 3 brand-new rules and a fresh password, starting with 1 minute and getting 5 seconds shorter every 2 rounds (down to 10 seconds). Your score is the round you reach. <b>PvP</b> rooms hold up to 8 players: 1v1 in <b>Score</b>, <b>Race</b> or <b>Knockout</b>, or 3-8 players in <b>Battle Royale</b> or <b>FFA</b>.</p>
   <h3>Spelling is forgiving</h3>
   <p>Case, spaces, hyphens and accents don't matter: <i>Under the Dome</i>, <i>UnderTheDome</i> and <i>under-the-dome</i> all count. Numbers hidden inside longer numbers count too (1942 contains 42). A few rules ask for a specific format, and their card tells you how.</p>
   <h3>Scoring</h3>
@@ -3580,9 +4413,65 @@ pwEl.addEventListener('beforeinput', e => {
 });
 pwEl.addEventListener('compositionend', e => { if ((S.phase === 'playing' || S.phase === 'between') && e.data) S.chars += [...e.data].length; });
 pwEl.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); lockIn(); } });
-$('lock').onclick = () => { lockIn(); pwEl.focus(); };
+$('lock').onclick = () => { if (S.mp && S.mode === 'ko' && S.phase === 'waiting') { koUnlock(); return; } lockIn(); pwEl.focus(); };
+$('emoteBar').addEventListener('click', e => { const b = e.target.closest('[data-emote]'); if (b) sendEmote(+b.dataset.emote); });
+
+
+/* ---------- beat flash: the last 20 seconds of a Standard round pulse with the music ---------- */
+let flashV = 0;
+function beatFlash(now) {
+  const el = $('beatFlash'); if (!el) return;
+  let target = 0;
+  if (S.phase === 'playing' && S.mode === 'standard' && !S.paused && S.dispLeft < 20 && quality !== 'off' && !$('game').hidden) {
+    const urgency = 1 - Math.max(0, S.dispLeft) / 20;
+    let since;
+    const b = music.playing() ? music.beat() : null;
+    if (b) { let bt = b.next; while (bt > b.now) bt -= b.len; since = b.now - bt; }
+    else since = Math.ceil(S.dispLeft) - S.dispLeft;      // no music: once a second
+    target = Math.exp(-since * 7) * (.07 + .13 * urgency);
+  }
+  if (target !== flashV) { flashV = target; el.style.opacity = flashV < .003 ? '0' : flashV.toFixed(3); }
+}
+
+/* ---------- medals you can turn in your hand ---------- */
+let tiltEl = null, haloEl = null;
+const medalAt = t => t && t.closest ? t.closest('.acc-medals .medal, .pf-medals .medal') : null;
+document.addEventListener('pointermove', e => {
+  if (e.pointerType === 'touch') return;
+  const md = medalAt(e.target);
+  if (md !== tiltEl) { if (tiltEl) untilt(tiltEl); tiltEl = md; if (md) { md.classList.add('tilting'); if (md.querySelector('.disc.t-rainbow')) haloOn(md); } }
+  if (!md) return;
+  const d = md.querySelector('.disc'), r = d.getBoundingClientRect();
+  const x = Math.max(-1.3, Math.min(1.3, (e.clientX - r.left - r.width / 2) / (r.width / 2))), y = Math.max(-1.3, Math.min(1.3, (e.clientY - r.top - r.height / 2) / (r.height / 2)));
+  const rot = `rotateY(${(x * 26).toFixed(1)}deg) rotateX(${(-y * 26).toFixed(1)}deg)`;
+  d.style.transform = `perspective(380px) ${rot} scale(1.25)`;
+  d.style.setProperty('--mx', (50 + x * 38).toFixed(0) + '%'); d.style.setProperty('--my', (50 + y * 38).toFixed(0) + '%');
+  if (haloEl) { const hd = haloEl.querySelector('.disc'); hd.style.transform = `perspective(380px) ${rot} scale(1.7)`; hd.style.setProperty('--mx', d.style.getPropertyValue('--mx')); hd.style.setProperty('--my', d.style.getPropertyValue('--my')); }
+}, { passive: true });
+document.addEventListener('pointerout', e => { if (!e.relatedTarget && tiltEl) { untilt(tiltEl); tiltEl = null; } });
+addEventListener('scroll', () => { if (tiltEl) { untilt(tiltEl); tiltEl = null; } }, { passive: true, capture: true });
+function untilt(md) { md.classList.remove('tilting'); const d = md.querySelector('.disc'); if (d) d.style.transform = ''; if (haloEl) haloOff(); }
+// rainbow medals: the room goes dark, the music hushes, a choir sings and the medal shines
+function haloOn(md) {
+  const disc = md.querySelector('.disc'), r = disc.getBoundingClientRect();
+  const dim = document.createElement('div'); dim.className = 'halo-dim';
+  const h = document.createElement('div'); h.className = 'medal halo' + (md.classList.contains('sm') ? ' sm' : '');
+  h.innerHTML = '<div class="rays"></div><div class="sparks"><i></i><i></i><i></i><i></i><i></i><i></i></div>' + disc.outerHTML;
+  h.style.left = (r.left + r.width / 2) + 'px'; h.style.top = (r.top + r.height / 2) + 'px';
+  document.body.append(dim, h);
+  requestAnimationFrame(() => { dim.classList.add('on'); h.classList.add('on'); });
+  h._dim = dim; haloEl = h;
+  music.duck(true); choir.start();
+}
+function haloOff() {
+  const h = haloEl; if (!h) return; haloEl = null;
+  h.classList.remove('on'); h._dim.classList.remove('on');
+  setTimeout(() => { h.remove(); h._dim.remove(); }, 600);
+  music.duck(false); choir.stop();
+}
 
 /* ---------- main loop ---------- */
+let bgSpeed = 0.1;
 let lastFrame = performance.now(), lastBg = 0, bgT = 0, slowAcc = 0, autoLowered = false;
 function frame() {
   const now = performance.now();
@@ -3606,7 +4495,7 @@ function frame() {
   else if (S.phase === 'between' || S.phase === 'waiting') target = 0;
   else if (S.phase === 'over') target = S.lastWin ? .15 : 1;
   else target = .06 + .05 * Math.sin(now / 3000);
-  heatShown += (target - heatShown) * .04;
+  heatShown += (target - heatShown) * (1 - Math.exp(-dt / 2.2));
   const h = Math.max(0, Math.min(1, heatShown));
   $('timeOut').style.color = mixHex('cfd9ff', 'ffb45a', h);
   // score count-up
@@ -3615,7 +4504,9 @@ function frame() {
     $('scoreOut').textContent = nf(S.shownScore);
   }
   // draw
-  bgT += dt * (0.1 + 0.2 * h);
+  bgSpeed += ((0.1 + 0.2 * h) - bgSpeed) * (1 - Math.exp(-dt / 3));
+  bgT += dt * bgSpeed;
+  beatFlash(now);
   const Q = QUAL[quality];
   // slow devices: drop to LOW once if HIGH can't keep ~28 fps during play
   if (quality === 'high' && !autoLowered && S.phase === 'playing') {
@@ -3626,6 +4517,7 @@ function frame() {
   else if (gl) { lastBg = now; gl.uniform2f(uRes, bg.width, bg.height); gl.uniform1f(uT, bgT); gl.uniform1f(uHeat, h); gl.drawArrays(gl.TRIANGLES, 0, 6); }
   else if (bg2d) { lastBg = now; const g = bg2d.createLinearGradient(0, 0, bg.width, bg.height); g.addColorStop(0, mixHex('241e66', '7a2410', h)); g.addColorStop(1, mixHex('3a6fd8', 'f29a35', h)); bg2d.fillStyle = g; bg2d.fillRect(0, 0, bg.width, bg.height); }
   drawFlames(h, dt);
+  crackleTick(pCount > 0 ? Math.min(1, fireI / 2) : 0, dt);
   if (TUT.on) tutLayout();
   requestAnimationFrame(frame);
 }
