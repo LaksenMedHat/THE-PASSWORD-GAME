@@ -463,7 +463,8 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 /* ---------- V8 ---------- */
 .btn.orange { --b1: #ff8a2b; --b2: var(--red); --b3: #ffd23d; color: var(--edge); text-shadow: none; }
 .playwrap { position: relative; height: 88px; --c1: var(--red); --c2: #ff8a2b; --cm: #ffd23d; --t1: var(--ink); --t2: var(--edge); }
-.pvpwrap { height: 76px; --c1: var(--good); --c2: #2fb7ff; --cm: #b6ff6a; --t1: var(--edge); --t2: var(--edge); }
+.pvpwrap { height: 76px; --c1: #1f9e5c; --c2: #1d7fc4; --cm: #6fd38a; --t1: var(--ink); --t2: var(--ink); }
+.pvpwrap .pbtn, .pvpwrap .playsplit .pbtn:last-child { text-shadow: 0 3px 0 rgba(0,0,0,.35); }
 .goo { position: absolute; inset: -6px -6px 0; filter: url(#goo) drop-shadow(0 6px 0 var(--edge)); pointer-events: none; }
 .blob { position: absolute; top: 6px; bottom: 6px; left: 6px; right: 6px; border-radius: 12px; background: var(--c1);
   transition: left .62s cubic-bezier(.55,-0.35,.3,1.45), right .62s cubic-bezier(.55,-0.35,.3,1.45), transform .2s cubic-bezier(.3,1.6,.5,1), filter .2s; }
@@ -931,7 +932,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .menu-div { border: 0; height: 3px; margin: 2px 18%; border-radius: 3px; background: rgba(255, 255, 255, .13); }
 .btn.locked, .btn.locked:hover, .btn.locked:active, .playwrap.locked .blob, .playwrap.locked:hover .blob, .playwrap.locked:active .blob,
 .playwrap.droplock.split .br, .playwrap.droplock.split:has(.pbtn:last-child:hover) .br, .playwrap.droplock.split:has(.pbtn:last-child:active) .br { filter: grayscale(.85) brightness(.72) !important; }
-.ufx-go { position: absolute; left: 50%; bottom: 14%; transform: translateX(-50%); opacity: 0; transition: opacity .4s; pointer-events: none; }
+.ufx-go { position: absolute; left: 0; right: 0; margin: 0 auto; width: max-content; bottom: 14%; opacity: 0; transition: opacity .4s; pointer-events: none; }
 .ufx-go.show { opacity: 1; pointer-events: auto; }
 .set-help { display: flex; flex-wrap: wrap; gap: 8px; }
 .prow { border-left: 5px solid var(--pc, transparent); }
@@ -958,6 +959,32 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .mshow-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; margin-top: 10px; }
 .mshow-stats div { background: var(--edge); border-radius: 8px; padding: 8px 6px; display: grid; gap: 2px; }
 .mshow-stats small { font-size: 10px; letter-spacing: .14em; color: var(--dim); } .mshow-stats b { font-family: var(--display); font-weight: 400; font-size: 22px; }
+#vsFx { position: fixed; inset: 0; z-index: 27; overflow: hidden; pointer-events: none; background: rgba(4, 3, 10, 0); transition: background .3s; }
+#vsFx.on { background: rgba(4, 3, 10, .82); }
+#vsFx.out { opacity: 0; transition: opacity .35s; }
+.vs-band { position: absolute; left: -30%; right: -30%; top: 50%; height: 30vh; margin-top: -15vh; background: #000; border-top: 5px solid var(--gold); border-bottom: 5px solid var(--red);
+  transform: rotate(-24deg) scaleX(0); transition: transform .38s cubic-bezier(.7, 0, .2, 1) .05s; box-shadow: 0 0 60px rgba(0, 0, 0, .8); }
+#vsFx.on .vs-band { transform: rotate(-24deg) scaleX(1); }
+.vs-word { position: absolute; inset: 0; display: grid; place-items: center; }
+.vs-word b { font-family: var(--display); font-weight: 400; font-size: clamp(110px, 24vw, 260px); color: var(--gold); line-height: 1; text-shadow: 0 8px 0 var(--red), 0 0 50px rgba(255, 184, 61, .6); opacity: 0; transform: scale(3) rotate(-8deg); }
+#vsFx.on .vs-word b { animation: vsword .5s cubic-bezier(.2, 1.4, .4, 1) .95s forwards, vsshake .09s linear 1.45s 5; }
+@keyframes vsword { to { opacity: 1; transform: scale(1) rotate(-8deg); } }
+@keyframes vsshake { 0% { translate: 0 0; } 25% { translate: -6px 4px; } 50% { translate: 5px -5px; } 75% { translate: -4px -3px; } 100% { translate: 0 0; } }
+.vs-p { position: absolute; display: grid; gap: 6px; transition: transform .5s cubic-bezier(.2, 1.3, .4, 1); }
+.vs-p.p1 { left: 6%; top: 9%; transform: translateX(-120vw); transition-delay: .35s; }
+.vs-p.p2 { right: 6%; bottom: 9%; justify-items: end; transform: translateX(120vw); transition-delay: .6s; }
+#vsFx.on .vs-p { transform: none; }
+.vs-name .nchip { font-size: clamp(30px, 6vw, 60px); }
+.vs-p small { font-size: 13px; letter-spacing: .2em; color: #e8e2ff; }
+.note-more { margin-top: 6px; }
+.note-more > summary { cursor: pointer; display: inline-block; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); padding: 4px 10px; border: 2px solid var(--panel-hi); border-radius: 999px; list-style: none; user-select: none; }
+.note-more > summary::-webkit-details-marker { display: none; }
+.note-more > summary::before { content: '▸ '; } .note-more[open] > summary::before { content: '▾ '; }
+.note-more > summary:hover { border-color: var(--gold); }
+.note-more[open] > ul { margin-top: 8px; }
+.note-sub { display: grid; gap: 8px; margin-top: 10px; }
+.note-sub .note-v { background: rgba(255, 255, 255, .04); }
+.note-v h3 small.grp { background: var(--panel-hi); color: var(--ink); }
 .ico { width: 1.05em; height: 1.05em; fill: currentColor; display: inline-block; vertical-align: -.16em; flex: none; }
 .ico.l { margin-right: .4em; }
 .ico.gold { color: #ffcf4a; } .ico.silver { color: #d6dceb; } .ico.bronze { color: #e0904f; }
@@ -1008,7 +1035,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
       <button class="btn dark" id="setBtn" type="button">SETTINGS</button>
       <button class="btn dark" id="contactBtn" type="button">CONTACT</button>
     </div>
-    <button class="version" id="verBtn" type="button">V13.3 · CUSTOM GAMES · <u>PATCH NOTES</u></button>
+    <button class="version" id="verBtn" type="button">V14 · VERSUS · <u>PATCH NOTES</u></button>
   </section>
 
   <section id="account" class="screen account" hidden>
@@ -1227,7 +1254,20 @@ const COUNTRY_ALIASES = {
   'Bosnia and Herzegovina': 'Bosnia and Herzegovina|Bosnia',
   'Palestine': 'Palestine|Gaza',
   'Germany': 'Germany|West Germany|Deutschland',
-  'Ivory Coast': 'Ivory Coast|Côte d\'Ivoire'
+  'Ivory Coast': 'Ivory Coast|Côte d\'Ivoire',
+  'Democratic Republic of the Congo': 'Democratic Republic of the Congo|DR Congo|DRC|Congo-Kinshasa',
+  'Republic of the Congo': 'Republic of the Congo|Congo|Congo-Brazzaville',
+  'United Arab Emirates': 'United Arab Emirates|UAE|Emirates',
+  'South Korea': 'South Korea|Korea|Republic of Korea',
+  'Eswatini': 'Eswatini|Swaziland',
+  'Timor-Leste': 'Timor-Leste|East Timor',
+  'Cape Verde': 'Cape Verde|Cabo Verde',
+  'Micronesia': 'Micronesia|Federated States of Micronesia',
+  'São Tomé and Príncipe': 'São Tomé and Príncipe|Sao Tome',
+  'Kyrgyzstan': 'Kyrgyzstan|Kirgizstan|Kyrgyz Republic',
+  'Moldova': 'Moldova|Moldavia',
+  'Belarus': 'Belarus|Byelorussia',
+  'Greenland': 'Greenland|Kalaallit Nunaat'
 };
 const CL = names => L(names.split(';').map(n => COUNTRY_ALIASES[n.trim()] || n.trim()).join(';'));
 
@@ -1279,6 +1319,30 @@ const NV_RTX = [2050, 2060, 2070, 2080, 3050, 3060, 3070, 3080, 3090, 4050, 4060
 const NV_GT = [210, 610, 630, 710, 720, 730, 1010, 1030];
 const NV_RE = new RegExp('(?:geforce|quadro|titan(?:x|v|z|black|rtx|xp)|(?:gtx(?:' + NV_GTX.join('|') + '))|(?:rtx(?:' + NV_RTX.join('|') + '))|(?:rtxa[24568]000)|(?:gt(?:' + NV_GT.join('|') + '))|(?:gb?[hb](?:100|200|300))|(?:[avhp]100)|(?:a(?:800|40|30|10)(?![0-9]))|l40s?|l4(?![0-9])|jetson|dgx)');
 function nvidiaCheck(c) { return NV_RE.test(c.n); }
+
+/* ---------- V14 data ---------- */
+const CONTINENTS = {
+  Europe: EUROPE,
+  Asia: CL(`Afghanistan;Armenia;Azerbaijan;Bahrain;Bangladesh;Bhutan;Brunei;Cambodia;China;Cyprus;Georgia;India;Indonesia;Iran;Iraq;Israel;Japan;Jordan;Kazakhstan;Kuwait;Kyrgyzstan;Laos;Lebanon;Malaysia;Maldives;Mongolia;Myanmar;Nepal;North Korea;Oman;Pakistan;Palestine;Philippines;Qatar;Russia;Saudi Arabia;Singapore;South Korea;Sri Lanka;Syria;Taiwan;Tajikistan;Thailand;Timor-Leste;Turkey;Turkmenistan;United Arab Emirates;Uzbekistan;Vietnam;Yemen`),
+  Africa: CL(`Algeria;Angola;Benin;Botswana;Burkina Faso;Burundi;Cameroon;Cape Verde;Central African Republic;Chad;Comoros;Democratic Republic of the Congo;Republic of the Congo;Djibouti;Egypt;Equatorial Guinea;Eritrea;Eswatini;Ethiopia;Gabon;Gambia;Ghana;Guinea;Guinea-Bissau;Ivory Coast;Kenya;Lesotho;Liberia;Libya;Madagascar;Malawi;Mali;Mauritania;Mauritius;Morocco;Mozambique;Namibia;Niger;Nigeria;Rwanda;São Tomé and Príncipe;Senegal;Seychelles;Sierra Leone;Somalia;South Africa;South Sudan;Sudan;Tanzania;Togo;Tunisia;Uganda;Zambia;Zimbabwe`),
+  'North America': CL(`Antigua and Barbuda;Bahamas;Barbados;Belize;Canada;Costa Rica;Cuba;Dominica;Dominican Republic;El Salvador;Greenland;Grenada;Guatemala;Haiti;Honduras;Jamaica;Mexico;Nicaragua;Panama;Saint Kitts and Nevis;Saint Lucia;Saint Vincent and the Grenadines;Trinidad and Tobago;United States`),
+  'South America': CL(`Argentina;Bolivia;Brazil;Chile;Colombia;Ecuador;Guyana;Paraguay;Peru;Suriname;Uruguay;Venezuela`),
+  Oceania: CL(`Australia;Fiji;Kiribati;Marshall Islands;Micronesia;Nauru;New Zealand;Palau;Papua New Guinea;Samoa;Solomon Islands;Tonga;Tuvalu;Vanuatu`)
+};
+const USSR = CL(`Russia;Ukraine;Belarus;Estonia;Latvia;Lithuania;Moldova;Georgia;Armenia;Azerbaijan;Kazakhstan;Uzbekistan;Turkmenistan;Kyrgyzstan;Tajikistan`);
+const BROWSERS = L(`Google Chrome|Chrome;Firefox|Mozilla Firefox;Safari;Microsoft Edge|Edge;Opera;Opera GX;Brave;Vivaldi;Arc Browser;Tor Browser;Internet Explorer;Chromium;DuckDuckGo;Samsung Internet;UC Browser;Yandex Browser|Yandex;Maxthon;Netscape|Netscape Navigator;Mosaic|NCSA Mosaic;Waterfox;LibreWolf;Pale Moon;SeaMonkey;Lynx;Konqueror;GNOME Web|Epiphany;Midori;Zen Browser|Zen;Floorp;Comet;ChatGPT Atlas;Dia Browser;Ladybird;Orion;Mullvad Browser;Puffin;Amazon Silk|Silk;Sleipnir;Thorium;Ungoogled Chromium;Naver Whale|Whale;QQ Browser;360 Browser;Iridium;Falkon;qutebrowser;Dolphin Browser;Aloha;Kiwi Browser;Ecosia`);
+// tickers are case-sensitive: write them in capitals like on the stock exchange
+const TICKERS = [['Apple', 'AAPL'], ['Microsoft', 'MSFT'], ['Nvidia', 'NVDA'], ['Amazon', 'AMZN'], ['Alphabet (Google)', 'GOOGL|GOOG'], ['Tesla', 'TSLA'], ['Netflix', 'NFLX'], ['Intel', 'INTC'],
+  ['Coca-Cola', 'KO'], ['PepsiCo', 'PEP'], ["McDonald's", 'MCD'], ['Walmart', 'WMT'], ['Disney', 'DIS'], ['Nike', 'NKE'], ['Starbucks', 'SBUX'], ['Boeing', 'BA'], ['JPMorgan Chase', 'JPM'],
+  ['Mastercard', 'MA'], ['ExxonMobil', 'XOM'], ['Pfizer', 'PFE'], ['Johnson & Johnson', 'JNJ'], ['Procter & Gamble', 'PG'], ['Oracle', 'ORCL'], ['Adobe', 'ADBE'], ['Salesforce', 'CRM'],
+  ['Spotify', 'SPOT'], ['Verizon', 'VZ'], ['Costco', 'COST'], ['Home Depot', 'HD'], ['Berkshire Hathaway', 'BRK.A|BRK.B|BRK'], ['Novo Nordisk', 'NVO|NOVO'], ['Broadcom', 'AVGO'],
+  ['Qualcomm', 'QCOM'], ['PayPal', 'PYPL'], ['Airbnb', 'ABNB'], ['Shopify', 'SHOP'], ['Palantir', 'PLTR'], ['General Motors', 'GM'], ['Caterpillar', 'CAT'], ['Goldman Sachs', 'GS'],
+  ['Bank of America', 'BAC'], ['Chevron', 'CVX'], ['Toyota', 'TM'], ['Electronic Arts', 'EA'], ['Take-Two Interactive', 'TTWO'], ['Roblox', 'RBLX'], ['Nintendo', 'NTDOY'], ['Advanced Micro Devices (AMD)', 'AMD'],
+  ['Meta (Facebook)', 'META'], ['Uber', 'UBER'], ['Visa', 'V'], ['IBM', 'IBM'], ['AT&T', 'T'], ['Ford', 'F']].filter(([, t]) => t.split('|')[0].length >= 2 && !['AMD', 'META', 'UBER', 'IBM'].includes(t));
+const PROG_CHARS = ['{', '}', '[', ']', '(', ')', ';', '<', '>', '=', '&', '|', '!', '~', '^', '%', '*', '/', '\\', '_', '`', '#', '$', '@', '?', ':', '+', '-'];
+const SAMSUNG_RE = [/\b(?:galaxy\s*)?s\s?(?:2[0-6]|10|[2-9])(?:\s?(?:\+|plus|ultra|fe|edge|e))?(?![0-9a-z])/i, /\bnote\s?(?:[1-9]|10|20)(?![0-9])/i, /\bz\s?(?:fold|flip)\s?[1-7]?(?![0-9])/i,
+  /\bgalaxy\s?(?:fold|flip)\s?[1-7]?(?![0-9])/i, /\bgalaxy\s?(?:a|m|j)\s?\d{1,2}[s]?(?![0-9])/i, /\b(?:a|m)\s?(?:0[1-5]|[1-9][0-9])[s]?(?![0-9a-z])/i];
+const samsungCheck = c => SAMSUNG_RE.some(re => re.test(c.raw));
 
 /* ---------- variant data ---------- */
 
@@ -1696,7 +1760,26 @@ const RULES = [
   listRule('spanish', "Must contain a Spanish-speaking country that isn't Spain.", 'Territories count too.', SPANISH),
   listRule('worldcup', "Must contain a country that has won the men's World Cup.", null, WORLDCUP),
   listRule('feline', 'Must contain a feline animal.', 'Any wild cat species, and domestic cat breeds too.', FELINES),
-  listRule('europe', 'Must contain a country in Europe.', 'Countries that are partly in Europe, like Turkey and Russia, count too.', EUROPE),
+  {
+    id: 'europe', name: 'Must contain a country in X.',
+    make() { const k = pick(Object.keys(CONTINENTS)); const list = CONTINENTS[k];
+      return { text: `Must contain a country in ${k}.`, hint: k === 'Europe' || k === 'Asia' ? 'Countries that are partly in it, like Turkey and Russia, count too.' : k === 'North America' ? 'Central America and the Caribbean count too.' : null, check: c => !!matchList(list, c.n), examples: () => sample(list, 4) }; },
+    answers: () => Object.entries(CONTINENTS).map(([k, l]) => `${k}: ${l.map(e => e.display).join(', ')}`)
+  },
+  listRule('ussr', 'Must contain a country that was part of the USSR.', 'The 15 Soviet republics, by their names today.', USSR),
+  {
+    id: 'ticker', name: 'Must contain the stock ticker of X.',
+    make() { const [co, tk] = pick(TICKERS); const list = tk.split('|');
+      return { text: `Must contain the stock ticker of ${co}.`, hint: 'The short code it trades under, in capital letters. Nvidia is NVDA.', check: c => list.some(t => c.raw.includes(t)), examples: () => list.slice(0, 2) }; },
+    answers: () => TICKERS.map(([co, tk]) => `${co} → ${tk.split('|').join(' / ')}`)
+  },
+  listRule('browser', 'Must contain a web browser.', null, BROWSERS),
+  simple('progchar', 'Must contain a character used in programming.', 'Like { } [ ] ( ) ; = < > or #.', c => PROG_CHARS.some(ch => c.raw.includes(ch)), PROG_CHARS.slice()),
+  {
+    id: 'samsung', name: 'Must contain a Samsung phone.',
+    make: () => ({ text: 'Must contain a Samsung phone.', hint: 'A Galaxy model, like S24, Galaxy S26 Ultra, Note 20 or Z Flip 6.', check: samsungCheck, examples: () => ['S24', 'Galaxy S26 Ultra', 'Note 20', 'Z Fold 6'] }),
+    answers: () => ['Galaxy S: S2–S10, S20–S26 (with +, Plus, Ultra, FE or Edge)', 'Galaxy Note: Note 1–10, Note 20', 'Galaxy Z Fold and Z Flip 1–7', 'Galaxy A and M: A01–A99, M01–M99', 'The word Galaxy in front is optional.']
+  },
   {
     id: 'nvidia', name: 'Must contain an Nvidia graphics card.',
     make: () => ({ text: 'Must contain an Nvidia graphics card.', hint: 'A family name like GeForce or Quadro, or a real model written like RTX 4090 or GTX 1080.', check: nvidiaCheck, examples: () => ['RTX 4090', 'GTX 1080', 'GeForce', 'H100'] }),
@@ -1747,12 +1830,12 @@ const RULE_CAT = {
   special: 'classic', upper: 'classic', lower: 'classic', number: 'classic',
   csmap: 'gaming', valomap: 'gaming', fortnite: 'gaming', ps5: 'gaming', nintendo: 'gaming', team17: 'gaming', minecraft: 'gaming', gta: 'gaming', goty: 'gaming', alolan: 'gaming', gen1: 'gaming', starter: 'gaming',
   phone: 'tech', intel: 'tech', tld: 'tech', proglang: 'tech', windows: 'tech', ai: 'tech', hex: 'tech', carbrand: 'tech', nvidia: 'tech',
-  currency: 'geo', neighbor: 'geo', nato: 'geo', spanish: 'geo', europe: 'geo',
+  currency: 'geo', neighbor: 'geo', nato: 'geo', spanish: 'geo', europe: 'geo', ussr: 'history', ticker: 'tech', browser: 'tech', samsung: 'tech', progchar: 'classic',
   president: 'history', danishking: 'history', party: 'history', gun: 'history', ww2: 'history', states: 'history',
   norse: 'myth', greek: 'myth', zodiac: 'myth',
   titanic: 'film', king: 'film', jackblack: 'film', bpm: 'film', key: 'film', oscar: 'film', album: 'film', boxoffice: 'film', shakespeare: 'film',
   tdf: 'sport', sport: 'sport', worldcup: 'sport',
-  dog: 'nature', tree: 'nature', feline: 'nature', color: 'nature',
+  dog: 'nature', tree: 'nature', feline: 'nature', color: 'classic',
   abbrev: 'lang', synonym: 'lang', euroword: 'lang', backwards: 'lang', emoji: 'lang', emojix: 'lang',
   prime: 'math', solvex: 'math', pi: 'math', rock: 'math', meaning: 'math', funny: 'math',
   musk: 'pop', streamer: 'pop', fastfood: 'pop', brainrot: 'pop', born: 'pop'
@@ -2182,7 +2265,7 @@ const music = (() => {
   /* ----- jingles (they replace the win/lose sound when music is on) ----- */
   function jingle(kind) {
     if (!started || muted || vol.music <= 0 || hiddenAt) return false;
-    const t = a.currentTime + .06, d = jbus, len = kind === 'unlock' ? 6.2 : kind === 'win' ? 3.2 : 2.8;
+    const t = a.currentTime + .06, d = jbus, len = kind === 'vs' ? 2.6 : kind === 'unlock' ? 6.2 : kind === 'win' ? 3.2 : 2.8;
     jingleUntil = performance.now() + len * 1000;
     apply(Object.assign(decide(), { duck: true }));
     if (kind === 'win') {
@@ -2193,6 +2276,16 @@ const music = (() => {
       keys(f, [57, 61, 64, 68, 71], 1.7, 1.1, d); bass(f, 33, 1.8, 1.1, d); bass(f, 45, 1.8, .6, d);
       kick(f, 1, d); noiseHit(f, 'highpass', 5000, .5, .09, 1.6, d);
       lastLead = 76; lead(f + .05, 81, 1.4, .9, d);
+    } else if (kind === 'vs') {
+      // a short, loud build: riser, faster kicks, a slam on VS
+      noiseHit(t, 'bandpass', 900, 1.2, .08, 1.0, d);
+      [0, .3, .55, .75, .9, 1.0, 1.08, 1.15, 1.21].forEach(o => kick(t + o, 1, d));
+      [.75, .9, 1.0, 1.08, 1.15, 1.21, 1.27, 1.33].forEach(o => snare(t + o, .7, d));
+      bass(t + .3, 28, .4, 1, d); bass(t + .75, 28, .3, 1, d);
+      const f = t + 1.4;
+      kick(f, 1.3, d); noiseHit(f, 'highpass', 2500, .6, .14, 1.2, d);
+      keys(f, [40, 47, 52, 55], 1.1, 1.1, d); bass(f, 28, 1.1, 1.2, d);
+      lastLead = 76; lead(f + .05, 79, .9, .9, d, 74);
     } else if (kind === 'unlock') {
       // the lock slams down
       kick(t + .3, 1.1, d); bass(t + .3, 28, 1.3, 1.1, d);
@@ -2228,6 +2321,91 @@ const music = (() => {
 
 
 ['pointerdown', 'keydown'].forEach(ev => addEventListener(ev, () => { audio(); music.start(); }, { capture: true, passive: true }));
+
+/* ---------- heaven: the rainbow-medal choir ----------
+   A soft "ah" choir and a harp that follow the medal in your hand: tilt left/right to move through the chords,
+   tilt the top towards you for more voices and a brighter sound, and move it to make the harp play faster and higher. */
+const heaven = (() => {
+  let a = null, out = null, bright = null, voices = [], on = false, stopT = 0, tick = 0;
+  let tx = 0, ty = 0, energy = 0, chordI = -1, nextHarp = 0, harpStep = 0;
+  // F maj9 · A m9 · C maj9 · G add9 · D (Lydian lift)
+  const CHORDS = [[53, 57, 60, 64, 67, 72], [57, 60, 64, 67, 71, 76], [60, 64, 67, 71, 74, 79], [55, 62, 67, 71, 74, 81], [62, 66, 69, 73, 76, 81]];
+  const hz = m => 440 * Math.pow(2, (m - 69) / 12);
+  function setup() {
+    a = audio(); if (!a) return false;
+    if (out) return true;
+    out = a.createGain(); out.gain.value = 0;
+    bright = a.createBiquadFilter(); bright.type = 'lowpass'; bright.frequency.value = 2200; bright.Q.value = .4;
+    const wet = a.createGain(); wet.gain.value = .5;
+    // a small cathedral: two long feedback echoes, darker every bounce
+    [[.137, .58], [.293, .52], [.411, .45]].forEach(([dt, fbv]) => {
+      const d = a.createDelay(1); d.delayTime.value = dt;
+      const lp = a.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 2400;
+      const fb = a.createGain(); fb.gain.value = fbv;
+      bright.connect(d); d.connect(lp); lp.connect(fb); fb.connect(d); lp.connect(wet);
+    });
+    bright.connect(out); wet.connect(out);
+    out.connect(musicBus || a.destination);
+    return true;
+  }
+  function makeVoice(i) {
+    const g = a.createGain(); g.gain.value = 0;
+    const f1 = a.createBiquadFilter(); f1.type = 'bandpass'; f1.frequency.value = 760; f1.Q.value = 4;
+    const f2 = a.createBiquadFilter(); f2.type = 'bandpass'; f2.frequency.value = 1180; f2.Q.value = 6;
+    f1.connect(g); f2.connect(g); g.connect(bright);
+    const lfo = a.createOscillator(); lfo.frequency.value = 4.4 + i * .31;
+    const dep = a.createGain(); dep.gain.value = 9; lfo.connect(dep); lfo.start();
+    const oscs = [-10, 0, 10].map(det => { const o = a.createOscillator(); o.type = 'sawtooth'; o.detune.value = det; dep.connect(o.detune); o.connect(f1); o.connect(f2); o.start(); return o; });
+    return { g, oscs, lfo };
+  }
+  function pluck(t, m, v, len, wave) {
+    const o = a.createOscillator(), o2 = a.createOscillator(), g = a.createGain(), g2 = a.createGain();
+    o.type = wave || 'triangle'; o.frequency.value = hz(m); o2.type = 'sine'; o2.frequency.value = hz(m) * (wave === 'sine' ? 2.76 : 2); g2.gain.value = wave === 'sine' ? .25 : .35;
+    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(v, t + .006); g.gain.exponentialRampToValueAtTime(.0001, t + len);
+    o.connect(g); o2.connect(g2); g2.connect(g); g.connect(bright); o.start(t); o2.start(t); o.stop(t + len + .05); o2.stop(t + len + .05);
+  }
+  function loop() {
+    if (!a || !out) return;
+    const t = a.currentTime;
+    const want = Math.max(0, Math.min(CHORDS.length - 1, Math.round((tx + 1) / 2 * (CHORDS.length - 1))));
+    if (want !== chordI && voices.length) {
+      chordI = want; const ch = CHORDS[chordI];
+      voices.forEach((v, k) => { const f = hz(ch[k % ch.length]); v.oscs.forEach(o => o.frequency.setTargetAtTime(f, t, .25)); });
+      if (on) pluck(t + .01, ch[ch.length - 1] + 12, .035, 2.6, 'sine');   // a bell on every chord change
+    }
+    const lift = Math.max(0, Math.min(1, (1 - ty) / 2));
+    const n = 2 + Math.round(lift * 4);
+    voices.forEach((v, k) => v.g.gain.setTargetAtTime(on && k < n ? .02 * (1 - k * .07) * (.8 + .4 * Math.min(1, energy)) : 0, t, .35));
+    bright.frequency.setTargetAtTime(800 + 3400 * lift + 1500 * Math.min(1, energy), t, .25);
+    energy *= .92;
+    if (on && t >= nextHarp) {
+      const ch = CHORDS[Math.max(0, chordI)], seq = [...ch, ...ch.map(m => m + 12)];
+      const e = Math.min(1, energy);
+      harpStep = (harpStep + 1 + (e > .6 ? 1 : 0)) % seq.length;
+      pluck(t + .01, seq[harpStep] + 12, .026 + .03 * e, 1.7);
+      nextHarp = t + (.42 - .32 * e);
+    }
+  }
+  function start() {
+    if (muted || vol.music <= 0 || !setup()) return;
+    clearTimeout(stopT);
+    const was = on; on = true; music.duck(true);
+    if (!voices.length) { voices = Array.from({ length: 6 }, (_, i) => makeVoice(i)); chordI = -1; }
+    out.gain.cancelScheduledValues(a.currentTime); out.gain.setTargetAtTime(.5 * Math.min(2, vol.music), a.currentTime, .6);
+    if (!tick) tick = setInterval(loop, 50);
+    loop();
+    if (!was) { const ch = CHORDS[Math.max(0, chordI)]; [...ch, ...ch.map(m => m + 12)].forEach((m, i) => pluck(a.currentTime + .05 + i * .055, m + 12, .03, 1.8)); nextHarp = a.currentTime + .9; }
+  }
+  function stop() {
+    if (!on) return; on = false; music.duck(false);
+    if (out) out.gain.setTargetAtTime(0, a.currentTime, .5);
+    clearTimeout(stopT);
+    stopT = setTimeout(() => { if (on) return; clearInterval(tick); tick = 0;
+      voices.forEach(v => { v.oscs.forEach(o => { try { o.stop(); } catch (e) {} }); try { v.lfo.stop(); } catch (e) {} v.g.disconnect(); }); voices = []; }, 3000);
+  }
+  function move(x, y) { energy = Math.min(1.6, energy + Math.hypot(x - tx, y - ty) * 2.4); tx = Math.max(-1, Math.min(1, x)); ty = Math.max(-1, Math.min(1, y)); }
+  return { start, stop, move, on: () => on };
+})();
 
 /* quiet retro fire crackle: louder with more fire, silent with FX off */
 const crackle = { t: 0, g: null, buf: null };
@@ -2338,6 +2516,7 @@ function openSettings() {
       ${VOL_KEYS.map(k => `<label class="ap-row"><span>${SET_LABELS[k]}</span><input type="range" id="vol-${k}" min="0" max="200" step="1"><output id="vol-${k}-out"></output></label>`).join('')}
       <div class="row tight"><button class="btn small dark" id="setMute" type="button">MUTE ALL</button></div>
       <label class="ap-check"><input type="checkbox" id="setSmooth"${store.get('pg.smoothAudio', IS_FIREFOX) ? ' checked' : ''}><span><b>AUDIO FIX</b><small>A bigger audio buffer. Fixes crackling on some computers (Firefox especially).</small></span></label>
+      <p class="progress tiny">Crackling? Turn on the audio fix and refresh. If it comes back later, refreshing the page usually fixes it again. Still bad? Report it with <b>Contact</b> → Bug.</p>
       <div class="warn set-refresh" id="setRefresh" hidden><b id="setRefreshTxt">Refresh the page to apply the audio fix.</b><div class="row tight"><button class="btn small red" id="setReload" type="button">REFRESH NOW</button><button class="btn small dark" id="setLater" type="button">LATER</button></div></div>
     </section>
     <section class="set-sec"><h3>VISUAL</h3>
@@ -2355,7 +2534,7 @@ function openSettings() {
       <div class="set-row top"><span>BLOCKED</span><div class="blocked" id="setBlocked"></div></div>
     </section>
     <div class="row"><button class="btn dark" data-act="close" type="button">CLOSE</button></div>`, 'settings');
-  renderMute(); renderBlocked();
+  renderMute(); renderBlocked(); tutEvent('settingsOpen');
   const dragFrom = {};
   VOL_KEYS.forEach(k => {
     const el = $('vol-' + k);
@@ -2384,6 +2563,17 @@ function openSettings() {
     if (name === 'quality') { setQuality(v); $('setQualInfo').textContent = QUAL_INFO[v]; }
     if (name === 'filter') { chatFilter = v; store.set('pg.chatFilter', v); $('setFilterInfo').textContent = FILTER_INFO[v]; renderChatLog(); }
   }));
+}
+/* one-time note about the sound, for players who skipped the tutorial's settings step */
+function audioNote() {
+  if (store.get('pg.audioInfo14', false) || TUT.on || !$('modal').hidden || curScreen !== 'menu' || UFX.on || unlockQueue().length) return false;
+  store.set('pg.audioInfo14', true);
+  openModal(`<h2>ABOUT THE SOUND</h2>
+    <p>On some computers (Firefox especially) the game's audio can <b>crackle</b>. If that happens:</p>
+    <ol><li>Open <b>Settings</b> and turn on the <b>Audio fix</b>.</li><li>Press <b>Refresh now</b>.</li><li>If the crackling comes back later, just <b>refresh the page</b> again.</li></ol>
+    <p>Still broken? Use <b>Contact</b> in the menu, pick <b>Bug</b> and tell us which browser you use.</p>
+    <div class="row"><button class="btn red" data-act="settings" type="button">OPEN SETTINGS</button><button class="btn dark" data-act="close" type="button">GOT IT</button></div>`);
+  return true;
 }
 function renderBlocked() {
   const box = $('setBlocked'); if (!box) return;
@@ -2608,6 +2798,7 @@ function startGameNow(opts) {
   const tutGame = !custom && !mp && mode === 'standard' && TUT.on && TUT.game;
   S.custom = custom;
   Object.assign(S, { mode, mp, tutGame, forced: tutGame ? TUT_RULES.slice() : null, phase: 'playing', round: 0, active: [], pool: shuffle(rulePool()), score: 0, shownScore: 0, streak: 0, history: [], counter: 0, playTime: 0, chars: 0, pending: new Set(), discBefore: [...discovered], capAt: 0, lastStreak: 0, rewards: null, finalSubmitted: false });
+  if (opts && Array.isArray(opts.ach)) opts.ach.forEach(id => { if (!unlocked[id]) S.pending.add(id); });
   clearTimeout(S.betweenTimer); $('burst').hidden = true;
   flameLevel = 0;
   $('rules').innerHTML = ''; $('pw').value = ''; autosize();
@@ -2958,7 +3149,7 @@ function ghostOut() {
   document.body.append(bd, g);
   setTimeout(() => { g.remove(); bd.remove(); }, 280);
 }
-function closeModal() { if (!$('modal').hidden) ghostOut(); if (S.seq) S.seq.dead = true; releaseToasts(); document.querySelectorAll('.xp-fly, .xp-bit').forEach(e => e.remove()); $('modal').hidden = true; $('modal').innerHTML = ''; }
+function closeModal() { if (!$('modal').hidden) { ghostOut(); setTimeout(() => tutEvent('modalClose'), 0); } if (S.seq) S.seq.dead = true; releaseToasts(); document.querySelectorAll('.xp-fly, .xp-bit').forEach(e => e.remove()); $('modal').hidden = true; $('modal').innerHTML = ''; }
 $('modal').addEventListener('click', e => {
   if (S.seq && !S.seq.done && !S.seq.dead && !e.target.closest('button')) { S.seq.skip = true; return; }
   const a = e.target.closest('[data-act]');
@@ -3148,6 +3339,8 @@ const PX = {
   key: ['............', '............', '.####.......', '#....#......', '#.##.#######', '#.##.#######', '#....#..#.##', '.####...#..#', '............', '............', '............', '............'],
   speaker: ['......#.....', '.....##...#.', '....###..#..', '######..#..#', '######.#..#.', '######.#..#.', '######..#..#', '....###..#..', '.....##...#.', '......#.....', '............', '............'],
   dice: ['############', '#..........#', '#.##....##.#', '#.##....##.#', '#..........#', '#....##....#', '#....##....#', '#..........#', '#.##....##.#', '#.##....##.#', '#..........#', '############'],
+  arrowup: ['.....##.....', '....####....', '...######...', '..##.##.##..', '.##..##..##.', '.....##.....', '.....##.....', '.....##.....', '.....##.....', '.....##.....', '.....##.....', '............'],
+  arrowdown: ['............', '.....##.....', '.....##.....', '.....##.....', '.....##.....', '.....##.....', '.....##.....', '.##..##..##.', '..##.##.##..', '...######...', '....####....', '.....##.....'],
   q: ['....####....','...##..##...','..##....##..','.......##...','......##....','.....##.....','.....##.....','............','.....##.....','.....##.....','............','............']
 };
 const ACH = [
@@ -3198,6 +3391,8 @@ const ACH = [
   { id: 'customunlock', passive: true, name: 'CUSTOM GAME', desc: 'Reach level 25 and unlock Custom games', icon: 'dice', test: () => myLvl() >= CUSTOM_LVL, prog: () => [Math.min(myLvl(), CUSTOM_LVL), CUSTOM_LVL, 'lvl'] },
   { id: 'classic', name: "That's a Classic!", desc: 'Rewatch a cutscene', icon: 'film', test: () => false },
   { id: 'banger', name: 'BANGER ALERT', desc: 'Turn the music up to 200%', icon: 'speaker', test: () => false, prog: () => [Math.round((vol.music || 0) * 100), 200, '%'] },
+  { id: 'bigleagues', name: 'Big Leagues', desc: 'Play against someone with more Pristine than you', icon: 'arrowup', test: () => false },
+  { id: 'downplay', name: 'Down play', desc: 'Play against someone with less Pristine than you', icon: 'arrowdown', test: () => false },
   { id: 'pvpunlock', passive: true, name: 'PVP', desc: 'Reach level 10 and unlock PvP', icon: 'unlock', test: () => myLvl() >= PVP_LVL, prog: () => [Math.min(myLvl(), PVP_LVL), PVP_LVL, 'lvl'] },
   { id: 'competitive', name: 'Competitive spirit', desc: 'View the leaderboards', icon: 'binocs', test: () => false },
   { id: 'supporter', name: 'Supporter', desc: 'Send a message with the Contact button', icon: 'envelope', test: () => false },
@@ -3214,7 +3409,7 @@ const ACH_GROUPS = [
   ['Grinding', ['office', 'addicted', 'hard', 'chicken', 'leader', 'maxxer', 'millionaire', 'maxed']],
   ['Collection', ['champion', 'rainbow', 'nolife', 'spotless', 'gotemall']],
   ['Drop Out', ['dropunlock', 'dropout', 'hurry']],
-  ['PvP', ['pvpunlock', 'mpfirst', 'mpcrush', 'racewin', 'kowin', 'undefeated', 'mprival', 'fortnite', 'royale', 'ffabest']]
+  ['PvP', ['pvpunlock', 'bigleagues', 'downplay', 'mpfirst', 'mpcrush', 'racewin', 'kowin', 'undefeated', 'mprival', 'fortnite', 'royale', 'ffabest']]
 ];
 // grouped, alphabetical inside each group; headings show how many you have
 function groupedAchHTML(card, has) {
@@ -3619,18 +3814,18 @@ function openMedalShowcase(m) {
       <div class="mshow-stats"><div><small>YOU HAVE</small><b>${escapeHtml(shown)}</b></div><div><small>ULTIMATE AT</small><b>${escapeHtml(m.unit(m.steps[10]))}</b></div><div><small>TITLES</small><b>11 / 11</b></div></div>
     </div>
     <div class="row"><button class="btn" data-act="medal-track" data-medal="${m.id}" type="button">ALL LEVELS</button><button class="btn dark" data-act="close" type="button">CLOSE</button></div>`, 'showcase');
-  music.halo(true);
-  [784, 988, 1175, 1568, 1976].forEach((f, i) => tone(f, .5, 'triangle', .03, 0, i * .07));
+  heaven.move(0, 0); heaven.start();
   const stage = $('mshowStage'), disc = $('mshowDisc');
   // turn it in your hand
   stage.addEventListener('pointermove', e => {
     const r = disc.getBoundingClientRect(), x = Math.max(-1, Math.min(1, (e.clientX - r.left - r.width / 2) / r.width)), y = Math.max(-1, Math.min(1, (e.clientY - r.top - r.height / 2) / r.height));
     disc.style.transform = `perspective(600px) rotateY(${(x * 30).toFixed(1)}deg) rotateX(${(-y * 30).toFixed(1)}deg)`;
     disc.style.setProperty('--sx', (50 + x * 45).toFixed(0) + '%');
+    heaven.move(x * 2, y * 2);
   });
-  stage.addEventListener('pointerleave', () => { disc.style.transform = ''; disc.style.removeProperty('--sx'); });
+  stage.addEventListener('pointerleave', () => { disc.style.transform = ''; disc.style.removeProperty('--sx'); heaven.move(0, 0); });
   // the choir stops when the showcase closes
-  const mo = new MutationObserver(() => { if (!document.getElementById('mshowStage')) { music.halo(false); mo.disconnect(); } });
+  const mo = new MutationObserver(() => { if (!document.getElementById('mshowStage')) { heaven.stop(); mo.disconnect(); } });
   mo.observe($('modal'), { childList: true, subtree: true, attributes: true, attributeFilter: ['hidden'] });
 }
 function openMedalTrack(id, force) {
@@ -4022,7 +4217,10 @@ const STEPS = {
   setEdit: { target: '#accEdit', html: () => 'This is your <b>Account</b>. Everything you earn ends up here. Click <b>Edit</b>.', wait: { editOpen: () => tutGo('setForm') } },
   setForm: { target: '#accEditForm', html: () => 'Type your <b>username</b> at the top and pick a <b>color</b> at the bottom. Other players see your name in that color. Press <b>Save</b> when you\'re happy.', wait: { editSaved: () => tutGo('setDone'), editCancel: () => tutGo('setEdit') } },
   setDone: { target: '#accNameText', html: () => `Looking good, ${chipHTML(acct.name, acct.color)}! You can change it any time with <b>Edit</b>. More colors unlock as you play.`, btn: 'NEXT', next: () => tutGo('setBack') },
-  setBack: { target: '#accBack', html: () => 'Now click <b>Back to menu</b>.', wait: { menu: () => tutGo('hi') } },
+  setBack: { target: '#accBack', html: () => 'Now click <b>Back to menu</b>.', wait: { menu: () => tutGo('setSet') } },
+  setSet: { target: '#setBtn', html: () => 'Before we play, let\'s fine-tune your <b>settings</b>. Open <b>Settings</b>.', wait: { settingsOpen: () => tutGo('setAudio') } },
+  setAudio: { target: '#modal .set-sec', html: () => 'Set the volume for <b>music</b>, <b>effects</b>, <b>fire</b> and <b>typing</b> (up to 200%). If the sound <b>crackles</b>, turn on the <b>Audio fix</b> and refresh. If it comes back later, refresh the page again. Still broken? Report a bug with <b>Contact</b> in the menu.', btn: 'NEXT', next: () => { store.set('pg.audioInfo14', true); tutGo('setClose'); } },
+  setClose: { target: '#modal [data-act="close"]', html: () => 'Everything else in here (background quality, chat filter, How to play) can wait. Close <b>Settings</b> when you\'re ready.', wait: { modalClose: () => tutGo('hi') } },
   hi: { html: () => `Nice to meet you, ${chipHTML(acct.name, acct.color)}! Now let's play a real game of <b>Standard</b> together. I'll explain everything as we go, and the clock is paused whenever I'm talking.`, btn: "LET'S GO", next: () => tutGo('play') },
   play: { target: '#playWrap', html: () => 'Press <b>Play</b>, then <b>Standard</b> to start your first game.', wait: { gameStart: () => tutGo(S.tutGame ? 'timer' : 'fun') } },
   timer: { target: '#timeBox', pause: true, html: () => "This is the <b>clock</b>. You get <b>2:00</b> per round. If it hits 0:00, the game is over.", btn: 'NEXT', next: () => tutGo('rules') },
@@ -4038,6 +4236,14 @@ const STEPS = {
   winmenu: { target: '#modal [data-act="menu"]', html: () => 'Click <b>Menu</b> to head back. There\'s more to show you.', wait: { menu: () => tutGo('menuIntro'), gameStart: () => GO() } },
   lose: { target: '#modal [data-act="play"]', html: () => "Out of time. Don't worry, it happens to everyone. Click <b>Try again</b> for another go, or <b>Menu</b> to continue the tour.", wait: { gameStart: () => GO(), menu: () => tutGo('menuIntro') } },
   // the menu, button by button
+  // after the unlock cutscene
+  pvp1: { target: '#pvpWrap', html: () => '<b>PvP is unlocked!</b> Press <b>PvP</b>, then <b>Host</b> to create a room and get a 4-letter code to send your friends, or <b>Join</b> to type a friend\'s code. Rooms hold up to 8 players.', btn: 'NEXT', next: () => tutGo('pvp2') },
+  pvp2: { html: () => 'With <b>2 players</b> you play 1v1:<br><b>Score</b>: both play 5 rounds; when one submits, the other has 15 seconds left. Most points wins.<br><b>Race</b>: the first to finish all 5 rounds wins.<br><b>Knockout</b>: 2,500 HP each. The lower round score takes the difference as damage, and it hurts more every round.', btn: 'NEXT', next: () => tutGo('pvp3') },
+  pvp3: { html: () => 'With <b>3–8 players</b>:<br><b>Battle Royale</b>: rules pile up every round; the last to submit, or anyone who fails, is knocked out. Last one standing wins.<br><b>FFA</b>: everyone plays the same 5 rounds; most points wins.', btn: 'NEXT', next: () => tutGo('pvp4') },
+  pvp4: { html: () => 'The <b>host</b> picks the mode, and guests can ask for one. Rooms have chat and emotes, you can block players, and the host can kick. A 1v1 win gives 600 Pristine. Good luck!', btn: 'GOT IT', next: () => tutEnd() },
+  cus1: { target: '#customWrap', html: () => '<b>Custom games are unlocked!</b> Press <b>Custom</b> and pick <b>Standard</b> (5 rounds) or <b>Drop Out</b> (endless).', btn: 'NEXT', next: () => tutGo('cus2') },
+  cus2: { html: () => 'Then choose the <b>rule categories</b> (enough rules to finish the game), how many <b>rules per round</b> (up to 5) and the <b>clock</b>: no limit, or anything from 5 seconds to 10 minutes. In Drop Out you set a starting and an ending time, and how often it gets 5 seconds shorter.', btn: 'NEXT', next: () => tutGo('cus3') },
+  cus3: { html: () => 'Custom games are just for fun: no XP, stats or achievements, and a 20th of the usual Pristine. Your settings are remembered for next time.', btn: 'GOT IT', next: () => tutEnd() },
   menuIntro: { html: () => {
       TUT.game = false;
       const fr = S.lastFresh || [];
@@ -4070,6 +4276,11 @@ function tutStart(menuOnly) {
   setTimeout(() => tutGo(menuOnly ? 'menuDrop' : 'welcome'), curScreen === 'menu' ? 0 : 650);
 }
 // players from before V12 get offered the new tour once
+function tutMini(first) {
+  if (TUT.on) return;
+  TUT.on = true; TUT.menuOnly = true; TUT.game = false;
+  tutGo(first);
+}
 function offerTour() {
   if (store.get('pg.tour12', false) || TUT.on || !$('modal').hidden) return;
   store.set('pg.tour12', true);
@@ -4680,7 +4891,7 @@ async function joinRoom(code, asHost) {
 }
 function myInfo() {
   const ti = titleInfo(acct.title);
-  return { peer: PEER, dev: DEV_ID, name: cleanName(acct.name), level: levelInfo(acct.xp).lvl, title: ti ? ti.text : '', host: MP.host, joinedAt: MP.joinedAt, where: MP.where, mode: MP.mode, wins: MP.wins, color: validColor(acct.color) };
+  return { peer: PEER, dev: DEV_ID, name: cleanName(acct.name), level: levelInfo(acct.xp).lvl, title: ti ? ti.text : '', host: MP.host, joinedAt: MP.joinedAt, where: MP.where, mode: MP.mode, wins: MP.wins, color: validColor(acct.color), pristine: Math.round(acct.pristine || 0) };
 }
 function sayHello(reply) { send(Object.assign({ t: 'hello', reply: !!reply }, myInfo())); }
 function setPeer(info, via) {
@@ -4688,7 +4899,7 @@ function setPeer(info, via) {
   const had = MP.peers[info.peer];
   const p = had || (MP.peers[info.peer] = { peer: info.peer });
   Object.assign(p, { name: cleanName(info.name), level: num(info.level, 0), title: String(info.title || '').slice(0, 60), host: !!info.host,
-    dev: typeof info.dev === 'string' ? info.dev.slice(0, 40) : '', color: validColor(info.color), joinedAt: num(info.joinedAt, Date.now()), where: info.where === 'game' || info.where === 'result' ? info.where : 'lobby', wins: Math.max(0, Math.min(999, num(info.wins, 0))), seen: Date.now() });
+    dev: typeof info.dev === 'string' ? info.dev.slice(0, 40) : '', color: validColor(info.color), joinedAt: num(info.joinedAt, Date.now()), where: info.where === 'game' || info.where === 'result' ? info.where : 'lobby', wins: Math.max(0, Math.min(999, num(info.wins, 0))), pristine: typeof info.pristine === 'number' && isFinite(info.pristine) ? Math.max(0, Math.round(info.pristine)) : null, seen: Date.now() });
   if (p.host && MODES[info.mode] && MODES[info.mode].pvp && !MP.host && MP.mode !== info.mode && !matchLive()) { MP.mode = info.mode; if (MP.myReq === info.mode) MP.myReq = null; }
   if (p.host && MP.host && info.peer !== PEER && num(info.joinedAt, 0) < MP.joinedAt) { MP.host = false; mpLog('another host was here first'); }
   // a full room: the latest arrivals beyond 8 are turned away
@@ -4940,7 +5151,7 @@ function beginMatch(seed, mode, roster) {
   const players = {};
   roster.forEach(id => {
     const info = id === PEER ? myInfo() : MP.peers[id];
-    players[id] = { peer: id, color: validColor(info && info.color), name: info ? cleanName(info.name) : 'Player', level: info ? num(info.level, 0) : 0, host: !!(info && info.host), joinedAt: info ? num(info.joinedAt, 0) : 0,
+    players[id] = { peer: id, pristine: info && typeof info.pristine === 'number' ? info.pristine : null, color: validColor(info && info.color), name: info ? cleanName(info.name) : 'Player', level: info ? num(info.level, 0) : 0, host: !!(info && info.host), joinedAt: info ? num(info.joinedAt, 0) : 0,
       round: 1, ok: 0, total: 2, score: 0, status: 'playing', hist: [], pw: null, time: null, len: 0, seen: Date.now(), goneAt: 0 };
   });
   MP.match = { seed, mode, party: !!MODES[mode].party, roster, players, over: false, result: null, recorded: false, capRound: 0, myPlace: 0,
@@ -4948,14 +5159,37 @@ function beginMatch(seed, mode, roster) {
     br: { alive: new Set(roster), resolved: 0, outs: [] } };
   MP.where = 'game'; trackMe();
   MP.lobbyOpen = false; closeModal();
-  countdown(() => { if (MP.match && MP.match.seed === seed) startGame({ seed, mode }); });
+  const go = () => countdown(() => {
+    if (!(MP.match && MP.match.seed === seed)) return;
+    // Big Leagues / Down play: compare Pristine with everyone in the match
+    const mine = Math.round(acct.pristine || 0), theirs = roster.filter(id => id !== PEER).map(id => players[id].pristine).filter(p => typeof p === 'number');
+    const ach = [theirs.some(p => p > mine) && 'bigleagues', theirs.some(p => p < mine) && 'downplay'].filter(Boolean);
+    startGame({ seed, mode, ach });
+  });
+  if (!MODES[mode].party && roster.length === 2) vsIntro(players[roster[0]], players[roster[1]], go); else go();
 }
 const meP = () => MP.match && MP.match.players[PEER];
 const others = () => MP.match ? MP.match.roster.filter(id => id !== PEER).map(id => MP.match.players[id]) : [];
 const oppP = () => others()[0];
+/* 1v1: a black slash across the screen, VS in the middle, the two names slide in */
+function vsIntro(p1, p2, done) {
+  const el = document.createElement('div'); el.id = 'vsFx';
+  const card = (p, cls) => `<div class="vs-p ${cls}"><div class="vs-name">${chipHTML(p.name, p.color, 0, 'big')}</div><small>LEVEL ${num(p.level, 0)}${p.peer === PEER ? ' · YOU' : ''}</small></div>`;
+  el.innerHTML = `<div class="vs-band"></div><div class="vs-word"><b>VS</b></div>${card(p1, 'p1')}${card(p2, 'p2')}`;
+  document.body.appendChild(el);
+  requestAnimationFrame(() => el.classList.add('on'));
+  if (!music.jingle('vs')) {
+    [0, .25, .5, .62, .75, .82, .9, .96].forEach((d, i) => tone(i < 3 ? 110 : 140 + i * 30, .12, 'square', .05, .6, d));
+    tone(220, .5, 'sawtooth', .05, 2.5, .95); tone(880, .3, 'square', .04, .5, 1.35);
+  }
+  setTimeout(() => tone(400, .25, 'sawtooth', .03, 2.2), 300);
+  setTimeout(() => tone(400, .25, 'sawtooth', .03, 2.2), 550);
+  setTimeout(() => { el.classList.add('out'); }, 2600);
+  setTimeout(() => { el.remove(); done(); }, 2950);
+}
 function countdown(done) {
   const el = $('countdown'); el.hidden = false;
-  const steps = ['3', '2', '1', 'GO!'];
+  const steps = ['3', '2', '1', 'TYPE!'];
   steps.forEach((s, i) => setTimeout(() => {
     el.innerHTML = `<b>${s}</b>`; tone(i < 3 ? 523 : 1046, i < 3 ? .12 : .3, 'square', .05);
     if (i === steps.length - 1) setTimeout(() => { el.hidden = true; done(); }, 450);
@@ -5503,11 +5737,22 @@ function mpStanding() {
 function myKoHp() { const m = MP.match; return m && m.ko && m.ko.hp ? m.ko.hp[PEER] : KO_HP; }
 
 /* ---------- version + patch notes ---------- */
-const VERSION = 'V13.3';
+const VERSION = 'V14';
 // how long each update took to build (V1-V8 are reconstructed estimates, marked with ~)
-const DEV_DATE = { 'V13.3': '2026-10-04', 'V13.2': '2026-10-04', 'V13.1': '2026-10-04', V13: '2026-10-04', V12: '2026-10-04', V11: '2026-10-03', V10: '2026-10-03', 'V9.2': '2026-10-03', 'V9.1': '2026-10-03', V9: '2026-10-03', V8: '2026-10-03', 'V7.1': '2026-10-03', V7: '2026-10-03', V6: '2026-10-02', V5: '2026-10-02', V4: '2026-10-02', V3: '2026-10-01', V2: '2026-10-01', V1: '2026-10-01' };
-const DEV_TIME = { 'V13.3': '15 min', 'V13.2': '10 min', 'V13.1': '15 min', V13: '35 min', V12: '20 min', V11: '28 min', V10: '35 min', 'V9.2': '4 min', 'V9.1': '7 min', V9: '17 min', V8: '~1 h', 'V7.1': '~25 min', V7: '~50 min', V6: '~35 min', V5: '~45 min', V4: '~25 min', V3: '~20 min', V2: '~20 min', V1: '~45 min' };
+const DEV_DATE = { V14: '2026-10-04', 'V13.3': '2026-10-04', 'V13.2': '2026-10-04', 'V13.1': '2026-10-04', V13: '2026-10-04', V12: '2026-10-04', V11: '2026-10-03', V10: '2026-10-03', 'V9.2': '2026-10-03', 'V9.1': '2026-10-03', V9: '2026-10-03', V8: '2026-10-03', 'V7.1': '2026-10-03', V7: '2026-10-03', V6: '2026-10-02', V5: '2026-10-02', V4: '2026-10-02', V3: '2026-10-01', V2: '2026-10-01', V1: '2026-10-01' };
+const DEV_TIME = { V14: '30 min', 'V13.3': '15 min', 'V13.2': '10 min', 'V13.1': '15 min', V13: '35 min', V12: '20 min', V11: '28 min', V10: '35 min', 'V9.2': '4 min', 'V9.1': '7 min', V9: '17 min', V8: '~1 h', 'V7.1': '~25 min', V7: '~50 min', V6: '~35 min', V5: '~45 min', V4: '~25 min', V3: '~20 min', V2: '~20 min', V1: '~45 min' };
 const PATCH_NOTES = [
+  ['V14', 'Versus', ['1v1 matches start with a VS screen: a black slash across the screen, both names sliding in and loud music. Then 3, 2, 1, TYPE!',
+    'New rules: a country that was part of the USSR, the stock ticker of a company (like NVDA), a web browser, a character used in programming and a Samsung phone. "A country in Europe" is now "a country in" a random continent. "Must contain a color" moved to Classic.',
+    'Unlocking PvP or Custom games now walks you through how they work.',
+    'A note about the sound: how to use the audio fix, that refreshing helps if the crackling comes back, and how to report a bug. New players set up their sound in the tutorial.',
+    'Rainbow medals sing for real: a choir and a harp that follow the medal in your hand. Tilt it left and right to change the chords, tilt it up for more voices, and move it to make the harp play faster.',
+    'No more flickering when you brush past a rainbow medal.',
+    'Discovered rules: search only rule names, only answers, or both.',
+    'The PvP button is darker with white text, like the other buttons.',
+    'Patch notes show the highlights; expand any update to see every change. All V13 and V7 updates are grouped.',
+    '2 new achievements: Big Leagues and Down play.',
+    'Fixed: the Continue button in cutscenes jumped when you hovered it.']],
   ['V13.3', 'Finishing Touches', ['Custom splits into Standard and Drop Out like the other buttons, so the custom settings no longer have a mode switch.',
     'Click an ULTIMATE medal for a proper showcase: a big spinning rainbow medal with a shine, rays, sparkles and the choir. You can turn it with the mouse. ALL LEVELS shows the full track.',
     'Volume sliders go up to 200%.',
@@ -5620,10 +5865,54 @@ const PATCH_NOTES = [
   ['V2', 'Fair Play', ['Fixed the false "new highscore" badge.', 'Rule hints explain the format instead of giving answers away.', 'Statistics screen.']],
   ['V1', 'First Password', ['The (New and improved) Password Game: 5 rounds, 2 new rules a round, 54 rules, scoring, flames and a retro look.', 'Discovered rules and highscores.']]
 ];
+const NOTE_HL = {
+  V14: ['A VS screen and a TYPE! countdown for every 1v1.', '5 new rules, and countries from any continent.', 'Rainbow medals sing with a choir and harp that follow your hand.', 'Guides for PvP and Custom games when you unlock them.'],
+  'V13.3': ['Custom splits into Standard and Drop Out.', 'A showcase for ULTIMATE medals.', 'Volume up to 200% and 4 new achievements.'],
+  'V13.2': ['A new menu order; Community splits into Leaderboards and Players.', 'How to play and cutscene replays moved into Settings.', 'Player cards in each player\'s color.'],
+  'V13.1': ['Unlock cutscenes with their own music.', 'Drop Out unlocks after 3 Standard wins.', 'Pixel icons instead of emojis.'],
+  V13: ['Custom games.', 'Rule categories and 5 new rules.', 'A Players tab and a Contact button.'],
+  V12: ['A Settings menu.', 'Chat filter, blocking and kicking.', 'A full tutorial.'],
+  V11: ['Pristine and 37 name colors.', 'The crackling sound is fixed.', 'PvP splits into Host and Join; Knockout reworked.'],
+  V10: ['Rooms for up to 8 players: Battle Royale and FFA.', 'Chat and emotes.', 'Knockout rebuilt with HP and damage.'],
+  'V9.2': ['Smoother music, and a synth solo instead of the alarm.'],
+  'V9.1': ['Drop Out gets its own track.', 'Intense music when time runs low.'],
+  V9: ['Music! An original soundtrack that reacts to the game.', 'Separate music and effects volume.'],
+  V8: ['Drop Out.', 'Score, Race and Knockout for PvP.', 'Leaderboards.'],
+  V7: ['1v1 multiplayer with room codes.', 'A global leaderboard.'],
+  V6: ['A victory sequence with XP and medals.', 'Notifications for new rules and titles.'],
+  V5: ['Accounts, levels, medals and titles.', '14 new rules.'],
+  V4: ['A Quit button, FX setting and new achievements.'],
+  V3: ['Achievements.']
+};
+const NOTE_GROUPS = [
+  { v: 'V13', name: 'Custom Games', of: ['V13.3', 'V13.2', 'V13.1', 'V13'], time: '1 h 15 min',
+    hl: ['Custom games: your own categories, rules per round and clock, for Standard and Drop Out.', 'Rule categories, 5 new rules, Community with a Players tab and a Contact button.', 'PvP, Drop Out and Custom unlock as you play, each with its own cutscene.', 'A new tutorial, a new menu and a showcase for ULTIMATE medals.'] },
+  { v: 'V7', name: 'Online', of: ['V7.1', 'V7'], time: '~1 h 15 min', hl: ['1v1 multiplayer with room codes.', 'A global leaderboard.'] }
+];
+function noteVersionHTML(v, name, items) {
+  const li = i => `<li>${escapeHtml(i)}</li>`;
+  const hl = NOTE_HL[v] || items, more = items.length > hl.length;
+  return `<section class="note-v"><h3>${v} · ${escapeHtml(name)}${v === VERSION ? '<small>CURRENT</small>' : ''}<span class="devtime">${DEV_DATE[v] ? ico('calendar', 'l') + DEV_DATE[v] + ' · ' : ''}${DEV_TIME[v] ? ico('watch', 'l') + DEV_TIME[v] : ''}</span></h3>
+    <ul>${hl.map(li).join('')}</ul>${more ? `<details class="note-more"><summary>Every change (${items.length})</summary><ul>${items.map(li).join('')}</ul></details>` : ''}</section>`;
+}
+function notesHTML() {
+  const done = new Set(), out = [];
+  for (const [v, name, items] of PATCH_NOTES) {
+    if (done.has(v)) continue;
+    const g = NOTE_GROUPS.find(q => q.of.includes(v));
+    if (!g) { out.push(noteVersionHTML(v, name, items)); continue; }
+    g.of.forEach(x => done.add(x));
+    const subs = g.of.map(x => PATCH_NOTES.find(p => p[0] === x)).filter(Boolean);
+    const dates = g.of.map(x => DEV_DATE[x]).filter(Boolean).sort();
+    out.push(`<section class="note-v note-group"><h3>${g.v} · ${escapeHtml(g.name)}<small class="grp">${subs.length} UPDATES</small><span class="devtime">${dates.length ? ico('calendar', 'l') + (dates[0] === dates[dates.length - 1] ? dates[0] : dates[0] + ' – ' + dates[dates.length - 1]) + ' · ' : ''}${ico('watch', 'l')}${g.time}</span></h3>
+      <ul>${g.hl.map(i => `<li>${escapeHtml(i)}</li>`).join('')}</ul>
+      <details class="note-more"><summary>Show all ${g.v} versions (${subs.length})</summary><div class="note-sub">${subs.map(([sv, sn, si]) => noteVersionHTML(sv, sn, si)).join('')}</div></details></section>`);
+  }
+  return out.join('');
+}
 function openNotes() {
   sfx.click();
-  openModal(`<h2>PATCH NOTES</h2><p class="progress">You're playing ${VERSION}. ${ico('watch')} is how long each update took to build.</p><div class="notes">${PATCH_NOTES.map(([v, name, items]) =>
-    `<section class="note-v"><h3>${v} · ${escapeHtml(name)}${v === VERSION ? '<small>CURRENT</small>' : ''}<span class="devtime">${DEV_DATE[v] ? ico('calendar', 'l') + DEV_DATE[v] + ' · ' : ''}${DEV_TIME[v] ? ico('watch', 'l') + DEV_TIME[v] : ''}</span></h3><ul>${items.map(i => `<li>${escapeHtml(i)}</li>`).join('')}</ul></section>`).join('')}</div>
+  openModal(`<h2>PATCH NOTES</h2><p class="progress">You're playing ${VERSION}. ${ico('watch')} is how long each update took to build.</p><div class="notes">${notesHTML()}</div>
     <div class="row"><button class="btn dark" data-act="close" type="button">CLOSE</button></div>`);
 }
 
@@ -5665,7 +5954,7 @@ const UFX = { on: false, ready: 0, check: 0 };
 function unlockQueue() { return Array.isArray(acct.unlockQ) ? acct.unlockQ.filter(k => UNLOCK_INFO[k]) : []; }
 // plays once the player is back on the menu with nothing else open
 function maybeUnlockFx(now) {
-  if (UFX.on || now - UFX.check < 250) return; UFX.check = now;
+  if (UFX.on || UFX.guide || now - UFX.check < 250) return; UFX.check = now;
   if (!unlockQueue().length) return;
   const free = curScreen === 'menu' && !$('menu').hidden && $('modal').hidden && !TUT.on && !wiping && document.visibilityState === 'visible' && (S.phase === 'menu' || S.phase === 'over');
   if (!free) { UFX.ready = 0; return; }
@@ -5724,6 +6013,7 @@ function playUnlockFx(k, replay) {
     wrap.remove(); UFX.on = false; UFX.ready = 0; releaseToasts();
     const el = $(info.el); if (el) { el.classList.remove('unlock-glow'); void el.offsetWidth; el.classList.add('unlock-glow'); setTimeout(() => el.classList.remove('unlock-glow'), 3400); }
     renderMenuStats();
+    if (!replay && (k === 'pvp' || k === 'custom')) { UFX.guide = true; let tries = 0; const guide = () => { if (curScreen === 'menu' && $('modal').hidden && !TUT.on) { UFX.guide = false; tutMini(k === 'pvp' ? 'pvp1' : 'cus1'); } else if (++tries < 60) setTimeout(guide, 500); else UFX.guide = false; }; setTimeout(guide, 900); }
   }
   function draw() {
     if (done) return;
@@ -5910,7 +6200,7 @@ function openHow() { sfx.click(); openModal(`
   <p>Wins give XP (more for fast runs with short passwords). Achievements give 2,000 XP, medal levels 5,000 XP and rainbow medals another 10,000 XP. Medal levels unlock titles you can show in your Account.</p>
   <div class="row"><button class="btn red" data-act="play" type="button">PLAY STANDARD</button><button class="btn dark" data-act="settings" type="button">BACK TO SETTINGS</button></div>`); }
 
-let discSort = store.get('pg.discSort', 'az'), discCat = '';
+let discSort = store.get('pg.discSort', 'az'), discCat = '', discMode = ['both', 'rules', 'answers'].includes(store.get('pg.discMode', 'both')) ? store.get('pg.discMode', 'both') : 'both';
 $('discBtn').onclick = () => {
   sfx.click();
   const fresh = new Set(unseenRules());
@@ -5919,6 +6209,7 @@ $('discBtn').onclick = () => {
   openModal(`<h2>DISCOVERED RULES</h2><p class="progress">${discovered.size} of ${RULES.length} rules found. Rules with variants show every variant's answer.</p>
     <div class="disc-cats" id="discCats"></div>
     <div class="disc-tools"><input id="discSearch" type="search" placeholder="Search rules and answers…" autocomplete="off" spellcheck="false" aria-label="Search">
+      <select id="discModeSel" aria-label="Search in"><option value="both">Rules &amp; answers</option><option value="rules">Only rules</option><option value="answers">Only answers</option></select>
       <select id="discSortSel" aria-label="Sort"><option value="az">A → Z</option><option value="za">Z → A</option><option value="new">Newest found</option><option value="old">Oldest found</option></select></div>
     <div class="disc" id="discList"></div><div class="row"><button class="btn dark" data-act="close" type="button">CLOSE</button></div>`);
   const draw = () => {
@@ -5930,10 +6221,11 @@ $('discBtn').onclick = () => {
     if (discSort === 'za') list.sort((a, b) => b.name.localeCompare(a.name));
     if (discSort === 'new') list.sort((a, b) => order.indexOf(b.id) - order.indexOf(a.id));
     if (discSort === 'old') list.sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
-    if (q) list = list.filter(r => deLeet(r.name).includes(q) || answersOf(r).some(x => deLeet(String(x)).includes(q)));
+    const inName = r => discMode !== 'answers' && deLeet(r.name).includes(q), inAns = r => discMode !== 'rules' && answersOf(r).some(x => deLeet(String(x)).includes(q));
+    if (q) list = list.filter(r => inName(r) || inAns(r));
     const items = list.map(r => {
       const ans = answersOf(r);
-      const hit = q && !deLeet(r.name).includes(q);
+      const hit = q && !inName(r);
       const body = ans.length > 60 ? `<p>${ans.map(escapeHtml).join(', ')}</p>` : ans.map(a => `<p>${escapeHtml(a)}</p>`).join('');
       const ck = CATS().find(k => k.id === r.cat);
       return `<div class="disc-item"><header><span>${escapeHtml(r.name)}${ck ? `<span class="rcat">${ico(ck.icon, 'l')}${escapeHtml(ck.name)}</span>` : ''}${fresh.has(r.id) ? '<span class="newtag">NEW</span>' : ''}${hit ? '<small class="disc-hit">matches an answer</small>' : ''}</span><button type="button" data-act="answers">${hit ? 'Hide answers' : 'Show answers'}</button></header><div class="answers"${hit ? '' : ' hidden'}>${body}</div></div>`;
@@ -5941,7 +6233,9 @@ $('discBtn').onclick = () => {
     const locked = q ? 0 : RULES.filter(r => !discovered.has(r.id) && (!discCat || r.cat === discCat)).length;
     $('discList').innerHTML = (items || `<p class="progress">${q ? 'No rules match that.' : 'No rules found yet. Play a game!'}</p>`) + Array.from({ length: locked }, () => `<div class="disc-item locked"><header><span>? ? ? ? ? ?</span></header></div>`).join('');
   };
-  $('discSortSel').value = discSort;
+  $('discSortSel').value = discSort; $('discModeSel').value = discMode;
+  const ph = () => { $('discSearch').placeholder = discMode === 'rules' ? 'Search rules…' : discMode === 'answers' ? 'Search answers…' : 'Search rules and answers…'; };
+  ph(); $('discModeSel').onchange = e => { discMode = e.target.value; store.set('pg.discMode', discMode); sfx.click(); ph(); draw(); };
   $('discSortSel').onchange = e => { discSort = e.target.value; store.set('pg.discSort', discSort); sfx.click(); draw(); };
   $('discSearch').addEventListener('input', draw);
   $('discCats').addEventListener('click', e => { const b = e.target.closest('[data-dcat]'); if (!b) return; sfx.click(); discCat = b.dataset.dcat === discCat ? '' : b.dataset.dcat; draw(); });
@@ -5987,13 +6281,13 @@ function beatFlash(now) {
 }
 
 /* ---------- medals you can turn in your hand ---------- */
-let tiltEl = null, haloEl = null;
+let tiltEl = null, haloEl = null, haloWait = 0, haloGone = null;
 const medalAt = t => { const m = t && t.closest ? t.closest('.acc-medals .medal, .pf-medals .medal, .prog-medals .medal.in') : null; return m && m.closest('#account') && !$('accEditForm').hidden ? null : m; };
 document.addEventListener('pointermove', e => {
   if (e.pointerType === 'touch') return;
   const md = medalAt(e.target);
   const soft = md && !!md.closest('.prog-medals');      // results screen: same idea, toned down
-  if (md !== tiltEl) { if (tiltEl) untilt(tiltEl); tiltEl = md; if (md) { md.classList.add('tilting'); if (!soft && md.querySelector('.disc.t-rainbow')) haloOn(md); } }
+  if (md !== tiltEl) { if (tiltEl) untilt(tiltEl); tiltEl = md; if (md) { md.classList.add('tilting'); if (!soft && md.querySelector('.disc.t-rainbow')) { clearTimeout(haloWait); haloWait = setTimeout(() => { if (tiltEl === md) haloOn(md); }, 260); } } }
   if (!md) return;
   const d = md.querySelector('.disc'), r = d.getBoundingClientRect();
   const x = Math.max(-1.3, Math.min(1.3, (e.clientX - r.left - r.width / 2) / (r.width / 2))), y = Math.max(-1.3, Math.min(1.3, (e.clientY - r.top - r.height / 2) / (r.height / 2)));
@@ -6001,13 +6295,14 @@ document.addEventListener('pointermove', e => {
   const rot = `rotateY(${(x * k).toFixed(1)}deg) rotateX(${(-y * k).toFixed(1)}deg)`;
   d.style.transform = `perspective(380px) ${rot} scale(${soft ? 1.1 : 1.25})`;
   d.style.setProperty('--mx', (50 + x * 38).toFixed(0) + '%'); d.style.setProperty('--my', (50 + y * 38).toFixed(0) + '%');
-  if (haloEl) { const hd = haloEl.querySelector('.disc'); hd.style.transform = `perspective(380px) ${rot} scale(1.7)`; hd.style.setProperty('--mx', d.style.getPropertyValue('--mx')); hd.style.setProperty('--my', d.style.getPropertyValue('--my')); }
+  if (haloEl) { const hd = haloEl.querySelector('.disc'); hd.style.transform = `perspective(380px) ${rot} scale(1.7)`; hd.style.setProperty('--mx', d.style.getPropertyValue('--mx')); hd.style.setProperty('--my', d.style.getPropertyValue('--my')); heaven.move(x / 1.3, y / 1.3); }
 }, { passive: true });
 document.addEventListener('pointerout', e => { if (!e.relatedTarget && tiltEl) { untilt(tiltEl); tiltEl = null; } });
 addEventListener('scroll', () => { if (tiltEl) { untilt(tiltEl); tiltEl = null; } }, { passive: true, capture: true });
-function untilt(md) { md.classList.remove('tilting'); const d = md.querySelector('.disc'); if (d) d.style.transform = ''; if (haloEl) haloOff(); }
+function untilt(md) { clearTimeout(haloWait); md.classList.remove('tilting'); const d = md.querySelector('.disc'); if (d) d.style.transform = ''; if (haloEl) haloOff(); }
 // rainbow medals: the room goes dark, the music hushes, a choir sings and the medal shines
 function haloOn(md) {
+  if (haloGone) { clearTimeout(haloGone.t); haloGone.h.remove(); haloGone.h._dim.remove(); haloGone = null; }   // no double halos
   const disc = md.querySelector('.disc'), r = disc.getBoundingClientRect();
   const dim = document.createElement('div'); dim.className = 'halo-dim';
   const h = document.createElement('div'); h.className = 'medal halo' + (md.classList.contains('sm') ? ' sm' : '');
@@ -6016,13 +6311,13 @@ function haloOn(md) {
   document.body.append(dim, h);
   requestAnimationFrame(() => { dim.classList.add('on'); h.classList.add('on'); });
   h._dim = dim; haloEl = h;
-  music.halo(true);
+  heaven.start();
 }
 function haloOff() {
   const h = haloEl; if (!h) return; haloEl = null;
   h.classList.remove('on'); h._dim.classList.remove('on');
-  setTimeout(() => { h.remove(); h._dim.remove(); }, 600);
-  music.halo(false);
+  haloGone = { h, t: setTimeout(() => { h.remove(); h._dim.remove(); if (haloGone && haloGone.h === h) haloGone = null; }, 600) };
+  heaven.stop();
 }
 
 
@@ -6120,6 +6415,7 @@ renderMenuStats();
 if (getStats().games) setTimeout(lbPushSoon, 4000);
 setTimeout(() => { if (fbOutbox().length) fbFlush(); }, 6000);
 setTimeout(checkPassive, 3000);
+{ const tryNote = () => { if (store.get('pg.audioInfo14', false)) return; if (store.get('pg.tut', null) !== 'done') return setTimeout(tryNote, 4000); if (!audioNote()) setTimeout(tryNote, 3000); }; setTimeout(tryNote, 3500); }
 { const tut = store.get('pg.tut', null); if (tut === 'running' || (tut !== 'done' && !getStats().games)) setTimeout(tutStart, 700); else if (getStats().games) setTimeout(offerTour, 2600); }
 })();
 </script>
