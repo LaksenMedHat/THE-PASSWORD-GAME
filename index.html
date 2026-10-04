@@ -751,8 +751,8 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 /* the part of the password that satisfies a hovered rule */
 .pw-hl { position: absolute; inset: 0; z-index: 2; pointer-events: none; box-sizing: border-box; border: 4px solid transparent; padding: 16px 18px; overflow: hidden;
   font-family: var(--body); font-size: clamp(20px, 3.6vw, 28px); line-height: 1.35; color: transparent; white-space: pre-wrap; word-break: break-all; }
-.pw-hl mark { color: transparent; background: rgba(61, 220, 143, .32); border-radius: 4px; box-shadow: 0 0 0 2px rgba(61, 220, 143, .75); animation: hlin .25s ease-out; }
-@keyframes hlin { from { background: rgba(61, 220, 143, .7); } }
+.pw-hl mark { color: #ffd23d; background: none; text-shadow: 0 0 10px rgba(255, 210, 61, .55); animation: hlin .25s ease-out; }
+@keyframes hlin { from { color: #fff7c2; text-shadow: 0 0 18px rgba(255, 230, 120, .9); } }
 #rules li.rule.ok { cursor: help; }
 
 /* ---------- V11: account layout, Pristine, colors ---------- */
@@ -882,13 +882,13 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .ct-msg { min-height: 1.2em; }
 .ct-msg.ok { color: var(--good); } .ct-msg.bad { color: var(--gold); }
 .plist { display: grid; gap: 6px; }
-.prow { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 12px; width: 100%; background: var(--edge); border: 2px solid transparent; border-radius: 8px; padding: 8px 10px; text-align: left; font: inherit; color: var(--ink); cursor: pointer; }
-.prow:hover, .prow:focus-visible { border-color: var(--gold); }
-.prow.me { border-color: var(--pc, rgba(255, 255, 255, .5)); }
-.prow .pname { min-width: 0; }
-.prow .pt { display: block; font-size: 12px; color: var(--dim); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.prow .ppr { font-size: 13px; white-space: nowrap; }
-.prow .lvl-badge.mini { margin: 0; }
+.plrow { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 12px; width: 100%; background: var(--edge); border: 2px solid transparent; border-radius: 8px; padding: 8px 10px; text-align: left; font: inherit; color: var(--ink); cursor: pointer; }
+.plrow:hover, .plrow:focus-visible { border-color: var(--gold); }
+.plrow.me { border-color: var(--pc, rgba(255, 255, 255, .5)); }
+.plrow .pname { min-width: 0; }
+.plrow .pt { display: block; font-size: 12px; color: var(--dim); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.plrow .ppr { font-size: 13px; white-space: nowrap; }
+.plrow .lvl-badge.mini { margin: 0; }
 .cg-cats { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; }
 .cg-cat { display: flex; align-items: center; gap: 8px; font: inherit; font-size: 13px; text-align: left; padding: 8px 10px; background: var(--panel); color: var(--dim); border: 2px solid var(--panel-hi); border-radius: 8px; cursor: pointer; }
 .cg-cat .ico { width: 18px; height: 18px; } .cg-cat small { margin-left: auto; opacity: .7; font-size: 11px; }
@@ -937,7 +937,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .ufx-go { position: absolute; left: 0; right: 0; margin: 0 auto; width: max-content; bottom: 14%; opacity: 0; transition: opacity .4s; pointer-events: none; }
 .ufx-go.show { opacity: 1; pointer-events: auto; }
 .set-help { display: flex; flex-wrap: wrap; gap: 8px; }
-.prow { border-left: 5px solid var(--pc, transparent); }
+.plrow { border-left: 5px solid var(--pc, transparent); }
 @media (max-width: 640px) { .menu-btns .btn { font-size: 26px; } .menu-btns .pjoin { font-size: 32px; } .menu-btns .playsplit .pbtn { font-size: 22px; } .commwrap .playsplit .pbtn { font-size: 15px; } }
 .account.editing .acc-medals .medal { pointer-events: none; opacity: .55; filter: grayscale(.4); transition: opacity .25s, filter .25s; }
 .sheet.showcase { text-align: center; overflow: hidden; }
@@ -993,7 +993,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .d-easy { color: #3ddc8f; } .d-medium { color: #ffcf4a; } .d-hard { color: #ff8a2b; } .d-insane { color: #ff4d5e; }
 .bot-lv { font-weight: 700; }
 .vs-side { position: absolute; inset: 0; opacity: 0; transition: opacity .35s ease-out .15s, transform .5s cubic-bezier(.2,1.1,.4,1) .15s;
-  background: radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--vc) 75%, #fff 10%), color-mix(in srgb, var(--vc) 45%, #05040c) 75%); }
+  background: radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--vc) 88%, #fff), color-mix(in srgb, var(--vc) 45%, #05040c) 75%); }
 .vs-side.s1 { transform: translate(-6%, -6%); } .vs-side.s2 { transform: translate(6%, 6%); }
 #vsFx.on .vs-side { opacity: 1; transform: none; }
 .vs-p small { text-shadow: 0 2px 0 rgba(0,0,0,.6); }
@@ -1037,6 +1037,45 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 @keyframes introSlide { from { transform: translateX(110vw); } to { transform: none; } }
 @keyframes introSlideL { from { transform: translateX(-110vw); } to { transform: none; } }
 @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+/* V14.2 match intro */
+#vsFx .vs-band { transform: rotate(-24deg); clip-path: inset(0 100% 0 0); transition: clip-path .55s cubic-bezier(.7, 0, .2, 1) .05s; }
+#vsFx.on .vs-band { transform: rotate(-24deg); clip-path: inset(0 0 0 0); }
+#vsFx .vs-side { transition: opacity .4s ease-out .45s, transform .6s cubic-bezier(.2,1.1,.4,1) .45s; }
+.vs-p.p1 { transition-delay: .6s; } .vs-p.p2 { transition-delay: .85s; }
+#vsFx.on .vs-word b:not(.cd) { animation: vsword .45s cubic-bezier(.2, 1.4, .4, 1) 1.2s forwards, vsshake .09s linear 1.65s 6; }
+.vs-word b.cd { opacity: 1; transform: rotate(-8deg); animation: cdpop .5s cubic-bezier(.2, 1.6, .4, 1); }
+.vs-word b.cd.go { color: #fff; text-shadow: 0 8px 0 var(--red), 0 0 60px rgba(255, 255, 255, .7); }
+@keyframes cdpop { from { transform: scale(2.4) rotate(-8deg); opacity: 0; } to { transform: rotate(-8deg); opacity: 1; } }
+.vs-title { font-style: normal; font-size: 15px; color: #fff; text-shadow: 0 2px 0 rgba(0,0,0,.6); }
+.vs-title:empty { display: none; }
+#vsFx.leave { background: rgba(4, 3, 10, 0); transition: background .6s ease-in .2s; }
+#vsFx.leave .vs-side.s1, #vsFx.leave .vs-p.p1 { transform: translate(-70vw, -70vh); transition: transform .7s cubic-bezier(.6, 0, .4, 1) .25s; }
+#vsFx.leave .vs-side.s2, #vsFx.leave .vs-p.p2 { transform: translate(70vw, 70vh); transition: transform .7s cubic-bezier(.6, 0, .4, 1) .25s; }
+#vsFx.leave .vs-band { clip-path: inset(50% 0 50% 0); transition: clip-path .45s ease-in .3s; }
+#vsFx.leave .vs-word b { animation: vsout .6s ease-in .35s forwards; }
+@keyframes vsout { to { transform: scale(1.8) rotate(-8deg); opacity: 0; } }
+#vsFx.party { display: grid; align-content: center; justify-items: center; gap: 22px; padding: 20px; }
+#vsFx.party.on { background: rgba(4, 3, 10, .96); }
+.comp-title { font-family: var(--display); font-size: clamp(40px, 8vw, 86px); letter-spacing: .14em; color: var(--gold); text-shadow: 0 6px 0 var(--red); opacity: 0; transform: translateY(-40px); transition: opacity .4s, transform .5s cubic-bezier(.2, 1.4, .4, 1); }
+#vsFx.party.on .comp-title { opacity: 1; transform: none; }
+.comp-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; width: min(100%, 760px); }
+.vs-p.comp { position: relative; inset: auto; background: var(--panel); border: 3px solid var(--edge); border-left: 6px solid var(--gold); border-radius: 12px; padding: 12px 14px; box-shadow: 0 6px 0 var(--edge);
+  transform: translateX(var(--from, 110vw)); transition: transform .55s cubic-bezier(.2, 1.2, .4, 1) calc(.35s + var(--i) * .12s); }
+.vs-p.comp.from-left { --from: -110vw; }
+#vsFx.party.on .vs-p.comp { transform: none; }
+.vs-p.comp .vs-name .nchip { font-size: 28px; }
+#vsFx.party .vs-word { position: static; inset: auto; min-height: clamp(90px, 16vw, 170px); pointer-events: none; }
+#vsFx.party .vs-word b { font-size: clamp(80px, 15vw, 160px); }
+#vsFx.party .vs-word b { opacity: 0; }
+#vsFx.party.leave .comp-list .vs-p.comp { transform: translateX(var(--from, 110vw)); transition: transform .5s cubic-bezier(.6, 0, .4, 1) calc(var(--i) * .06s); }
+#vsFx.party.leave .comp-title { opacity: 0; transform: translateY(-60px); }
+.pcard .ptitle { font-style: normal; font-size: 13px; color: var(--ink); opacity: .85; }
+.pcard .ptitle.none { opacity: .45; }
+.pcard.addbot { cursor: pointer; border: 3px dashed var(--panel-hi); background: rgba(0, 0, 0, .2); color: var(--dim); font: inherit; text-align: left; place-content: center; justify-items: start; }
+.pcard.addbot .ico { width: 26px; height: 26px; } .pcard.addbot b { font-family: var(--display); font-size: 26px; color: var(--ink); }
+.pcard.addbot:hover { border-color: var(--gold); color: var(--ink); transform: translateY(-3px); }
+.opp-who { display: grid; min-width: 0; } .opp-title { font-style: normal; font-size: 11px; color: var(--dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.opp-title:empty { display: none; }
 .ico { width: 1.05em; height: 1.05em; fill: currentColor; display: inline-block; vertical-align: -.16em; flex: none; }
 .ico.l { margin-right: .4em; }
 .ico.gold { color: #ffcf4a; } .ico.silver { color: #d6dceb; } .ico.bronze { color: #e0904f; }
@@ -1087,7 +1126,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
       <button class="btn dark" id="setBtn" type="button">SETTINGS</button>
       <button class="btn dark" id="contactBtn" type="button">CONTACT</button>
     </div>
-    <button class="version" id="verBtn" type="button">V14.1 · BOTS &amp; INTRO · <u>PATCH NOTES</u></button>
+    <button class="version" id="verBtn" type="button">V14.2 · SHOWTIME · <u>PATCH NOTES</u></button>
     <div class="studio" aria-label="Prismatic Productions"><i class="prism-ico"></i>PRISMATIC PRODUCTIONS</div>
   </section>
 
@@ -1855,7 +1894,7 @@ const RULES = [
     answers: () => TICKERS.map(([co, tk]) => `${co} → ${tk.split('|').join(' / ')}`)
   },
   listRule('browser', 'Must contain a web browser.', null, BROWSERS),
-  simple('progchar', 'Must contain a character used in programming.', 'Like { } [ ] ( ) ; = < > or #.', c => PROG_CHARS.some(ch => c.raw.includes(ch)), PROG_CHARS.slice()),
+  simple('progchar', 'Must contain a character used in programming.', 'Any symbol you would see in code.', c => PROG_CHARS.some(ch => c.raw.includes(ch)), PROG_CHARS.slice()),
   {
     id: 'samsung', name: 'Must contain a Samsung phone.',
     make: () => ({ text: 'Must contain a Samsung phone.', hint: 'A Galaxy model, like S24, Galaxy S26 Ultra, Note 20 or Z Flip 6.', check: samsungCheck, examples: () => ['S24', 'Galaxy S26 Ultra', 'Note 20', 'Z Fold 6'] }),
@@ -2346,7 +2385,7 @@ const music = (() => {
   /* ----- jingles (they replace the win/lose sound when music is on) ----- */
   function jingle(kind) {
     if (!started || muted || vol.music <= 0 || hiddenAt) return false;
-    const t = a.currentTime + .06, d = jbus, len = kind === 'intro' ? 60 / TRACKS.lounge.bpm * 16 + .3 : kind === 'vs' ? 2.6 : kind === 'unlock' ? 6.2 : kind === 'win' ? 3.2 : 2.8;
+    const t = a.currentTime + .06, d = jbus, len = kind === 'intro' ? 60 / TRACKS.lounge.bpm * 16 + .3 : kind === 'vs' ? 6.4 : kind === 'unlock' ? 6.2 : kind === 'win' ? 3.2 : 2.8;
     jingleUntil = performance.now() + len * 1000;
     apply(Object.assign(decide(), { duck: true }));
     if (kind === 'win') {
@@ -2374,15 +2413,20 @@ const music = (() => {
       lastLead = 76; lead(f + q * 2, 76, q * .9, .8, d); lead(f + q * 3, 80, q * 1.6, .85, d);
       noiseHit(f + q * 2, 'bandpass', 1400, 1.4, .05, q * 2, d);
     } else if (kind === 'vs') {
-      // a short, loud build: riser, faster kicks, a slam on VS
-      noiseHit(t, 'bandpass', 900, 1.2, .08, 1.0, d);
-      [0, .3, .55, .75, .9, 1.0, 1.08, 1.15, 1.21].forEach(o => kick(t + o, 1, d));
-      [.75, .9, 1.0, 1.08, 1.15, 1.21, 1.27, 1.33].forEach(o => snare(t + o, .7, d));
+      // riser and faster kicks into the slam on VS, a pulse while the names sink in, then the countdown and TYPE!
+      noiseHit(t, 'bandpass', 900, 1.2, .08, 1.15, d);
+      [0, .3, .55, .75, .9, 1.0, 1.08, 1.14].forEach(o => kick(t + o, 1, d));
+      [.75, .9, 1.0, 1.08, 1.14].forEach(o => snare(t + o, .7, d));
       bass(t + .3, 28, .4, 1, d); bass(t + .75, 28, .3, 1, d);
-      const f = t + 1.4;
+      const f = t + 1.2;
       kick(f, 1.3, d); noiseHit(f, 'highpass', 2500, .6, .14, 1.2, d);
-      keys(f, [40, 47, 52, 55], 1.1, 1.1, d); bass(f, 28, 1.1, 1.2, d);
+      keys(f, [40, 47, 52, 55], 1.4, 1.1, d); bass(f, 28, 1.6, 1.2, d);
       lastLead = 76; lead(f + .05, 79, .9, .9, d, 74);
+      for (let k = 1; k < 4; k++) { kick(f + k * .45, .7, d); snare(f + k * .45 + .225, .3, d); }
+      [[3, [52, 55, 59]], [3.8, [53, 57, 60]], [4.6, [55, 59, 62]]].forEach(([o, ch]) => { kick(t + o, 1, d); keys(t + o, ch, .7, 1, d); bass(t + o, ch[0] - 24, .7, 1, d); });
+      const g = t + 5.4;
+      kick(g, 1.4, d); snare(g, 1, d); noiseHit(g, 'highpass', 3000, .6, .16, 1.4, d);
+      keys(g, [57, 61, 64, 69], 1.2, 1.1, d); bass(g, 33, 1.2, 1.2, d); lead(g + .05, 81, .8, .9, d);
     } else if (kind === 'unlock') {
       // the lock slams down
       kick(t + .3, 1.1, d); bass(t + .3, 28, 1.3, 1.1, d);
@@ -3022,7 +3066,7 @@ function wipeTo(fn) {
   run(230, false, () => { try { fn(); } catch (e) { console.error(e); } run(340, true, () => { cv.hidden = true; wiping = false; }); });
 }
 
-function startGame(opts) { if (curScreen === 'game' && S.phase !== 'over') return startGameNow(opts); wipeTo(() => startGameNow(opts)); }
+function startGame(opts) { if ((curScreen === 'game' && S.phase !== 'over') || (opts && opts.instant)) return startGameNow(opts); wipeTo(() => startGameNow(opts)); }
 function startGameNow(opts) {
   audio(); sfx.click();
   closeModal();
@@ -3630,6 +3674,12 @@ const ACH = [
   { id: 'customunlock', passive: true, name: 'CUSTOM GAME', desc: 'Reach level 25 and unlock Custom games', icon: 'dice', test: () => myLvl() >= CUSTOM_LVL, prog: () => [Math.min(myLvl(), CUSTOM_LVL), CUSTOM_LVL, 'lvl'] },
   { id: 'classic', name: "That's a Classic!", desc: 'Rewatch a cutscene', icon: 'film', test: () => false },
   { id: 'banger', name: 'BANGER ALERT', desc: 'Turn the music up to 200%', icon: 'speaker', test: () => false, prog: () => [Math.round((vol.music || 0) * 100), 200, '%'] },
+  { id: 'farming', name: 'Are you farming?', desc: 'Type the same character 20 times in a row', icon: 'keyboard', test: () => false },
+  { id: 'ultwins', passive: true, name: 'ULTIMATE', desc: 'Get the ULTIMATE Wins medal', icon: 'trophy', test: () => (acct.medals.wins || 0) >= 11, prog: () => [acct.medals.wins || 0, 11, 'lvl'] },
+  { id: 'ulttyped', passive: true, name: 'CEO', desc: 'Get the ULTIMATE Typed medal', icon: 'keyboard', test: () => (acct.medals.typed || 0) >= 11, prog: () => [acct.medals.typed || 0, 11, 'lvl'] },
+  { id: 'ultpoints', passive: true, name: 'Peak gamer', desc: 'Get the ULTIMATE Points medal', icon: 'diamond', test: () => (acct.medals.points || 0) >= 11, prog: () => [acct.medals.points || 0, 11, 'lvl'] },
+  { id: 'ulttime', passive: true, name: 'Reddit mod', desc: 'Get the ULTIMATE Time medal', icon: 'watch', test: () => (acct.medals.time || 0) >= 11, prog: () => [acct.medals.time || 0, 11, 'lvl'] },
+  { id: 'ultpvp', passive: true, name: 'Arch-Nemesis', desc: 'Get the ULTIMATE PvP medal', icon: 'versus', test: () => (acct.medals.pvp || 0) >= 11, prog: () => [acct.medals.pvp || 0, 11, 'lvl'] },
   { id: 'bigleagues', name: 'Big Leagues', desc: 'Play against someone with more Pristine than you', icon: 'arrowup', test: () => false },
   { id: 'downplay', name: 'Down play', desc: 'Play against someone with less Pristine than you', icon: 'arrowdown', test: () => false },
   { id: 'pvpunlock', passive: true, name: 'PVP', desc: 'Reach level 10 and unlock PvP', icon: 'unlock', test: () => myLvl() >= PVP_LVL, prog: () => [Math.min(myLvl(), PVP_LVL), PVP_LVL, 'lvl'] },
@@ -3644,9 +3694,9 @@ const ACH_GROUPS = [
   ['Custom games', ['customunlock', 'god']],
   ['Customization', ['hello', 'uncertain', 'style', 'coolcolors', 'pride', 'drip']],
   ['Speed', ['quickster', 'justintime', 'quick', 'holy', 'there']],
-  ['Passwords', ['short', 'long', 'explorer']],
+  ['Passwords', ['short', 'long', 'farming', 'explorer']],
   ['Grinding', ['office', 'addicted', 'hard', 'chicken', 'leader', 'maxxer', 'millionaire', 'maxed']],
-  ['Collection', ['champion', 'rainbow', 'nolife', 'spotless', 'gotemall']],
+  ['Collection', ['champion', 'rainbow', 'ultwins', 'ulttyped', 'ultpoints', 'ulttime', 'ultpvp', 'nolife', 'spotless', 'gotemall']],
   ['Drop Out', ['dropunlock', 'dropout', 'hurry']],
   ['PvP', ['pvpunlock', 'bigleagues', 'downplay', 'mpfirst', 'mpcrush', 'racewin', 'kowin', 'undefeated', 'mprival', 'fortnite', 'royale', 'ffabest']]
 ];
@@ -3737,7 +3787,7 @@ const MEDALS = [
     titles: ['Applicant', 'Candidate', 'Intern', 'Junior', 'Associate', 'Specialist', 'Senior', 'Manager', 'Director', 'Executive', 'CEO'] },
   { id: 'points', name: 'Points', icon: 'diamond', steps: [10000, 50000, 100000, 200000, 300000, 400000, 500000, 600000, 700000, 800000, 1000000], value: st => st.points || 0, unit: n => nf(n) + ' pts',
     titles: ['Ultra noob', 'Noob', 'Button Masher', 'Rookie', 'Casual', 'Grinder', 'Tryhard', 'Sweat', 'Pro', 'Gaming legend', 'Peak gamer'] },
-  { id: 'time', name: 'Time played', icon: 'watch', steps: [1, 5, 10, 15, 30, 45, 60, 90, 120, 150, 180], value: st => (st.time || 0) / 60, unit: n => nf(Math.floor(n)) + ' min',
+  { id: 'time', name: 'Time', icon: 'watch', steps: [1, 5, 10, 15, 30, 45, 60, 90, 120, 150, 180], value: st => (st.time || 0) / 60, unit: n => nf(Math.floor(n)) + ' min',
     titles: ['I have a full-time job', 'I need to pay my bills', 'I should probably do something with my life', 'I rarely shower', 'My girlfriend left me', 'What is grass?', 'I never had a girlfriend', 'Terminally online', 'Unemployed by choice', 'Discord mod', 'Reddit mod'] },
   { id: 'pvp', name: 'PvP played', icon: 'versus', steps: [1, 5, 10, 20, 30, 40, 50, 60, 70, 80, 100], value: st => st.mpPlayed || 0, unit: n => nf(n) + (n === 1 ? ' game' : ' games'),
     titles: ['Rival', 'Challenger', 'Adversary', 'Competitor', 'Opponent', 'Antagonist', 'Nemesis', 'Blood Rival', 'Eternal Enemy', 'Mortal Foe', 'Arch-Nemesis'] }
@@ -3964,7 +4014,7 @@ function colorUnlocked(id, pr) {
 }
 function checkPassive() {
   if (S.phase === 'playing' || S.phase === 'between') return;
-  ['maxed', 'drip', 'nolife', 'spotless', 'pvpunlock', 'dropunlock', 'customunlock', 'gotemall'].forEach(id => { const a = ACH.find(q => q.id === id); if (a && !unlocked[id]) { let ok = false; try { ok = a.test({ st: getStats() }); } catch (e) {} if (ok) award(id); } });
+  ['maxed', 'drip', 'nolife', 'spotless', 'pvpunlock', 'dropunlock', 'customunlock', 'ultwins', 'ulttyped', 'ultpoints', 'ulttime', 'ultpvp', 'gotemall'].forEach(id => { const a = ACH.find(q => q.id === id); if (a && !unlocked[id]) { let ok = false; try { ok = a.test({ st: getStats() }); } catch (e) {} if (ok) award(id); } });
 }
 function addPristine(amount, quiet) {
   amount = Math.max(0, Math.round(amount || 0)); if (!amount) return 0;
@@ -4740,9 +4790,9 @@ function drawPlayers() {
   body.innerHTML = `<div class="plist">${list.map(r => {
     const p = r.profile || {}, me = r.id === myId;
     const cb = colorById(validColor(p.color)).base;
-    return `<button type="button" class="prow${me ? ' me' : ''}" style="${themeStyle(p.color)}${cb ? ';--pc:' + cb : ''}" data-act="pl-player" data-id="${escapeHtml(String(r.id))}"><span class="pname">${chipHTML(r.name, p.color)}${me ? ' <span class="newtag">YOU</span>' : ''}<small class="pt"></small></span><span class="ppr pr-inline">◆ ${nf(pr(r))}</span>${lvlBadge(num(+r.level, 0), 'mini')}</button>`;
+    return `<button type="button" class="plrow${me ? ' me' : ''}" style="${themeStyle(p.color)}${cb ? ';--pc:' + cb : ''}" data-act="pl-player" data-id="${escapeHtml(String(r.id))}"><span class="pname">${chipHTML(r.name, p.color)}${me ? ' <span class="newtag">YOU</span>' : ''}<small class="pt"></small></span><span class="ppr pr-inline">◆ ${nf(pr(r))}</span>${lvlBadge(num(+r.level, 0), 'mini')}</button>`;
   }).join('')}</div>${lbWhyHTML()}`;
-  body.querySelectorAll('.prow .pt').forEach((el, i) => { const t = (list[i].profile || {}).title; el.textContent = typeof t === 'string' && t ? t.slice(0, 60) : 'No title'; });
+  body.querySelectorAll('.plrow .pt').forEach((el, i) => { const t = (list[i].profile || {}).title; el.textContent = typeof t === 'string' && t ? t.slice(0, 60) : 'No title'; });
 }
 
 /* ---------- V13: Contact (bug reports, feature requests, rule ideas) ----------
@@ -4800,7 +4850,7 @@ function openContact(kind) {
     msg.className = 'progress ct-msg ' + (ok ? 'ok' : 'bad');
     msg.textContent = ok ? 'Thank you! Your message was sent.' : `Couldn't reach the server right now (${String(why).slice(0, 80)}). It's saved and will be sent automatically next time you play online.`;
     sfx.ok();
-    award('supporter');
+    setTimeout(() => { if ($('ctText')) closeModal(); toastInfo(ok ? 'MESSAGE SENT' : 'MESSAGE SAVED', ok ? 'Thank you for helping make the game better!' : 'It will be sent next time you play online.'); award('supporter'); }, 1200);
   };
 }
 
@@ -5061,14 +5111,15 @@ function renderLobbyInner(box) {
   const card = (p, me) => {
     const tag = [p.host ? ico('crown', 'l') + 'HOST' : '', me ? 'YOU' : '', p.bot ? ico('robot', 'l') + 'BOT' : '', !me && !p.bot && p.where === 'game' ? 'IN A MATCH' : !me && !p.bot && p.where === 'result' ? 'ON RESULTS' : ''].filter(Boolean).join(' · ') || 'PLAYER';
     const dl = p.bot ? (BOT_DIFF[p.diff] || BOT_DIFF.medium).label : '';
-    const line = p.bot ? (MP.host && !matchLive() ? `<button type="button" class="bot-diff d-${p.diff}" data-act="bot-diff" data-peer="${escapeHtml(p.peer)}" title="Change difficulty">${dl} ▸</button> · Bot` : `<b class="bot-lv d-${p.diff}">${dl}</b> · Bot`) : `Level ${num(p.level, 0)}${p.title ? ' · <i class="ptitle"></i>' : ''}`;
+    const line = p.bot ? (MP.host && !matchLive() ? `<button type="button" class="bot-diff d-${p.diff}" data-act="bot-diff" data-peer="${escapeHtml(p.peer)}" title="Change difficulty">${dl} ▸</button>` : `<b class="bot-lv d-${p.diff}">${dl}</b>`) : `Level ${num(p.level, 0)}`;
     return `<div class="pcard${me ? ' me' : p.bot ? ' bot' : ' click'}" ${me || p.bot ? '' : `data-act="mp-prof" data-peer="${escapeHtml(p.peer)}" tabindex="0" title="View profile"`} style="--pc:${colorOf(p.peer)};${themeStyle(colorIdOf(p.peer))}">${!me && MP.host && !matchLive() ? `<button type="button" class="kick" data-act="${p.bot ? 'bot-remove' : 'mp-kick'}" data-peer="${escapeHtml(p.peer)}" title="${p.bot ? 'Remove bot' : 'Kick from the room'}" aria-label="${p.bot ? 'Remove bot' : 'Kick'}">✕</button>` : ''}
-      <small>${tag}</small><b class="pname"></b><span>${line}</span>
+      <small>${tag}</small><b class="pname"></b><i class="ptitle${p.title ? '' : ' none'}"></i><span>${line}</span>
       <em class="pwins">${num(p.wins, 0)} ${num(p.wins, 0) === 1 ? 'WIN' : 'WINS'}</em></div>`;
   };
   const meInfo = Object.assign(myInfo(), { wins: MP.wins });
   const cards = [card(meInfo, true), ...peers.map(p => card(p, false))];
-  const empty = n < 2 ? `<div class="pcard empty"><small>WAITING</small><b>…</b><span>Send the code to your friends${MP.host ? ', or add a bot' : ''}</span></div>` : '';
+  const empty = (n < 2 && !MP.host ? `<div class="pcard empty"><small>WAITING</small><b>…</b><span>Send the code to your friends</span></div>` : '')
+    + (MP.host && n < MAX_PLAYERS && !matchLive() ? `<button type="button" class="pcard addbot" data-act="bot-add">${ico('robot')}<b>+ ADD BOT</b><span>${n < 2 ? 'Or send the code to your friends' : 'Fill the room'}</span></button>` : '');
   const info = k => `<span class="minfo" tabindex="0" aria-label="${escapeHtml(MODES[k].desc)}">i<span class="tip">${MODES[k].desc}</span></span>`;
   const modeBtn = k => {
     const fits = modeFits(k, n);
@@ -5090,13 +5141,12 @@ function renderLobbyInner(box) {
     ${last ? `<p class="progress">Last match: ${last}.</p>` : ''}
     <div class="row">${MP.host ? `<button class="btn red" data-act="mp-start" type="button"${canStart ? '' : ' disabled'}>START</button>${!modeFits(MP.mode, n) ? `<span class="progress">${n < 2 ? 'Waiting for players…' : MODES[MP.mode].party ? 'Needs 3-8 players.' : 'Needs exactly 2 players.'}</span>` : busy.length ? `<span class="progress">Waiting for ${busy.length === 1 ? escapeHtml(busy[0].name) : busy.length + ' players'} to return…</span>` : ''}`
       : `<p class="progress wait-dots">Waiting for the host to start</p>`}
-      ${MP.host ? `<button class="btn" data-act="bot-add" type="button">${ico('robot', 'l')}ADD BOT</button>` : ''}
       <button class="btn dark" data-act="mp-leave" type="button">LEAVE ROOM</button></div>
     ${MP.host && peers.some(p => p.bot) ? '<p class="progress tiny">Matches with bots give a 20th of the usual XP and Pristine and don\'t count for PvP stats, the leaderboards or achievements.</p>' : ''}`;
   // names and titles are set as text, never as HTML
-  const nodes = box.querySelectorAll('.pcard:not(.empty)');
-  [meInfo, ...peers].forEach((p, i) => { const c = nodes[i]; if (!c) return; c.querySelector('.pname').innerHTML = chipOf(p.peer, p.name, 'big'); const t = c.querySelector('.ptitle'); if (t) t.textContent = p.peer !== PEER && peerBlocked(p.peer) ? '' : String(p.title).slice(0, 40); });
-  const ab = box.querySelector('[data-act="bot-add"]'); if (ab) ab.disabled = n >= MAX_PLAYERS || matchLive();
+  const nodes = box.querySelectorAll('.pcard:not(.empty):not(.addbot)');
+  [meInfo, ...peers].forEach((p, i) => { const c = nodes[i]; if (!c) return; c.querySelector('.pname').innerHTML = chipOf(p.peer, p.name, 'big'); const t = c.querySelector('.ptitle'); if (t) t.textContent = p.peer !== PEER && peerBlocked(p.peer) ? '' : String(p.title || 'No title').slice(0, 40); });
+
 }
 function newCode() { let c = ''; for (let i = 0; i < 4; i++) c += CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)]; return c; }
 function mpCreate() { joinRoom(newCode(), true); }
@@ -5240,7 +5290,7 @@ function onMsg(p) {
     afterPeerUpdate(p.from, !wasEnded && END(pl.status));
   }
   if (p.t === 'koRes') applyKoRes(num(p.round, 0), p.snap || {});
-  if (p.t === 'brRes') applyBrRes(num(p.round, 0), Array.isArray(p.out) ? p.out.filter(x => typeof x === 'string') : []);
+  if (p.t === 'brRes') applyBrRes(num(p.round, 0), Array.isArray(p.out) ? p.out.filter(x => typeof x === 'string') : [], typeof p.late === 'string' ? p.late : null);
 }
 const matchLive = () => !!(MP.match && !MP.match.over);
 function heartbeat() {
@@ -5401,7 +5451,7 @@ function beginMatch(seed, mode, roster) {
   const players = {};
   roster.forEach(id => {
     const info = id === PEER ? myInfo() : MP.peers[id];
-    players[id] = { peer: id, bot: !!(info && info.bot), diff: info && info.diff, pristine: info && typeof info.pristine === 'number' ? info.pristine : null, color: validColor(info && info.color), name: info ? cleanName(info.name) : 'Player', level: info ? num(info.level, 0) : 0, host: !!(info && info.host), joinedAt: info ? num(info.joinedAt, 0) : 0,
+    players[id] = { peer: id, title: info ? String(info.title || '').slice(0, 40) : '', bot: !!(info && info.bot), diff: info && info.diff, pristine: info && typeof info.pristine === 'number' ? info.pristine : null, color: validColor(info && info.color), name: info ? cleanName(info.name) : 'Player', level: info ? num(info.level, 0) : 0, host: !!(info && info.host), joinedAt: info ? num(info.joinedAt, 0) : 0,
       round: 1, ok: 0, total: 2, score: 0, status: 'playing', hist: [], pw: null, time: null, len: 0, seen: Date.now(), goneAt: 0 };
   });
   MP.match = { seed, mode, party: !!MODES[mode].party, roster, players, over: false, result: null, recorded: false, capRound: 0, myPlace: 0,
@@ -5409,38 +5459,48 @@ function beginMatch(seed, mode, roster) {
     br: { alive: new Set(roster), resolved: 0, outs: [] } };
   MP.where = 'game'; trackMe();
   MP.lobbyOpen = false; closeModal();
-  const go = () => countdown(() => {
+  const go = () => {
     if (!(MP.match && MP.match.seed === seed)) return;
     // Big Leagues / Down play: compare Pristine with everyone in the match
     const mine = Math.round(acct.pristine || 0), theirs = roster.filter(id => id !== PEER).map(id => players[id].pristine).filter(p => typeof p === 'number');
     const ach = roster.some(id => players[id].bot) ? [] : [theirs.some(p => p > mine) && 'bigleagues', theirs.some(p => p < mine) && 'downplay'].filter(Boolean);
-    startGame({ seed, mode, ach });
-  });
+    startGame({ seed, mode, ach, instant: true });
+  };
   const vs = !MODES[mode].party && roster.length === 2;
-  if (MP.host) botStartMatch((vs ? 2950 : 0) + 3650);
-  if (vs) vsIntro(players[roster[0]], players[roster[1]], go); else go();
+  if (MP.host) botStartMatch(INTRO_TYPE + 150);
+  matchIntro(roster.map(id => players[id]), !vs, go);
 }
 const meP = () => MP.match && MP.match.players[PEER];
 const others = () => MP.match ? MP.match.roster.filter(id => id !== PEER).map(id => MP.match.players[id]) : [];
 const oppP = () => others()[0];
 /* 1v1: a black slash across the screen, VS in the middle, the two names slide in */
-function vsIntro(p1, p2, done) {
-  const el = document.createElement('div'); el.id = 'vsFx';
-  const card = (p, cls) => `<div class="vs-p ${cls}"><div class="vs-name">${chipHTML(p.name, p.color, 0, 'big')}</div><small>LEVEL ${num(p.level, 0)}${p.peer === PEER ? ' · YOU' : ''}</small></div>`;
-  const W = innerWidth, H = innerHeight, tn = Math.tan(24 * Math.PI / 180), yL = H / 2 + tn * W / 2, yR = H / 2 - tn * W / 2;
-  const tint = (p, d) => { const b = colorById(validColor(p.color)).base; return b && validColor(p.color) !== 'black' ? b : d; };
-  el.innerHTML = `<div class="vs-side s1" style="--vc:${tint(p1, '#3f8fff')};clip-path:polygon(0 0, ${W}px 0, ${W}px ${yR}px, 0 ${yL}px)"></div><div class="vs-side s2" style="--vc:${tint(p2, '#ff4d5e')};clip-path:polygon(0 ${yL}px, ${W}px ${yR}px, ${W}px ${H}px, 0 ${H}px)"></div>
-    <div class="vs-band"></div><div class="vs-word"><b>VS</b></div>${card(p1, 'p1')}${card(p2, 'p2')}`;
-  document.body.appendChild(el);
-  requestAnimationFrame(() => el.classList.add('on'));
-  if (!music.jingle('vs')) {
-    [0, .25, .5, .62, .75, .82, .9, .96].forEach((d, i) => tone(i < 3 ? 110 : 140 + i * 30, .12, 'square', .05, .6, d));
-    tone(220, .5, 'sawtooth', .05, 2.5, .95); tone(880, .3, 'square', .04, .5, 1.35);
+/* the match intro: 1v1 gets a VS screen, 3-8 players get COMPETITORS. Then 3, 2, 1, TYPE! and it slides away. */
+const INTRO_TYPE = 5400;     // ms until TYPE!
+function matchIntro(list, party, done) {
+  const old = $('vsFx'); if (old) old.remove();
+  const el = document.createElement('div'); el.id = 'vsFx'; el.className = party ? 'party' : 'duel';
+  const label = p => p.bot ? `${(BOT_DIFF[p.diff] || BOT_DIFF.medium).label.toUpperCase()} BOT` : `LEVEL ${num(p.level, 0)}`;
+  const card = (p, cls, i) => `<div class="vs-p ${cls}" style="--i:${i}${cls.includes('comp') ? ';' + themeStyle(p.color) : ''}"><div class="vs-name">${chipHTML(p.name, p.color, 0, 'big')}</div><i class="vs-title"></i><small>${label(p)}${p.peer === PEER ? ' · YOU' : ''}</small></div>`;
+  if (!party) {
+    const [p1, p2] = list;
+    const W = innerWidth, H = innerHeight, tn = Math.tan(24 * Math.PI / 180), yL = H / 2 + tn * W / 2, yR = H / 2 - tn * W / 2;
+    const tint = (p, d) => { const b = colorById(validColor(p.color)).base; return b && validColor(p.color) !== 'black' ? b : d; };
+    el.innerHTML = `<div class="vs-side s1" style="--vc:${tint(p1, '#3f8fff')};clip-path:polygon(0 0, ${W}px 0, ${W}px ${yR}px, 0 ${yL}px)"></div><div class="vs-side s2" style="--vc:${tint(p2, '#ff4d5e')};clip-path:polygon(0 ${yL}px, ${W}px ${yR}px, ${W}px ${H}px, 0 ${H}px)"></div>
+      <div class="vs-band"></div><div class="vs-word"><b>VS</b></div>${card(p1, 'p1', 0)}${card(p2, 'p2', 1)}`;
+  } else {
+    el.innerHTML = `<div class="comp-title">COMPETITORS</div><div class="comp-list">${list.map((p, i) => card(p, 'comp ' + (i % 2 ? 'from-left' : 'from-right'), i)).join('')}</div><div class="vs-word"><b></b></div>`;
   }
-  setTimeout(() => tone(400, .25, 'sawtooth', .03, 2.2), 300);
-  setTimeout(() => tone(400, .25, 'sawtooth', .03, 2.2), 550);
-  setTimeout(() => { el.classList.add('out'); }, 2600);
-  setTimeout(() => { el.remove(); done(); }, 2950);
+  el.querySelectorAll('.vs-title').forEach((t, i) => { const p = list[i]; t.textContent = p.peer !== PEER && peerBlocked(p.peer) ? '' : p.bot ? 'Bot' : (p.title || ''); });
+  document.body.appendChild(el);
+  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('on')));
+  if (!music.jingle('vs')) { [0, .3, .55, .75, .9, 1.02, 1.1, 1.16].forEach((d, i) => tone(i < 3 ? 110 : 140 + i * 30, .12, 'square', .05, .6, d)); tone(880, .3, 'square', .05, .5, 1.2); }
+  tone(300, .45, 'sawtooth', .03, 2.4, .05);
+  const word = el.querySelector('.vs-word b');
+  const count = (txt, big) => { word.textContent = txt; word.classList.remove('vs-slam', 'cd'); void word.offsetWidth; word.classList.add('cd'); if (big) word.classList.add('go'); tone(big ? 1046 : 523, big ? .35 : .12, 'square', .05); };
+  const T = [3000, 3800, 4600];
+  ['3', '2', '1'].forEach((n, i) => setTimeout(() => count(n), T[i]));
+  setTimeout(() => { count('TYPE!', true); el.classList.add('leave'); done(); }, INTRO_TYPE);
+  setTimeout(() => el.remove(), INTRO_TYPE + 1100);
 }
 function countdown(done) {
   const el = $('countdown'); el.hidden = false;
@@ -5700,8 +5760,15 @@ function brMaybeResolve() {
   const alive = [...m.br.alive].map(id => m.players[id]);
   const gone = alive.filter(p => GONE(p.status));
   const playing = alive.filter(p => !GONE(p.status));
-  if (playing.some(p => !p.hist[n - 1])) return;
+  const waitingFor = playing.filter(p => !p.hist[n - 1]);
   let out = gone.map(p => p.peer);
+  if (waitingFor.length === 1 && playing.length >= 2 && playing.every(p => p === waitingFor[0] || p.hist[n - 1].s === 'c')) {
+    out.push(waitingFor[0].peer);   // everyone else is through, so the last one can't avoid the knockout
+    send({ t: 'brRes', seed: m.seed, round: n, out, late: waitingFor[0].peer });
+    applyBrRes(n, out, waitingFor[0].peer);
+    return;
+  }
+  if (waitingFor.length) return;
   const failed = playing.filter(p => p.hist[n - 1].s === 'f');
   if (failed.length && failed.length < playing.length) out = out.concat(failed.map(p => p.peer));
   else if (!failed.length && playing.length > 1 && !gone.length) {   // someone who left takes this round's knockout
@@ -5711,7 +5778,7 @@ function brMaybeResolve() {
   send({ t: 'brRes', seed: m.seed, round: n, out });
   applyBrRes(n, out);
 }
-function applyBrRes(n, out) {
+function applyBrRes(n, out, late) {
   const m = MP.match; if (!m || m.mode !== 'br' || m.br.resolved >= n || n < 1) return;
   m.br.resolved = n;
   out = out.filter(id => m.br.alive.has(id));
@@ -5723,11 +5790,12 @@ function applyBrRes(n, out) {
   renderPlayersBar();
   const iAmOut = out.includes(PEER);
   if (S.phase === 'over') { renderMpResult(); mpResolve(); return; }      // spectating
+  if (iAmOut) { S.phase = 'waiting'; $('pw').readOnly = true; }
   // round result card
   const names = out.map(id => id === PEER ? 'You' : m.players[id].name);
   const why = !out.length ? 'Everyone failed, so nobody is out. 2 more rules!'
     : out.every(id => m.players[id].hist[n - 1] && m.players[id].hist[n - 1].s === 'f') ? (out.length === 1 ? 'failed the round' : 'failed the round')
-    : out.some(id => GONE(m.players[id].status)) && out.length === 1 ? 'left the match' : 'submitted last';
+    : out.some(id => GONE(m.players[id].status)) && out.length === 1 ? 'left the match' : late ? 'was the only one left typing' : 'submitted last';
   const bEl = $('burst');
   bEl.innerHTML = `<div class="card brres${iAmOut ? ' out' : ''}"><h2>ROUND ${n}</h2><div class="br-out"></div><div class="why">${out.length ? escapeHtml(why) + ' · ' : ''}${m.br.alive.size} left</div></div>`;
   bEl.querySelector('.br-out').textContent = out.length ? `${names.join(', ')} ${out.length === 1 && names[0] !== 'You' ? 'is' : 'are'} knocked out!` : why;
@@ -5897,10 +5965,10 @@ function mpRecord(res) {
    its progress exactly like a real player would, so everyone sees the same thing. */
 const BOT_NAMES = ['John', 'Sofia', 'Emma', 'Lucas', 'Mia', 'Noah', 'Olivia', 'Liam', 'Ava', 'Elias', 'Oscar', 'Ida', 'Karl', 'Nora', 'Leo', 'Alma', 'Hugo', 'Clara', 'Felix', 'Ella', 'Viktor', 'Maja', 'Anton', 'Theo', 'Luna', 'Adam', 'Ellen', 'Otto', 'Sara', 'Max'];
 const BOT_DIFF = {
-  easy: { label: 'Easy', solve: 64, spread: .45, fail: .2, cpr: 13 },
-  medium: { label: 'Medium', solve: 40, spread: .4, fail: .09, cpr: 9.5 },
-  hard: { label: 'Hard', solve: 24, spread: .35, fail: .035, cpr: 7 },
-  insane: { label: 'Insane', solve: 12, spread: .3, fail: .01, cpr: 5 }
+  easy: { label: 'Easy', solve: 34, spread: .4, fail: .08, cpr: 9 },
+  medium: { label: 'Medium', solve: 21, spread: .35, fail: .035, cpr: 6.5 },
+  hard: { label: 'Hard', solve: 12, spread: .3, fail: .012, cpr: 4.8 },
+  insane: { label: 'Insane', solve: 6.5, spread: .25, fail: .003, cpr: 3.6 }
 };
 const BOT_ORDER = ['easy', 'medium', 'hard', 'insane'];
 const BOT_COLORS = ['orange', 'green', 'brown', 'red', 'blue', 'purple', 'pink', 'yellow', 'teal'];
@@ -5966,11 +6034,13 @@ function botStartMatch(delay) {
 function botPlan(b, m) {
   const p = m.players[b.id], d = BOT_DIFF[p.diff] || BOT_DIFF.medium, md = MODES[m.mode];
   const limit = md.time(b.round) * 1000, total = md.perRound * b.round;
-  const solve = Math.max(1600 * BSP(), d.solve * (.55 + .15 * b.round) * (1 + d.spread * (Math.random() * 2 - 1)) * 1000 * BSP());
+  // each round only the new rules need work: the password from the last round is kept
+  const solve = Math.max(1200 * BSP(), d.solve * (.75 + .1 * b.round) * (1 + d.spread * (Math.random() * 2 - 1)) * 1000 * BSP());
   const fail = Math.random() < d.fail * (1 + .15 * b.round) || solve > limit - 400;
   const len = Math.max(4, Math.round(total * d.cpr * (.8 + Math.random() * .4)));
-  b.plan = { limit, total, solve, fail, len };
-  p.total = total; p.round = b.round; p.ok = 0;
+  const kept = md.fresh ? 0 : md.perRound * (b.round - 1);
+  b.plan = { limit, total, solve, fail, len, kept };
+  p.total = total; p.round = b.round; p.ok = kept;
 }
 function botSend(b, m, extra) {
   const p = m.players[b.id]; Object.assign(p, extra || {}); p.seen = Date.now();
@@ -6066,7 +6136,7 @@ function botTick() {
     const deadline = Math.min(b.start + pl.limit, b.capAt || Infinity);
     if (!pl.fail && b.start + pl.solve <= deadline && el >= pl.solve) { botClear(b, m, el); continue; }
     if (now >= deadline) { botFail(b, m); continue; }
-    const ok = Math.max(0, Math.min(pl.total - 1, Math.floor(pl.total * el / (pl.fail ? pl.limit * 1.15 : pl.solve))));
+    const ok = Math.max(pl.kept, Math.min(pl.total - 1, pl.kept + Math.floor((pl.total - pl.kept) * el / (pl.fail ? pl.limit * 1.15 : pl.solve))));
     if (ok !== p.ok || now - b.lastSend > 2500) botSend(b, m, { ok });
   }
 }
@@ -6165,12 +6235,13 @@ function renderPlayersBar() {
       : { playing: 'TYPING…', cleared: m.mode === 'ko' || m.mode === 'br' ? 'LOCKED IN' : `CLEARED ROUND ${o.round}`, submitting: `CLEARED ROUND ${o.round}`, failed: `FAILED ROUND ${o.round}`, finished: 'FINISHED', out: 'OUT OF TIME', beaten: 'OUT', ko: 'KNOCKED OUT', forfeit: 'LEFT', gone: 'DISCONNECTED', eliminated: 'KNOCKED OUT', won: 'WINNER' }[o.status] || '';
     const pips = Array.from({ length: Math.max(0, Math.min(m.party ? 8 : 10, o.total)) }, (_, i) => `<i class="${i < o.ok ? 'on' : ''}"></i>`).join('');
     const right = m.mode === 'ko' ? nf(m.ko.hp[o.peer]) + ' HP' : m.mode === 'br' ? '' : nf(o.score);
-    return `<div class="prow${out ? ' out' : ''}" style="--pc:${colorOf(o.peer)}"><b class="opp-name"></b><span class="opp-round">R${m.mode === 'br' ? o.round : Math.min(5, o.round)}</span><span class="pips">${pips}</span><span class="opp-score">${right}</span><span class="opp-status s-${o.status}${o.goneAt ? ' s-gone' : ''}">${status}</span></div>`;
+    return `<div class="prow${out ? ' out' : ''}" style="--pc:${colorOf(o.peer)}"><span class="opp-who"><b class="opp-name"></b><i class="opp-title"></i></span><span class="opp-round">R${m.mode === 'br' ? o.round : Math.min(5, o.round)}</span><span class="pips">${pips}</span><span class="opp-score">${right}</span><span class="opp-status s-${o.status}${o.goneAt ? ' s-gone' : ''}">${status}</span></div>`;
   };
   const os = others();
   bar.className = 'oppbar' + (m.party ? ' party' : '');
   bar.innerHTML = (m.party ? '' : '<span class="opp-tag">VS</span>') + os.map(row).join('');
   bar.querySelectorAll('.opp-name').forEach((n, i) => { n.innerHTML = chipOf(os[i].peer, os[i].name); });
+  bar.querySelectorAll('.opp-title').forEach((n, i) => { const o = os[i]; n.textContent = peerBlocked(o.peer) ? '' : o.bot ? (BOT_DIFF[o.diff] || BOT_DIFF.medium).label + ' bot' : (o.title || ''); });
   bar.hidden = false;
 }
 const renderOppBar = renderPlayersBar;
@@ -6187,11 +6258,21 @@ function mpStanding() {
 function myKoHp() { const m = MP.match; return m && m.ko && m.ko.hp ? m.ko.hp[PEER] : KO_HP; }
 
 /* ---------- version + patch notes ---------- */
-const VERSION = 'V14.1';
+const VERSION = 'V14.2';
 // how long each update took to build (V1-V8 are reconstructed estimates, marked with ~)
-const DEV_DATE = { 'V14.1': '2026-10-04', V14: '2026-10-04', 'V13.3': '2026-10-04', 'V13.2': '2026-10-04', 'V13.1': '2026-10-04', V13: '2026-10-04', V12: '2026-10-04', V11: '2026-10-03', V10: '2026-10-03', 'V9.2': '2026-10-03', 'V9.1': '2026-10-03', V9: '2026-10-03', V8: '2026-10-03', 'V7.1': '2026-10-03', V7: '2026-10-03', V6: '2026-10-02', V5: '2026-10-02', V4: '2026-10-02', V3: '2026-10-01', V2: '2026-10-01', V1: '2026-10-01' };
-const DEV_TIME = { 'V14.1': '35 min', V14: '30 min', 'V13.3': '15 min', 'V13.2': '10 min', 'V13.1': '15 min', V13: '35 min', V12: '20 min', V11: '28 min', V10: '35 min', 'V9.2': '4 min', 'V9.1': '7 min', V9: '17 min', V8: '~1 h', 'V7.1': '~25 min', V7: '~50 min', V6: '~35 min', V5: '~45 min', V4: '~25 min', V3: '~20 min', V2: '~20 min', V1: '~45 min' };
+const DEV_DATE = { 'V14.2': '2026-10-04', 'V14.1': '2026-10-04', V14: '2026-10-04', 'V13.3': '2026-10-04', 'V13.2': '2026-10-04', 'V13.1': '2026-10-04', V13: '2026-10-04', V12: '2026-10-04', V11: '2026-10-03', V10: '2026-10-03', 'V9.2': '2026-10-03', 'V9.1': '2026-10-03', V9: '2026-10-03', V8: '2026-10-03', 'V7.1': '2026-10-03', V7: '2026-10-03', V6: '2026-10-02', V5: '2026-10-02', V4: '2026-10-02', V3: '2026-10-01', V2: '2026-10-01', V1: '2026-10-01' };
+const DEV_TIME = { 'V14.2': '30 min', 'V14.1': '35 min', V14: '30 min', 'V13.3': '15 min', 'V13.2': '10 min', 'V13.1': '15 min', V13: '35 min', V12: '20 min', V11: '28 min', V10: '35 min', 'V9.2': '4 min', 'V9.1': '7 min', V9: '17 min', V8: '~1 h', 'V7.1': '~25 min', V7: '~50 min', V6: '~35 min', V5: '~45 min', V4: '~25 min', V3: '~20 min', V2: '~20 min', V1: '~45 min' };
 const PATCH_NOTES = [
+  ['V14.2', 'Showtime', ['A new match intro. 1v1: the black slash is drawn across the screen, both names (with their titles) slide in on their own colors, VS slams into the middle and turns into 3, 2, 1, TYPE! before the two halves slide away. 3-8 players: COMPETITORS, with everyone\'s card sliding in like the menu buttons.',
+    'Bots are much tougher, and they keep their password between rounds like a real player.',
+    'Battle Royale: when everyone else has submitted, the last one still typing is knocked out right away.',
+    'Titles show under the name in PvP rooms, in the match and in the intro.',
+    'ADD BOT is now a card next to the players.',
+    'Fixed the players bar in 3-8 player matches overlapping.',
+    'Hovering a rule turns the matching part of your password yellow instead of drawing a green box.',
+    'The Contact window closes by itself after you send a message.',
+    'The "Time played" medal is now called "Time". The programming-character rule\'s hint no longer gives the answers away.',
+    '6 new achievements: Are you farming?, ULTIMATE, CEO, Peak gamer, Reddit mod and Arch-Nemesis.']],
   ['V14.1', 'Bots & Intro', ['Bots! The host can press ADD BOT in a room. Each bot gets a name, the title "Bot" and a difficulty: Easy, Medium, Hard or Insane (click it to change). Remove them with ✕. Bots play every mode, react and send emotes, but never type in the chat.',
     'Matches with bots give a 20th of the usual XP and Pristine and don\'t count for PvP stats, the leaderboards or achievements.',
     'A Prismatic Productions intro every time you open the game: 4 bars of music, the title typed out, "(New and improved)" slapping in and the menu flying into place. Turn it off in Settings.',
@@ -6325,6 +6406,7 @@ const PATCH_NOTES = [
   ['V1', 'First Password', ['The (New and improved) Password Game: 5 rounds, 2 new rules a round, 54 rules, scoring, flames and a retro look.', 'Discovered rules and highscores.']]
 ];
 const NOTE_HL = {
+  'V14.2': ['A new VS and COMPETITORS intro with the countdown built in.', 'Tougher bots and a faster Battle Royale.', '6 new achievements.'],
   'V14.1': ['Bots for every PvP mode.', 'A Prismatic Productions intro.', 'Reset Progress and Boost audio in Settings.', '3 new rules.'],
   V14: ['A VS screen and a TYPE! countdown for every 1v1.', '5 new rules, and countries from any continent.', 'Rainbow medals sing with a choir and harp that follow your hand.', 'Guides for PvP and Custom games when you unlock them.'],
   'V13.3': ['Custom splits into Standard and Drop Out.', 'A showcase for ULTIMATE medals.', 'Volume up to 200% and 4 new achievements.'],
@@ -6345,7 +6427,7 @@ const NOTE_HL = {
   V3: ['Achievements.']
 };
 const NOTE_GROUPS = [
-  { v: 'V14', name: 'Versus', of: ['V14.1', 'V14'], time: '1 h 5 min',
+  { v: 'V14', name: 'Versus', of: ['V14.2', 'V14.1', 'V14'], time: '1 h 35 min',
     hl: ['Bots: Easy to Insane, in every PvP mode.', 'A VS screen with both players\' colors and a TYPE! countdown.', 'A Prismatic Productions intro, Reset Progress and Boost audio.', '11 new rules and a choir for rainbow medals.'] },
   { v: 'V13', name: 'Custom Games', of: ['V13.3', 'V13.2', 'V13.1', 'V13'], time: '1 h 15 min',
     hl: ['Custom games: your own categories, rules per round and clock, for Standard and Drop Out.', 'Rule categories, 5 new rules, Community with a Players tab and a Contact button.', 'PvP, Drop Out and Custom unlock as you play, each with its own cutscene.', 'A new tutorial, a new menu and a showcase for ULTIMATE medals.'] },
@@ -6719,6 +6801,7 @@ pwEl.addEventListener('beforeinput', e => {
   if (S.phase !== 'playing' && S.phase !== 'between') return;
   if (!pwEl.readOnly) sfx.key(/^delete/.test(e.inputType));
   if ((e.inputType === 'insertText' || e.inputType === 'insertReplacementText') && e.data) S.chars += [...e.data].length;
+  if (!unlocked.farming) setTimeout(() => { if (!unlocked.farming && (S.phase === 'playing' || S.phase === 'between') && /(.)\1{19}/u.test(pwEl.value)) award('farming'); }, 0);
 });
 pwEl.addEventListener('compositionend', e => { if ((S.phase === 'playing' || S.phase === 'between') && e.data) S.chars += [...e.data].length; });
 pwEl.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); lockIn(); } });
