@@ -82,7 +82,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .audiopop { position: fixed; top: calc(62px + env(safe-area-inset-top, 0px)); right: 12px; z-index: 7; width: 260px; max-width: calc(100vw - 24px); background: var(--panel); border: 3px solid var(--edge); border-radius: 10px; padding: 12px 14px 14px; box-shadow: 0 6px 0 rgba(0,0,0,.45); display: grid; gap: 10px; }
 .audiopop[hidden] { display: none; }
 .ap-title { letter-spacing: .2em; color: var(--gold); font-size: 13px; }
-.ap-row { display: grid; grid-template-columns: 64px 1fr 40px; align-items: center; gap: 8px; font-size: 12px; letter-spacing: .1em; color: var(--dim); }
+.ap-row { display: grid; grid-template-columns: 64px 1fr 46px; align-items: center; gap: 8px; font-size: 12px; letter-spacing: .1em; color: var(--dim); }
 .ap-row output { text-align: right; color: var(--ink); font-variant-numeric: tabular-nums; }
 .ap-row input { width: 100%; accent-color: var(--gold); }
 .ap-check { display: grid; grid-template-columns: auto 1fr; gap: 8px; align-items: start; font-size: 12px; cursor: pointer; }
@@ -230,7 +230,9 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .emblem .px { fill: #6d65a0; }
 .emblem.on .hex { fill: var(--gold); }
 .emblem.on .hex-in { fill: #c9771d; }
+.themed .emblem.on .hex-in { fill: color-mix(in srgb, var(--gold) 62%, #000); }
 .emblem.on .px { fill: #fff6dc; }
+.themed .emblem.on .px { fill: color-mix(in srgb, var(--gold) 12%, #fff); }
 #toasts { position: fixed; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 25; display: flex; flex-direction: column; width: min(calc(100% - 32px), 420px); pointer-events: none; }
 .toast.info.plain { grid-template-columns: 1fr; }
 .toast { display: grid; grid-template-columns: 52px 1fr; gap: 12px; align-items: center; box-sizing: border-box; height: 88px; margin-top: 12px; overflow: hidden; background: var(--panel); border: 4px solid var(--edge); border-radius: 12px; box-shadow: 0 8px 0 var(--edge); padding: 8px 14px; animation: toastin .55s cubic-bezier(.2,.9,.3,1) both; }
@@ -402,7 +404,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .pcard small { font-size: 11px; letter-spacing: .14em; color: var(--dim); }
 .pcard b { font-family: var(--display); font-weight: 400; font-size: 34px; line-height: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .pcard span { font-size: 12px; color: var(--dim); }
-.pcard.me { box-shadow: inset 0 0 0 2px var(--gold); }
+.pcard.me { box-shadow: inset 0 0 0 2px var(--pc, var(--gold)); }
 .pcard.empty b { color: var(--dim); animation: blink 1.2s steps(2) infinite; }
 .vs { font-family: var(--display); font-size: 28px; color: var(--red); }
 .wait-dots { margin: 0; align-self: center; }
@@ -879,7 +881,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .plist { display: grid; gap: 6px; }
 .prow { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 12px; width: 100%; background: var(--edge); border: 2px solid transparent; border-radius: 8px; padding: 8px 10px; text-align: left; font: inherit; color: var(--ink); cursor: pointer; }
 .prow:hover, .prow:focus-visible { border-color: var(--gold); }
-.prow.me { border-color: rgba(255, 184, 61, .45); }
+.prow.me { border-color: var(--pc, rgba(255, 255, 255, .5)); }
 .prow .pname { min-width: 0; }
 .prow .pt { display: block; font-size: 12px; color: var(--dim); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .prow .ppr { font-size: 13px; white-space: nowrap; }
@@ -919,6 +921,9 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .menu-btns .pjoin { font-size: 34px; }
 .menu-btns .playsplit .pbtn { font-size: 26px; }
 .menu-btns .pbtn .lockreq { margin-top: 3px; }
+.customwrap { --c1: #a35bff; --c2: #ff5bd1; --cm: #ffd0f4; --t1: var(--ink); --t2: var(--ink); }
+.customwrap .pbtn { text-shadow: 0 3px 0 rgba(0,0,0,.35); }
+.customwrap .playsplit .pbtn:last-child { text-shadow: 0 3px 0 rgba(0,0,0,.35); }
 .commwrap { --c1: var(--blue); --c2: #5ad1ff; --cm: #7b5cff; --t1: var(--ink); --t2: var(--edge); }
 .commwrap .pbtn { text-shadow: 0 3px 0 rgba(0,0,0,.35); }
 .commwrap .playsplit .pbtn { font-size: 20px; letter-spacing: .02em; }
@@ -931,6 +936,28 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
 .set-help { display: flex; flex-wrap: wrap; gap: 8px; }
 .prow { border-left: 5px solid var(--pc, transparent); }
 @media (max-width: 640px) { .menu-btns .btn { font-size: 26px; } .menu-btns .pjoin { font-size: 32px; } .menu-btns .playsplit .pbtn { font-size: 22px; } .commwrap .playsplit .pbtn { font-size: 15px; } }
+.account.editing .acc-medals .medal { pointer-events: none; opacity: .55; filter: grayscale(.4); transition: opacity .25s, filter .25s; }
+.sheet.showcase { text-align: center; overflow: hidden; }
+.mshow { display: grid; justify-items: center; gap: 4px; padding-top: 6px; }
+.mshow-stage { position: relative; width: 280px; height: 250px; display: grid; place-items: center; touch-action: none; }
+.mshow-rays { position: absolute; inset: -60px; border-radius: 50%; background: repeating-conic-gradient(from 0deg, rgba(255,240,190,.22) 0deg 7deg, transparent 7deg 22deg); -webkit-mask: radial-gradient(circle, #000 18%, transparent 68%); mask: radial-gradient(circle, #000 18%, transparent 68%); animation: swirl 24s linear infinite; }
+.mshow-disc { width: 168px; height: 168px; border-radius: 50%; border: 5px solid var(--edge); display: grid; place-items: center; position: relative; overflow: hidden;
+  box-shadow: 0 8px 0 var(--edge), inset 0 0 0 6px rgba(255,255,255,.3), 0 0 50px 14px rgba(255,236,160,.55), 0 0 120px 40px rgba(170,110,255,.45);
+  transition: transform .15s ease-out; animation: mshowin .9s cubic-bezier(.2,1.6,.4,1) both, mshowbob 3.6s ease-in-out .9s infinite; }
+.mshow-disc.tier-fill.t-rainbow::before { inset: 0; border-radius: 50%; animation: angspin 9s linear infinite; background: conic-gradient(from var(--ang), #ff4d5e, #ff9f3d, #ffe85a, #3ddc8f, #2fd0ff, #2f6bff, #a35bff, #ff4d9e, #ff4d5e); }
+.mshow-disc .pxi { width: 78px; height: 78px; opacity: 1; filter: drop-shadow(0 4px 0 rgba(0,0,0,.35)); position: relative; z-index: 1; }
+.mshow-shine { position: absolute; inset: 0; border-radius: 50%; z-index: 2; pointer-events: none; background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,.7) 48%, transparent 60%); background-size: 260% 100%; animation: mshine 2.8s ease-in-out infinite; }
+.mshow-sparks i { position: absolute; left: 50%; top: 50%; width: 7px; height: 7px; margin: -3px; background: #fff7d6; box-shadow: 0 0 10px #fff; opacity: 0; animation: mspark 2.4s ease-out var(--d) infinite; }
+@keyframes mspark { 0% { opacity: 0; transform: rotate(var(--a)) translateY(-60px) scale(.4); } 25% { opacity: 1; } 100% { opacity: 0; transform: rotate(var(--a)) translateY(-138px) scale(1); } }
+@keyframes mshowin { 0% { transform: scale(.2) rotate(-200deg); opacity: 0; } 100% { transform: none; opacity: 1; } }
+@keyframes mshowbob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }
+@keyframes mshine { 0%, 15% { background-position: 130% 0; } 60%, 100% { background-position: -40% 0; } }
+.mshow-tier { letter-spacing: .3em; font-size: 12px; background: linear-gradient(90deg, #ff4d5e, #ffe85a, #3ddc8f, #2fd0ff, #a35bff, #ff4d9e); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 700; }
+.mshow-name { margin: 0; font-size: clamp(44px, 9vw, 64px); }
+.mshow-title { margin: 0; color: var(--dim); } .mshow-title b { color: var(--gold); }
+.mshow-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; margin-top: 10px; }
+.mshow-stats div { background: var(--edge); border-radius: 8px; padding: 8px 6px; display: grid; gap: 2px; }
+.mshow-stats small { font-size: 10px; letter-spacing: .14em; color: var(--dim); } .mshow-stats b { font-family: var(--display); font-weight: 400; font-size: 22px; }
 .ico { width: 1.05em; height: 1.05em; fill: currentColor; display: inline-block; vertical-align: -.16em; flex: none; }
 .ico.l { margin-right: .4em; }
 .ico.gold { color: #ffcf4a; } .ico.silver { color: #d6dceb; } .ico.bronze { color: #e0904f; }
@@ -964,7 +991,11 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
         <button class="pbtn pjoin" id="mpBtn" type="button">PVP<small class="lockreq" id="pvpLock" hidden></small></button>
         <div class="playsplit" id="pvpSplit" inert><button class="pbtn" id="pvpHost" type="button">HOST</button><button class="pbtn" id="pvpJoin" type="button">JOIN</button></div>
       </div>
-      <button class="btn custom" id="customBtn" type="button">CUSTOM GAME<small class="lockreq" id="customLock" hidden></small></button>
+      <div class="playwrap customwrap" id="customWrap">
+        <div class="goo" aria-hidden="true"><i class="blob bl"></i><i class="strand"></i><i class="blob br"></i></div>
+        <button class="pbtn pjoin" id="customBtn" type="button">CUSTOM<small class="lockreq" id="customLock" hidden></small></button>
+        <div class="playsplit" id="customSplit" inert><button class="pbtn" id="customStd" type="button">STANDARD</button><button class="pbtn" id="customDrop" type="button">DROP OUT</button></div>
+      </div>
       <hr class="menu-div">
       <div class="playwrap commwrap" id="commWrap">
         <div class="goo" aria-hidden="true"><i class="blob bl"></i><i class="strand"></i><i class="blob br"></i></div>
@@ -977,7 +1008,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabula
       <button class="btn dark" id="setBtn" type="button">SETTINGS</button>
       <button class="btn dark" id="contactBtn" type="button">CONTACT</button>
     </div>
-    <button class="version" id="verBtn" type="button">V13.2 · CUSTOM GAMES · <u>PATCH NOTES</u></button>
+    <button class="version" id="verBtn" type="button">V13.3 · CUSTOM GAMES · <u>PATCH NOTES</u></button>
   </section>
 
   <section id="account" class="screen account" hidden>
@@ -2263,7 +2294,8 @@ let lastVol = Object.assign({ music: .6, sfx: 1, fire: .8, typing: .8 }, store.g
 VOL_KEYS.forEach(k => { if (vol[k] > 0) lastVol[k] = vol[k]; });
 if (muted && VOL_KEYS.some(k => vol[k] > 0)) { VOL_KEYS.forEach(k => { vol[k] = 0; }); store.set('pg.vol', vol); }   // older saves: muted with sliders up
 function saveLast() { store.set('pg.volLast', lastVol); }
-function setVol(k, v) { vol[k] = Math.max(0, Math.min(1, v)); store.set('pg.vol', vol); if (k === 'sfx' && sfxBus) sfxBus.gain.value = vol.sfx; }
+const VOL_MAX = 2;
+function setVol(k, v) { vol[k] = Math.max(0, Math.min(VOL_MAX, v)); store.set('pg.vol', vol); if (k === 'sfx' && sfxBus) sfxBus.gain.value = vol.sfx; }
 const allSilent = () => muted || VOL_KEYS.every(k => vol[k] <= 0);
 function renderMute() {
   const b = $('setMute'); if (!b) return;
@@ -2303,7 +2335,7 @@ function openSettings() {
   const seg = (name, cur, opts) => `<div class="seg" role="radiogroup">${opts.map(([v, l]) => `<button type="button" class="seg-b${v === cur ? ' on' : ''}" data-seg="${name}" data-v="${v}" role="radio" aria-checked="${v === cur}">${l}</button>`).join('')}</div>`;
   openModal(`<h2>SETTINGS</h2>
     <section class="set-sec"><h3>AUDIO</h3>
-      ${VOL_KEYS.map(k => `<label class="ap-row"><span>${SET_LABELS[k]}</span><input type="range" id="vol-${k}" min="0" max="100" step="1"><output id="vol-${k}-out"></output></label>`).join('')}
+      ${VOL_KEYS.map(k => `<label class="ap-row"><span>${SET_LABELS[k]}</span><input type="range" id="vol-${k}" min="0" max="200" step="1"><output id="vol-${k}-out"></output></label>`).join('')}
       <div class="row tight"><button class="btn small dark" id="setMute" type="button">MUTE ALL</button></div>
       <label class="ap-check"><input type="checkbox" id="setSmooth"${store.get('pg.smoothAudio', IS_FIREFOX) ? ' checked' : ''}><span><b>AUDIO FIX</b><small>A bigger audio buffer. Fixes crackling on some computers (Firefox especially).</small></span></label>
       <div class="warn set-refresh" id="setRefresh" hidden><b id="setRefreshTxt">Refresh the page to apply the audio fix.</b><div class="row tight"><button class="btn small red" id="setReload" type="button">REFRESH NOW</button><button class="btn small dark" id="setLater" type="button">LATER</button></div></div>
@@ -2315,7 +2347,7 @@ function openSettings() {
     </section>
     <section class="set-sec"><h3>HELP</h3>
       <div class="set-help"><button class="btn small" data-act="how" type="button">HOW TO PLAY</button><button class="btn small dark" data-act="tutorial" type="button">REPLAY TUTORIAL</button></div>
-      <div class="set-row top"><span>CUTSCENES</span><div class="set-help">${(acct.seenFx || []).filter(k => UNLOCK_INFO[k]).map(k => `<button class="btn small dark" data-act="replay-fx" data-fx="${k}" type="button">${ico('unlock', 'l')}${UNLOCK_INFO[k].title}</button>`).join('') || '<p class="progress tiny">Unlock a game mode to see its cutscene here.</p>'}</div></div>
+      <div class="set-row top"><span>CUTSCENES</span><div class="set-help">${['drop', 'pvp', 'custom'].filter(k => (acct.seenFx || []).includes(k) || (k === 'drop' ? dropUnlocked() : k === 'pvp' ? pvpUnlocked() : customUnlocked())).map(k => `<button class="btn small dark" data-act="replay-fx" data-fx="${k}" type="button">${ico('unlock', 'l')}${UNLOCK_INFO[k].title}</button>`).join('') || '<p class="progress tiny">Unlock a game mode to see its cutscene here.</p>'}</div></div>
     </section>
     <section class="set-sec"><h3>MULTIPLAYER</h3>
       <div class="set-row"><span>CHAT FILTER</span>${seg('filter', chatFilter, [['none', 'NONE'], ['censor', 'CENSOR'], ['replace', 'REPLACE']])}</div>
@@ -2334,6 +2366,7 @@ function openSettings() {
       if (muted) { muted = false; store.set('pg.muted', false); }
       const was = allSilent();
       setVol(k, +e.target.value / 100); renderMute();
+      if (k === 'music' && +e.target.value >= 200) award('banger');
       if (!was && allSilent() && typeof award === 'function') award('muted');
     });
     // remember where the slider was before it was dragged down to 0
@@ -2936,7 +2969,9 @@ $('modal').addEventListener('click', e => {
     if (act === 'play-drop') { startGame({ mode: 'dropout' }); return; }
     if (act === 'settings') { openSettings(); return; }
     if (act === 'how') { openHow(); return; }
-    if (act === 'replay-fx') { closeModal(); playUnlockFx(a.dataset.fx, true); return; }
+    if (act === 'replay-fx') { closeModal(); playUnlockFx(a.dataset.fx, true); award('classic'); return; }
+    if (act === 'medal-track') { openMedalTrack(a.dataset.medal, true); return; }
+    if (act === 'medal-show') { openMedalTrack(a.dataset.medal); return; }
     if (act === 'custom-again') { startGame({ custom: S.custom || customCfg() }); return; }
     if (act === 'custom-edit') { openCustom(); return; }
     if (act === 'hof-boards') { openBoards(lastBoard); return; }
@@ -3110,6 +3145,9 @@ const PX = {
   paw: ['............', '...#....#...', '..###..###..', '..###..###..', '#..#....#..#', '##........##', '##..####..##', '...######...', '..########..', '..########..', '...##..##...', '............'],
   bubble: ['............', '.##########.', '#..........#', '#.###.####.#', '#..........#', '#.#####.##.#', '#..........#', '.##########.', '...##.......', '..#.........', '............', '............'],
   hash: ['............', '...##..##...', '...##..##...', '.##########.', '.##########.', '...##..##...', '...##..##...', '.##########.', '.##########.', '...##..##...', '...##..##...', '............'],
+  key: ['............', '............', '.####.......', '#....#......', '#.##.#######', '#.##.#######', '#....#..#.##', '.####...#..#', '............', '............', '............', '............'],
+  speaker: ['......#.....', '.....##...#.', '....###..#..', '######..#..#', '######.#..#.', '######.#..#.', '######..#..#', '....###..#..', '.....##...#.', '......#.....', '............', '............'],
+  dice: ['############', '#..........#', '#.##....##.#', '#.##....##.#', '#..........#', '#....##....#', '#....##....#', '#..........#', '#.##....##.#', '#.##....##.#', '#..........#', '############'],
   q: ['....####....','...##..##...','..##....##..','.......##...','......##....','.....##.....','.....##.....','............','.....##.....','.....##.....','............','............']
 };
 const ACH = [
@@ -3156,7 +3194,11 @@ const ACH = [
   { id: 'drip', passive: true, name: 'He got drip!', desc: 'Unlock every color', icon: 'drop', test: () => COLORS.every(c => colorUnlocked(c.id)), prog: () => [COLORS.filter(c => colorUnlocked(c.id)).length, COLORS.length, 'colors'] },
   { id: 'pride', name: 'Pride month', desc: 'Wear the Rainbow color', icon: 'heart', test: () => acct.color === 'rainbow', prog: () => [acct.color === 'rainbow' ? 1 : 0, 1] },
   { id: 'god', name: 'I AM A GOD', desc: 'Play a custom game', icon: 'wand', test: () => false },
-  { id: 'pvpunlock', passive: true, name: 'Player versus player', desc: 'Unlock PvP', icon: 'unlock', test: () => myLvl() >= PVP_LVL, prog: () => [Math.min(myLvl(), PVP_LVL), PVP_LVL, 'lvl'] },
+  { id: 'dropunlock', passive: true, name: 'DROP OUT', desc: 'Win 3 games of Standard and unlock Drop Out', icon: 'key', test: () => dropUnlocked(), prog: () => [Math.min(stdWins(), DROP_WINS), DROP_WINS, 'wins'] },
+  { id: 'customunlock', passive: true, name: 'CUSTOM GAME', desc: 'Reach level 25 and unlock Custom games', icon: 'dice', test: () => myLvl() >= CUSTOM_LVL, prog: () => [Math.min(myLvl(), CUSTOM_LVL), CUSTOM_LVL, 'lvl'] },
+  { id: 'classic', name: "That's a Classic!", desc: 'Rewatch a cutscene', icon: 'film', test: () => false },
+  { id: 'banger', name: 'BANGER ALERT', desc: 'Turn the music up to 200%', icon: 'speaker', test: () => false, prog: () => [Math.round((vol.music || 0) * 100), 200, '%'] },
+  { id: 'pvpunlock', passive: true, name: 'PVP', desc: 'Reach level 10 and unlock PvP', icon: 'unlock', test: () => myLvl() >= PVP_LVL, prog: () => [Math.min(myLvl(), PVP_LVL), PVP_LVL, 'lvl'] },
   { id: 'competitive', name: 'Competitive spirit', desc: 'View the leaderboards', icon: 'binocs', test: () => false },
   { id: 'supporter', name: 'Supporter', desc: 'Send a message with the Contact button', icon: 'envelope', test: () => false },
   { id: 'stillthere', name: 'Are you still there?', desc: 'Look at the menu for 5 minutes straight', icon: 'zzz', test: () => false, prog: () => [Math.floor(S.menuIdle / 60), 5, 'min'] }
@@ -3164,13 +3206,14 @@ const ACH = [
 const achKey = a => a.name.toLowerCase().replace(/[^a-z0-9]/g, '');
 function sortedAch() { return ACH.slice().sort((a, b) => achKey(a).localeCompare(achKey(b))); }
 const ACH_GROUPS = [
-  ['Getting started', ['beginning', 'buddy', 'robot', 'muted', 'stillthere', 'competitive', 'supporter', 'god']],
+  ['Getting started', ['beginning', 'buddy', 'robot', 'muted', 'stillthere', 'competitive', 'supporter', 'classic', 'banger']],
+  ['Custom games', ['customunlock', 'god']],
   ['Customization', ['hello', 'uncertain', 'style', 'coolcolors', 'pride', 'drip']],
   ['Speed', ['quickster', 'justintime', 'quick', 'holy', 'there']],
   ['Passwords', ['short', 'long', 'explorer']],
   ['Grinding', ['office', 'addicted', 'hard', 'chicken', 'leader', 'maxxer', 'millionaire', 'maxed']],
   ['Collection', ['champion', 'rainbow', 'nolife', 'spotless', 'gotemall']],
-  ['Drop Out', ['dropout', 'hurry']],
+  ['Drop Out', ['dropunlock', 'dropout', 'hurry']],
   ['PvP', ['pvpunlock', 'mpfirst', 'mpcrush', 'racewin', 'kowin', 'undefeated', 'mprival', 'fortnite', 'royale', 'ffabest']]
 ];
 // grouped, alphabetical inside each group; headings show how many you have
@@ -3487,7 +3530,7 @@ function colorUnlocked(id, pr) {
 }
 function checkPassive() {
   if (S.phase === 'playing' || S.phase === 'between') return;
-  ['maxed', 'drip', 'nolife', 'spotless', 'pvpunlock', 'gotemall'].forEach(id => { const a = ACH.find(q => q.id === id); if (a && !unlocked[id]) { let ok = false; try { ok = a.test({ st: getStats() }); } catch (e) {} if (ok) award(id); } });
+  ['maxed', 'drip', 'nolife', 'spotless', 'pvpunlock', 'dropunlock', 'customunlock', 'gotemall'].forEach(id => { const a = ACH.find(q => q.id === id); if (a && !unlocked[id]) { let ok = false; try { ok = a.test({ st: getStats() }); } catch (e) {} if (ok) award(id); } });
 }
 function addPristine(amount, quiet) {
   amount = Math.max(0, Math.round(amount || 0)); if (!amount) return 0;
@@ -3560,10 +3603,41 @@ function openPristineTrack() {
     <div class="row"><button class="btn dark" data-act="close" type="button">CLOSE</button></div>`);
   scrollTrack();
 }
-function openMedalTrack(id) {
+function openMedalShowcase(m) {
+  const st = getStats(), v = m.value(st);
+  const shown = m.unit(m.id === 'time' ? v : Math.round(v));
+  if (tiltEl) { untilt(tiltEl); tiltEl = null; }
+  openModal(`<div class="mshow">
+      <div class="mshow-stage" id="mshowStage">
+        <div class="mshow-rays"></div>
+        <div class="mshow-sparks">${Array.from({ length: 14 }, (_, i) => `<i style="--a:${(i * 360 / 14).toFixed(0)}deg;--d:${(i * .23 % 2.4).toFixed(2)}s"></i>`).join('')}</div>
+        <div class="disc tier-fill t-rainbow mshow-disc" id="mshowDisc">${pixelSvg(m.icon)}<i class="mshow-shine"></i></div>
+      </div>
+      <small class="mshow-tier">ULTIMATE · RAINBOW MEDAL</small>
+      <h2 class="mshow-name">${escapeHtml(m.name.toUpperCase())}</h2>
+      <p class="mshow-title">Title unlocked: <b>${escapeHtml(m.titles[10])}</b></p>
+      <div class="mshow-stats"><div><small>YOU HAVE</small><b>${escapeHtml(shown)}</b></div><div><small>ULTIMATE AT</small><b>${escapeHtml(m.unit(m.steps[10]))}</b></div><div><small>TITLES</small><b>11 / 11</b></div></div>
+    </div>
+    <div class="row"><button class="btn" data-act="medal-track" data-medal="${m.id}" type="button">ALL LEVELS</button><button class="btn dark" data-act="close" type="button">CLOSE</button></div>`, 'showcase');
+  music.halo(true);
+  [784, 988, 1175, 1568, 1976].forEach((f, i) => tone(f, .5, 'triangle', .03, 0, i * .07));
+  const stage = $('mshowStage'), disc = $('mshowDisc');
+  // turn it in your hand
+  stage.addEventListener('pointermove', e => {
+    const r = disc.getBoundingClientRect(), x = Math.max(-1, Math.min(1, (e.clientX - r.left - r.width / 2) / r.width)), y = Math.max(-1, Math.min(1, (e.clientY - r.top - r.height / 2) / r.height));
+    disc.style.transform = `perspective(600px) rotateY(${(x * 30).toFixed(1)}deg) rotateX(${(-y * 30).toFixed(1)}deg)`;
+    disc.style.setProperty('--sx', (50 + x * 45).toFixed(0) + '%');
+  });
+  stage.addEventListener('pointerleave', () => { disc.style.transform = ''; disc.style.removeProperty('--sx'); });
+  // the choir stops when the showcase closes
+  const mo = new MutationObserver(() => { if (!document.getElementById('mshowStage')) { music.halo(false); mo.disconnect(); } });
+  mo.observe($('modal'), { childList: true, subtree: true, attributes: true, attributeFilter: ['hidden'] });
+}
+function openMedalTrack(id, force) {
   const m = MEDALS.find(x => x.id === id); if (!m) return;
   sfx.click();
   const st = getStats(), v = m.value(st), lvl = acct.medals[m.id] || 0;
+  if (lvl >= 11 && !force) return openMedalShowcase(m);
   const nodes = m.steps.map((at, i) => ({ at: i, html: `<div class="disc tier-fill ${tierCls(i)} mini-disc">${pixelSvg(m.icon)}</div>`, label: escapeHtml(m.titles[i]) }));
   // evenly spaced levels; the marker sits between the levels you're between
   let pos = 0; for (let i = 0; i < m.steps.length; i++) { const prev = i ? m.steps[i - 1] : 0; if (v >= m.steps[i]) pos = i; else { pos = i - 1 + Math.max(0, (v - prev) / (m.steps[i] - prev)); break; } }
@@ -3573,7 +3647,7 @@ function openMedalTrack(id) {
     <p class="progress">${lvl ? `Level ${lvl === 11 ? 'ULTIMATE' : lvl} (${TIERS[lvl - 1]})` : 'Not unlocked yet'} · ${escapeHtml(shown)}. Every level unlocks a title.</p>
     ${html}
     <div class="tbl-wrap"><table class="tbl"><thead><tr><th>LEVEL</th><th>NEEDS</th><th>TITLE</th></tr></thead><tbody>${m.steps.map((at, i) => `<tr class="${lvl > i ? 'got' : ''}"><td>${i === 10 ? 'ULTIMATE' : i + 1}</td><td>${escapeHtml(m.unit(at))}</td><td>${lvl > i ? '✓ ' : ico('lock', 'l')}${escapeHtml(m.titles[i])}</td></tr>`).join('')}</tbody></table></div>
-    <div class="row"><button class="btn dark" data-act="close" type="button">CLOSE</button></div>`);
+    <div class="row">${lvl >= 11 ? `<button class="btn" data-act="medal-show" data-medal="${m.id}" type="button">BACK</button>` : ''}<button class="btn dark" data-act="close" type="button">CLOSE</button></div>`);
   scrollTrack();
 }
 function wireTrack(t) {
@@ -3855,7 +3929,7 @@ function fitName() {
   while (el.scrollWidth > el.clientWidth + 1 && size > 28) { size -= 2; el.style.fontSize = size + 'px'; }
 }
 addEventListener('resize', () => { if (!$('account').hidden) fitName(); });
-function closeEdit() { $('accEditForm').hidden = true; $('accEdit').hidden = false; if (!$('account').hidden) { $('account').setAttribute('style', themeStyle(acct.color)); $('accNameText').innerHTML = nameHTML(acct.name, acct.color); } }
+function closeEdit() { $('account').classList.remove('editing'); $('accEditForm').hidden = true; $('accEdit').hidden = false; if (!$('account').hidden) { $('account').setAttribute('style', themeStyle(acct.color)); $('account').classList.toggle('themed', colorById(acct.color).id !== 'default'); $('accNameText').innerHTML = nameHTML(acct.name, acct.color); } }
 function openEdit() {
   sfx.click();
   const newT = new Set(unseenTitles());
@@ -3867,7 +3941,7 @@ function openEdit() {
   $('accTitleWhy').innerHTML = titleWhy($('accTitle').value);
   $('accNameInput').value = acct.name;
   pickColor(acct.color);
-  $('accEdit').hidden = true; $('accEditForm').hidden = false;
+  $('accEdit').hidden = true; $('accEditForm').hidden = false; $('account').classList.add('editing'); if (tiltEl) { untilt(tiltEl); tiltEl = null; }
   $('accNameInput').focus();
   markSeen('titles', [...newT]);
   tutEvent('editOpen');
@@ -3903,7 +3977,7 @@ $('accEditForm').addEventListener('submit', e => {
 $('accNameInput').addEventListener('keydown', e => { if (e.key === 'Escape') closeEdit(); });
 $('account').addEventListener('click', e => {
   const a = e.target.closest('[data-act="reveal"]'); if (a) { sfx.click(); revealAch(a); return; }
-  const md = e.target.closest('#accMedals [data-medal]'); if (md) { openMedalTrack(md.dataset.medal); return; }
+  const md = e.target.closest('#accMedals [data-medal]'); if (md) { if ($('accEditForm').hidden) openMedalTrack(md.dataset.medal); return; }
   const cp = e.target.closest('#accColors [data-color]'); if (cp && !cp.disabled) { sfx.click(); pickColor(cp.dataset.color); }
 });
 $('account').addEventListener('keydown', e => { const md = e.target.closest && e.target.closest('#accMedals [data-medal]'); if (md && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openMedalTrack(md.dataset.medal); } });
@@ -3914,7 +3988,7 @@ function pickColor(id) {
   $('accColors').innerHTML = colorPickerHTML(pickedColor);
   $('accColorPrev').innerHTML = `${chipHTML($('accNameInput').value || acct.name, pickedColor)} <span>${escapeHtml(colorById(pickedColor).name)}</span>`;
   // preview the theme live while editing
-  $('account').setAttribute('style', themeStyle(pickedColor));
+  $('account').setAttribute('style', themeStyle(pickedColor)); $('account').classList.toggle('themed', colorById(pickedColor).id !== 'default');
   $('accNameText').innerHTML = nameHTML(acct.name, pickedColor);
 }
 $('accBtn').onclick = openAccount;
@@ -3972,7 +4046,7 @@ const STEPS = {
     }, btn: 'NEXT', next: () => tutGo('menuDrop') },
   menuDrop: { target: '#playWrap', html: () => `<b>Play</b> has two modes. <b>Standard</b> is ${TUT.menuOnly ? 'the classic: 5 rounds, 2 new rules each' : 'what you just played'}. <b>Drop Out</b> is endless: every round brings 3 brand-new rules and a fresh password, and the clock shrinks from 1 minute down to 10 seconds. Your score is the round you reach. ${dropUnlocked() ? "It's unlocked." : `It unlocks when you've won ${DROP_WINS} games of Standard.`}`, btn: 'NEXT', next: () => tutGo('menuPvp') },
   menuPvp: { target: '#pvpWrap', html: () => `<b>PvP</b> ${pvpUnlocked() ? 'is' : `unlocks at <b>level ${PVP_LVL}</b>. It's`} where you play your friends: <b>Host</b> gets a room code, <b>Join</b> types theirs. With 2 players you can play <b>Score</b>, <b>Race</b> or <b>Knockout</b>; with 3-8 it's <b>Battle Royale</b> or <b>FFA</b>. Rooms have chat and emotes.`, btn: 'NEXT', next: () => tutGo('menuCustom') },
-  menuCustom: { target: '#customBtn', html: () => `<b>Custom games</b> ${customUnlocked() ? 'are' : `unlock at <b>level ${CUSTOM_LVL}</b>. They're`} your own rules: pick the rule categories, Standard or Drop Out, the number of rules and the clock.`, btn: 'NEXT', next: () => tutGo('menuLb') },
+  menuCustom: { target: '#customWrap', html: () => `<b>Custom games</b> ${customUnlocked() ? 'are' : `unlock at <b>level ${CUSTOM_LVL}</b>. They're`} your own rules: pick the rule categories, Standard or Drop Out, the number of rules and the clock.`, btn: 'NEXT', next: () => tutGo('menuLb') },
   menuLb: { target: '#commWrap', html: () => '<b>Community</b> has the <b>leaderboards</b>, from best score to time played, and a list of every <b>player</b>. Click anyone to see their account.', btn: 'NEXT', next: () => tutGo('menuDisc') },
   menuDisc: { target: '#discBtn', html: () => 'Every rule you meet is saved in <b>Discovered rules</b>, with every answer that works. Search them, sort them, or filter by category.', btn: 'NEXT', next: () => tutGo('menuSet') },
   menuSet: { target: '#setBtn', html: () => '<b>Settings</b>: volume, the audio fix, background quality, fire, the chat filter and blocked players. <b>How to play</b> lives here too, and you can replay this tutorial and any cutscene you\'ve seen.', btn: 'NEXT', next: () => tutGo('menuContact') },
@@ -4295,16 +4369,17 @@ function customCfg() {
 }
 const CATS = () => window.PG.CATEGORIES;
 function catsLabel(c) { return !c.cats ? 'All' : c.cats.length === 1 ? (CATS().find(k => k.id === c.cats[0]) || {}).name : `${c.cats.length} of ${CATS().length}`; }
-function openCustom() {
+function openCustom(mode) {
   sfx.click();
   const cfg = customCfg();
+  if (mode === 'standard' || mode === 'dropout') cfg.mode = mode;
   let picked = new Set(cfg.cats || CATS().map(k => k.id));
   const count = id => RULES.filter(r => r.cat === id).length;
   const seg = (name, cur, opts) => `<div class="seg" role="radiogroup">${opts.map(([v, l]) => `<button type="button" class="seg-b${v === cur ? ' on' : ''}" data-cg="${name}" data-v="${v}" role="radio" aria-checked="${v === cur}">${l}</button>`).join('')}</div>`;
   const slider = (id, label, min, max, step, val) => `<label class="ap-row wide"><span>${label}</span><input type="range" id="${id}" min="${min}" max="${max}" step="${step}" value="${val}"><output id="${id}Out"></output></label>`;
-  openModal(`<h2>CUSTOM GAME</h2>
+  openModal(`<h2>CUSTOM ${cfg.mode === 'dropout' ? 'DROP OUT' : 'STANDARD'}</h2>
     <p class="progress">Make the game your own. Custom games don't give XP, stats, highscores or achievements, but you still earn <b>1/20</b> of the usual Pristine ◆.</p>
-    <section class="set-sec"><h3>MODE</h3>${seg('mode', cfg.mode, [['standard', 'STANDARD'], ['dropout', 'DROP OUT']])}</section>
+    <div hidden>${seg('mode', cfg.mode, [['standard', 'STANDARD'], ['dropout', 'DROP OUT']])}</div>
     <section class="set-sec"><h3>RULE CATEGORIES<small id="cgCatCount"></small></h3>
       <div class="cg-cats">${CATS().map(k => `<button type="button" class="cg-cat" data-cat="${k.id}" aria-pressed="false">${ico(k.icon)}<span>${escapeHtml(k.name)}</span><small>${count(k.id)}</small></button>`).join('')}</div>
       <div class="row tight"><button class="btn small dark" id="cgAll" type="button">ALL</button><button class="btn small dark" id="cgNone" type="button">NONE</button></div>
@@ -4405,7 +4480,7 @@ function openProfile(r, back) {
     <h3>Achievements <small>${[...have].filter(id => ACH.some(a => a.id === id)).length}/${ACH.length}</small></h3>
     <div class="achs pf-achs">${achs}</div>
   </div>
-  <div class="row"><button class="btn" data-act="${back.act}" type="button">${back.label}</button>${back.extra || ''}${back.act === 'lb-back' || back.act === 'pl-back' ? '<button class="btn dark" data-act="close" type="button">CLOSE</button>' : ''}</div>`);
+  <div class="row"><button class="btn" data-act="${back.act}" type="button">${back.act === 'lb-back' || back.act === 'pl-back' ? 'BACK' : back.label}</button>${back.extra || ''}</div>`);
   const nm = $('modal').querySelector('.pf-name'); nm.innerHTML = chipHTML(r.name, p.color, 0, 'big');
   const pfEl = $('modal').querySelector('.profile'); if (pfEl) { pfEl.setAttribute('style', themeStyle(p.color)); pfEl.classList.toggle('themed', validColor(p.color) !== 'default'); }
   const tt = $('modal').querySelector('.pf-title'); tt.textContent = typeof p.title === 'string' && p.title ? p.title.slice(0, 60) : 'No title';
@@ -5428,11 +5503,20 @@ function mpStanding() {
 function myKoHp() { const m = MP.match; return m && m.ko && m.ko.hp ? m.ko.hp[PEER] : KO_HP; }
 
 /* ---------- version + patch notes ---------- */
-const VERSION = 'V13.2';
+const VERSION = 'V13.3';
 // how long each update took to build (V1-V8 are reconstructed estimates, marked with ~)
-const DEV_DATE = { 'V13.2': '2026-10-04', 'V13.1': '2026-10-04', V13: '2026-10-04', V12: '2026-10-04', V11: '2026-10-03', V10: '2026-10-03', 'V9.2': '2026-10-03', 'V9.1': '2026-10-03', V9: '2026-10-03', V8: '2026-10-03', 'V7.1': '2026-10-03', V7: '2026-10-03', V6: '2026-10-02', V5: '2026-10-02', V4: '2026-10-02', V3: '2026-10-01', V2: '2026-10-01', V1: '2026-10-01' };
-const DEV_TIME = { 'V13.2': '10 min', 'V13.1': '15 min', V13: '35 min', V12: '20 min', V11: '28 min', V10: '35 min', 'V9.2': '4 min', 'V9.1': '7 min', V9: '17 min', V8: '~1 h', 'V7.1': '~25 min', V7: '~50 min', V6: '~35 min', V5: '~45 min', V4: '~25 min', V3: '~20 min', V2: '~20 min', V1: '~45 min' };
+const DEV_DATE = { 'V13.3': '2026-10-04', 'V13.2': '2026-10-04', 'V13.1': '2026-10-04', V13: '2026-10-04', V12: '2026-10-04', V11: '2026-10-03', V10: '2026-10-03', 'V9.2': '2026-10-03', 'V9.1': '2026-10-03', V9: '2026-10-03', V8: '2026-10-03', 'V7.1': '2026-10-03', V7: '2026-10-03', V6: '2026-10-02', V5: '2026-10-02', V4: '2026-10-02', V3: '2026-10-01', V2: '2026-10-01', V1: '2026-10-01' };
+const DEV_TIME = { 'V13.3': '15 min', 'V13.2': '10 min', 'V13.1': '15 min', V13: '35 min', V12: '20 min', V11: '28 min', V10: '35 min', 'V9.2': '4 min', 'V9.1': '7 min', V9: '17 min', V8: '~1 h', 'V7.1': '~25 min', V7: '~50 min', V6: '~35 min', V5: '~45 min', V4: '~25 min', V3: '~20 min', V2: '~20 min', V1: '~45 min' };
 const PATCH_NOTES = [
+  ['V13.3', 'Finishing Touches', ['Custom splits into Standard and Drop Out like the other buttons, so the custom settings no longer have a mode switch.',
+    'Click an ULTIMATE medal for a proper showcase: a big spinning rainbow medal with a shine, rays, sparkles and the choir. You can turn it with the mouse. ALL LEVELS shows the full track.',
+    'Volume sliders go up to 200%.',
+    'Achievement emblems follow your account color.',
+    'Every mode you\'ve unlocked can be rewatched in Settings, including ones you unlocked before cutscenes existed.',
+    'Medals can\'t be clicked while you edit your account.',
+    'Profiles from Community have a single BACK button.',
+    'Your own player card is outlined in your color instead of orange.',
+    '4 new achievements: DROP OUT, CUSTOM GAME, That\'s a Classic! and BANGER ALERT. "Player versus player" is now called PVP.']],
   ['V13.2', 'Menu Makeover', ['New menu order with dividers: Play, PvP, Custom | Community, Account, Discovered rules | Settings, Contact. Every menu button is the same size.',
     'Community splits in two like Play and PvP: Leaderboards and Players.',
     'How to play moved into Settings, next to Replay tutorial and replays of every unlock cutscene you\'ve seen.',
@@ -5575,7 +5659,7 @@ function renderMenuStats() {
 const UNLOCK_INFO = {
   drop: { title: 'DROP OUT', sub: 'Endless rounds, a fresh password every round and a shrinking clock. Find it under Play.', el: 'playWrap' },
   pvp: { title: 'PVP', sub: 'Host a room or join your friends: 1v1 or up to 8 players.', el: 'pvpWrap' },
-  custom: { title: 'CUSTOM GAMES', sub: 'Pick the rule categories, the mode, the rules per round and the clock.', el: 'customBtn' }
+  custom: { title: 'CUSTOM GAMES', sub: 'Custom Standard and Drop Out: pick the rule categories, the rules per round and the clock.', el: 'customWrap' }
 };
 const UFX = { on: false, ready: 0, check: 0 };
 function unlockQueue() { return Array.isArray(acct.unlockQ) ? acct.unlockQ.filter(k => UNLOCK_INFO[k]) : []; }
@@ -5750,7 +5834,7 @@ function renderLocks() {
   const now = { drop: dropUnlocked(), pvp: pvpUnlocked(), custom: customUnlocked() };
   $('pvpWrap').classList.toggle('locked', !now.pvp && !inRoom); $('pvpLock').hidden = now.pvp || inRoom; $('pvpLock').innerHTML = `${ico('lock', 'l')}LEVEL ${PVP_LVL}`;
   $('playWrap').classList.toggle('droplock', !now.drop); $('dropLock').hidden = now.drop; $('dropLock').innerHTML = `${ico('lock', 'l')}WIN ${DROP_WINS} · ${Math.min(stdWins(), DROP_WINS)}/${DROP_WINS}`;
-  $('customBtn').classList.toggle('locked', !now.custom); $('customLock').hidden = now.custom; $('customLock').innerHTML = `${ico('lock', 'l')}LEVEL ${CUSTOM_LVL}`;
+  $('customWrap').classList.toggle('locked', !now.custom); $('customLock').hidden = now.custom; $('customLock').innerHTML = `${ico('lock', 'l')}LEVEL ${CUSTOM_LVL}`;
   const was = acct.unlocks;
   if (!was || typeof was !== 'object') { acct.unlocks = now; saveAcct(); return; }
   let changed = false;
@@ -5800,7 +5884,8 @@ function squish(open) { const a = audio(); if (!a || muted) return; const t = a.
 makeSplit('playWrap', () => startGame({ mode: 'standard' }), () => { if (dropUnlocked()) startGame({ mode: 'dropout' }); else lockNudge($('playDrop'), 'DROP OUT IS LOCKED', `Win ${DROP_WINS} games of Standard to unlock it. You have ${Math.min(stdWins(), DROP_WINS)}/${DROP_WINS}.`); });
 const pvpSplit = makeSplit('pvpWrap', () => { MP.msg = ''; openLobby(); mpCreate(); }, () => { MP.msg = ''; if (MP.ch) leaveRoom(); openLobby(); setTimeout(() => { const i = $('mpCodeIn'); if (i) i.focus(); }, 80); });
 $('mpBtn').onclick = () => { if (MP.ch) { sfx.click(); openLobby(); } else if (!pvpUnlocked()) lockNudge($('pvpWrap'), 'PVP IS LOCKED', `Reach level ${PVP_LVL} to unlock PvP. You're level ${myLvl()}.`); else pvpSplit.open(); };
-$('customBtn').onclick = () => { if (customUnlocked()) openCustom(); else lockNudge($('customBtn'), 'CUSTOM GAMES ARE LOCKED', `Reach level ${CUSTOM_LVL} to unlock custom games. You're level ${myLvl()}.`); };
+const customSplit = makeSplit('customWrap', () => openCustom('standard'), () => openCustom('dropout'));
+$('customBtn').onclick = () => { if (customUnlocked()) customSplit.open(); else lockNudge($('customWrap'), 'CUSTOM GAMES ARE LOCKED', `Reach level ${CUSTOM_LVL} to unlock custom games. You're level ${myLvl()}.`); };
 $('contactBtn').onclick = () => openContact();   // already in a room: go straight back to it
 document.addEventListener('click', e => { if (isSplit() && !e.target.closest('.playwrap')) collapsePlay(); });
 function openHow() { sfx.click(); openModal(`
@@ -5903,7 +5988,7 @@ function beatFlash(now) {
 
 /* ---------- medals you can turn in your hand ---------- */
 let tiltEl = null, haloEl = null;
-const medalAt = t => t && t.closest ? t.closest('.acc-medals .medal, .pf-medals .medal, .prog-medals .medal.in') : null;
+const medalAt = t => { const m = t && t.closest ? t.closest('.acc-medals .medal, .pf-medals .medal, .prog-medals .medal.in') : null; return m && m.closest('#account') && !$('accEditForm').hidden ? null : m; };
 document.addEventListener('pointermove', e => {
   if (e.pointerType === 'touch') return;
   const md = medalAt(e.target);
